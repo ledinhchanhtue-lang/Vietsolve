@@ -17,7 +17,7 @@ export default function Home() {
       <AnimatedBackground />
       <BackgroundStripes />
 
-      <div className="relative z-10">
+      <div className="relative z-40">
         <Navbar />
         <Hero />
         <HowWeWork />

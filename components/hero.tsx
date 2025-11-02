@@ -34,7 +34,7 @@ export default function Hero() {
   return (
     <section className="relative min-h-screen flex items-center pt-8 pb-16 overflow-hidden">
       {/* Background Video */}
-      <div className="absolute inset-0 z-0">
+      <div className="absolute inset-0 z-1">
         {mounted && (
           <iframe
             src="https://www.youtube.com/embed/IZkRgWfDlHc?autoplay=1&mute=1&loop=1&controls=0&showinfo=0&rel=0&modestbranding=1&playlist=IZkRgWfDlHc&playsinline=1&disablekb=1&fs=0&iv_load_policy=3&cc_load_policy=0&start=1"
@@ -60,7 +60,7 @@ export default function Hero() {
         <div className="absolute inset-0 bg-gradient-to-b from-white/30 via-white/20 to-white/10" />
       </div>
 
-      <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="relative z-30 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="max-w-5xl mx-auto text-center lg:text-left">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
