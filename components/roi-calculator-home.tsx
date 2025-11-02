@@ -63,7 +63,7 @@ export default function ROICalculatorHome() {
           viewport={{ once: true }}
           className="text-center mb-16"
         >
-          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 mb-6">Tính toán ROI của bạn</h2>
+          <h2 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-6 lg:text-5xl">Tính toán ROI của bạn</h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
             Xem bạn có thể tạo ra bao nhiêu doanh thu với các chiến lược marketing đã được chứng minh của chúng tôi
           </p>

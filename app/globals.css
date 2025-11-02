@@ -25,6 +25,8 @@
     --input: 220 13% 91%;
     --ring: 0 84% 60%; /* Red ring color */
     --radius: 0.5rem;
+    /* Add Inter font variable */
+    --font-inter: "Inter", sans-serif;
   }
 }
 
@@ -35,6 +37,33 @@
   body {
     /* Changed from bg-black text-foreground to light theme */
     @apply bg-white text-gray-900;
+    /* Apply Inter font with weight 400 for body text */
+    font-family: var(--font-inter);
+    font-weight: 400;
+  }
+
+  /* Apply Inter font weight 700 for all headings */
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-inter);
+    font-weight: 700;
+  }
+
+  /* Apply Inter font to buttons, links, and inputs */
+  button,
+  a {
+    font-family: var(--font-inter);
+  }
+
+  input,
+  textarea,
+  select {
+    font-family: var(--font-inter);
+    font-weight: 400;
   }
 }
 
@@ -49,6 +78,21 @@
 
   .bg-size-200 {
     background-size: 200% 200%;
+  }
+
+  /* Added light-sweep animation for headline gradient text */
+  .animate-light-sweep {
+    animation: light-sweep 7s ease-in-out infinite;
+  }
+
+  /* Added pulse-slow animation for AI-Powered badge */
+  .animate-pulse-slow {
+    animation: pulse-slow 3s ease-in-out infinite;
+  }
+
+  /* Added ripple animation for button click effect */
+  .animate-ripple {
+    animation: ripple 0.6s ease-out forwards;
   }
 }
 
@@ -70,5 +114,62 @@
   }
   50% {
     background-position: 100% 50%;
+  }
+}
+
+/* Added light-sweep keyframes for text gradient animation */
+@keyframes light-sweep {
+  0% {
+    mask-position: -200% 0;
+  }
+  100% {
+    mask-position: 200% 0;
+  }
+}
+
+/* Added pulse-slow keyframes for badge animation */
+@keyframes pulse-slow {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+/* Added ripple keyframes for button click effect */
+@keyframes ripple {
+  0% {
+    width: 0;
+    height: 0;
+    opacity: 0.5;
+  }
+  100% {
+    width: 300px;
+    height: 300px;
+    opacity: 0;
+    margin-left: -150px;
+    margin-top: -150px;
+  }
+}
+
+/* Adding bird-layer styles for scroll-linked bird animation */
+/* tăng hiệu ứng additive khi giao nhau */
+.bird-layer {
+  isolation: isolate; /* để mix-blend-mode hoạt động chính xác */
+}
+
+/* tắt animation cho người dùng giảm chuyển động */
+@media (prefers-reduced-motion: reduce) {
+  .bird-layer {
+    display: none !important;
+  }
+
+  /* Disable all custom animations for reduced motion */
+  .animate-light-sweep,
+  .animate-pulse-slow,
+  .animate-ripple {
+    animation: none !important;
   }
 }

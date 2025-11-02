@@ -1,77 +1,13 @@
 "use client"
-
-import type React from "react"
 import Image from "next/image"
 import Link from "next/link"
-import { useState } from "react"
 import { motion } from "framer-motion"
-import { Instagram, Twitter, Linkedin, Youtube, Mail, Phone, MapPin, ArrowRight } from "lucide-react"
+import { Instagram, Twitter, Linkedin, Youtube, Mail, Phone, MapPin } from "lucide-react"
 import AnimatedButton from "./animated-button"
 
 export default function AnimatedFooter() {
-  const [email, setEmail] = useState("")
-  const [isSubscribed, setIsSubscribed] = useState(false)
-
-  const handleSubscribe = (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsSubscribed(true)
-    setTimeout(() => setIsSubscribed(false), 3000)
-    setEmail("")
-  }
-
   return (
     <footer className="relative bg-gray-900 border-t border-gray-700">
-      {/* Newsletter Section */}
-      <div className="relative z-10 border-b border-gray-700 bg-gradient-to-br from-red-950/30 via-gray-900 to-black">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
-            className="text-center mb-12"
-          >
-            <h3 className="text-3xl sm:text-4xl font-bold text-white mb-4">Luôn dẫn đầu xu hướng</h3>
-            <p className="text-xl text-gray-300 max-w-2xl mx-auto">
-              Nhận thông tin chi tiết độc quyền, chiến lược thương hiệu và mẹo tăng trưởng được gửi đến hộp thư của bạn
-              hàng tuần.
-            </p>
-          </motion.div>
-
-          <motion.form
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            viewport={{ once: true }}
-            onSubmit={handleSubscribe}
-            className="max-w-md mx-auto"
-          >
-            <div className="flex gap-4">
-              <div className="flex-1 relative">
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Nhập email của bạn"
-                  className="w-full px-4 py-3 bg-gray-800 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 transition-colors"
-                  required
-                />
-              </div>
-              <AnimatedButton
-                type="submit"
-                className="bg-red-600 text-white hover:bg-red-700"
-                gradient="radial-gradient(circle, rgba(220,38,38,0.2) 0%, rgba(185,28,28,0.1) 50%, rgba(153,27,27,0) 100%)"
-              >
-                <ArrowRight className="h-5 w-5" />
-              </AnimatedButton>
-            </div>
-            {isSubscribed && (
-              <p className="text-green-400 text-center mt-4 animate-fade-in">Cảm ơn bạn đã đăng ký! 🎉</p>
-            )}
-          </motion.form>
-        </div>
-      </div>
-
       {/* Main Footer Content */}
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-12">

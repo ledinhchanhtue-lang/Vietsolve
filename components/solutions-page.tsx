@@ -3,8 +3,12 @@
 import { motion } from "framer-motion"
 import { Brain, Palette, Cpu, CheckCircle2, ChevronLeft, ChevronRight, Check } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { useState } from "react"
+import { useState, useRef, useEffect } from "react"
 import Image from "next/image"
+import GlossyIcon from "./glossy-icon"
+import GlowButton from "./glow-button"
+import CountingStats from "./counting-stats"
+import { useScroll, useTransform } from "framer-motion"
 
 const solutions = [
   {
@@ -130,14 +134,25 @@ const caseStudies = [
 
 export default function SolutionsPage() {
   const [currentCase, setCurrentCase] = useState(0)
+  const sectionRef = useRef<HTMLElement>(null)
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start end", "end start"],
+  })
 
-  const nextCase = () => {
-    setCurrentCase((prev) => (prev + 1) % caseStudies.length)
-  }
+  const y1 = useTransform(scrollYProgress, [0, 1], [0, 12])
+  const y2 = useTransform(scrollYProgress, [0, 1], [0, 24])
 
-  const prevCase = () => {
-    setCurrentCase((prev) => (prev - 1 + caseStudies.length) % caseStudies.length)
-  }
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false)
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)")
+    setPrefersReducedMotion(mediaQuery.matches)
+
+    const handleChange = () => setPrefersReducedMotion(mediaQuery.matches)
+    mediaQuery.addEventListener("change", handleChange)
+    return () => mediaQuery.removeEventListener("change", handleChange)
+  }, [])
 
   return (
     <div className="min-h-screen bg-white">
@@ -181,43 +196,135 @@ export default function SolutionsPage() {
       </section>
 
       {/* Solutions Grid */}
-      <section className="py-20 px-4 bg-gray-50">
-        <div className="max-w-[1200px] mx-auto">
-          <motion.h2
-            className="text-3xl md:text-4xl font-bold text-center mb-16"
+      <section ref={sectionRef} className="relative py-24 md:py-32 px-4 bg-gray-50 overflow-hidden">
+        {!prefersReducedMotion && (
+          <>
+            <motion.div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{ y: y1 }}>
+              <div className="absolute inset-0 bg-[repeating-linear-gradient(45deg,#C94A4A_0px,#C94A4A_2px,transparent_2px,transparent_12px)]" />
+            </motion.div>
+            <motion.div className="absolute inset-0 opacity-[0.02] pointer-events-none" style={{ y: y2 }}>
+              <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iMzAwIj48ZmlsdGVyIGlkPSJhIiB4PSIwIiB5PSIwIj48ZmVUdXJidWxlbmNlIGJhc2VGcmVxdWVuY3k9Ii43NSIgc3RpdGNoVGlsZXM9InN0aXRjaCIgdHlwZT0iZnJhY3RhbE5vaXNlIi8+PGZlQ29sb3JNYXRyaXggdHlwZT0ic2F0dXJhdGUiIHZhbHVlcz0iMCIvPjwvZmlsdGVyPjxwYXRoIGQ9Ik0wIDBoMzAwdjMwMEgweiIgZmlsdGVyPSJ1cmwoI2EpIiBvcGFjaXR5PSIuMDUiLz48L3N2Zz4=')]" />
+            </motion.div>
+          </>
+        )}
+
+        <div className="max-w-[1200px] mx-auto relative z-10">
+          <motion.div
+            className="text-center mb-16"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
-            Hệ sinh thái <span className="text-red-700">giải pháp toàn diện</span>
-          </motion.h2>
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">
+              Hệ sinh thái{" "}
+              <span className="relative inline-block">
+                <span className="bg-gradient-to-r from-vietsolve-red to-vietsolve-burgundy bg-clip-text text-transparent">
+                  giải pháp toàn diện
+                </span>
+                {!prefersReducedMotion && (
+                  <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent bg-clip-text text-transparent animate-light-sweep" />
+                )}
+              </span>
+            </h2>
+            <motion.div
+              className="w-24 h-1 bg-gradient-to-r from-vietsolve-red to-vietsolve-burgundy mx-auto mt-4"
+              initial={{ scaleX: 0 }}
+              whileInView={{ scaleX: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.45, ease: "easeInOut" }}
+            />
+          </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
             {solutions.map((solution, index) => (
               <motion.div
                 key={index}
-                className="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-shadow"
+                className="group relative bg-white p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300"
+                style={{
+                  border: "1px solid transparent",
+                  backgroundImage: "linear-gradient(white, white), linear-gradient(135deg, #C94A4A 0%, #5A2A3A 100%)",
+                  backgroundOrigin: "border-box",
+                  backgroundClip: "padding-box, border-box",
+                }}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
+                whileHover={
+                  !prefersReducedMotion
+                    ? {
+                        rotateX: 5,
+                        rotateY: 5,
+                        y: -6,
+                      }
+                    : {}
+                }
               >
-                <div className="w-16 h-16 bg-red-100 rounded-xl flex items-center justify-center mb-6">
-                  <solution.icon className="w-8 h-8 text-red-700" />
+                <div className="absolute top-4 right-4">
+                  <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-gradient-to-r from-vietsolve-red/10 to-vietsolve-burgundy/10 text-vietsolve-red border border-vietsolve-red/20 animate-pulse-slow">
+                    AI-Powered
+                  </span>
                 </div>
+
+                <motion.div
+                  className="mb-6"
+                  whileHover={!prefersReducedMotion ? { scale: 1.06 } : {}}
+                  transition={{ duration: 0.2 }}
+                >
+                  <GlossyIcon color="orange" size="lg">
+                    <solution.icon className="w-8 h-8" />
+                  </GlossyIcon>
+                </motion.div>
+
                 <h3 className="text-2xl font-bold mb-4 text-gray-900">{solution.title}</h3>
                 <p className="text-gray-600 mb-6">{solution.description}</p>
+
                 <ul className="space-y-3">
                   {solution.features.map((feature, idx) => (
-                    <li key={idx} className="flex items-start gap-2">
-                      <Check className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
-                      <span className="text-gray-700">{feature}</span>
-                    </li>
+                    <motion.li
+                      key={idx}
+                      className="flex items-start gap-2 group/item cursor-default"
+                      initial={{ opacity: 0, y: 12 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.3, delay: index * 0.1 + idx * 0.09 }}
+                    >
+                      <Check className="w-5 h-5 text-gray-400 group-hover/item:text-vietsolve-red flex-shrink-0 mt-0.5 transition-colors duration-150" />
+                      <span className="text-gray-700 group-hover/item:translate-x-1 group-hover/item:underline decoration-vietsolve-red/30 transition-all duration-150">
+                        {feature}
+                      </span>
+                    </motion.li>
                   ))}
                 </ul>
               </motion.div>
             ))}
           </div>
+
+          <CountingStats
+            stats={[
+              { value: 38, suffix: "%", label: "ROI trung bình tăng" },
+              { value: 60, suffix: "%", label: "Thời gian triển khai giảm" },
+              { value: 1.2, suffix: "M+", label: "Lượt xem/chiến dịch" },
+            ]}
+          />
+
+          <motion.div
+            className="text-center mt-16"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.4 }}
+          >
+            <GlowButton
+              magnetic={!prefersReducedMotion}
+              ripple={!prefersReducedMotion}
+              size="lg"
+              className="px-8 py-6 text-lg font-semibold"
+              aria-label="Nhận demo 15 phút miễn phí"
+            >
+              Nhận demo 15'
+            </GlowButton>
+          </motion.div>
         </div>
       </section>
 
@@ -352,7 +459,12 @@ export default function SolutionsPage() {
               </div>
             </motion.div>
             <div className="flex justify-center gap-4 mt-8">
-              <Button variant="outline" size="icon" onClick={prevCase} className="rounded-full bg-transparent">
+              <Button
+                variant="outline"
+                size="icon"
+                onClick={() => setCurrentCase((prev) => (prev - 1 + caseStudies.length) % caseStudies.length)}
+                className="rounded-full bg-transparent"
+              >
                 <ChevronLeft className="w-5 h-5" />
               </Button>
               <div className="flex items-center gap-2">
@@ -366,7 +478,12 @@ export default function SolutionsPage() {
                   />
                 ))}
               </div>
-              <Button variant="outline" size="icon" onClick={nextCase} className="rounded-full bg-transparent">
+              <Button
+                variant="outline"
+                size="icon"
+                onClick={() => setCurrentCase((prev) => (prev + 1) % caseStudies.length)}
+                className="rounded-full bg-transparent"
+              >
                 <ChevronRight className="w-5 h-5" />
               </Button>
             </div>

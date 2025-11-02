@@ -39,28 +39,24 @@ export default function AnimatedButton({
 }: AnimatedButtonProps) {
   const buttonContent = (
     <motion.button
-      className={cn("relative overflow-hidden rounded-xl font-medium transition-all", className)}
+      className={cn(
+        "relative overflow-hidden rounded-xl font-medium transition-all flex items-center justify-center",
+        sizeClasses[size],
+        variantClasses[variant],
+        className,
+      )}
       whileHover={{ scale: 1.05 }}
       whileTap={{ scale: 0.95 }}
       onClick={onClick}
       disabled={disabled}
-      style={{ perspective: "600px" }}
+      type={type}
     >
       <motion.div
         className="absolute inset-0 bg-gradient-to-r from-red-500 to-red-700 opacity-0"
         whileHover={{ opacity: 1 }}
         transition={{ duration: 0.3 }}
       />
-
-      <motion.div
-        className={cn(
-          "relative z-10 rounded-xl transition-colors font-medium flex items-center justify-center",
-          sizeClasses[size],
-          variantClasses[variant],
-        )}
-      >
-        {children}
-      </motion.div>
+      <span className="relative z-10">{children}</span>
     </motion.button>
   )
 

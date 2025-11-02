@@ -1,12 +1,10 @@
 "use client"
 
-import { motion } from "framer-motion"
-import { ArrowRight } from "lucide-react"
+import { motion, useScroll, useTransform } from "framer-motion"
+import { ArrowRight, Play, Sparkles, Zap, TrendingUp } from "lucide-react"
 import { Pacifico } from "next/font/google"
 import AnimatedButton from "./animated-button"
-import CountingStats from "./counting-stats"
 import Link from "next/link"
-import { cn } from "@/lib/utils"
 import { useState, useEffect } from "react"
 
 const pacifico = Pacifico({
@@ -15,177 +13,779 @@ const pacifico = Pacifico({
   variable: "--font-pacifico",
 })
 
+function useTypingEffect(phrases: string[], typingSpeed = 80, pauseDuration = 1200) {
+  const [currentPhraseIndex, setCurrentPhraseIndex] = useState(0)
+  const [displayedText, setDisplayedText] = useState("")
+  const [isTyping, setIsTyping] = useState(true)
+
+  useEffect(() => {
+    const currentPhrase = phrases[currentPhraseIndex]
+
+    if (isTyping) {
+      if (displayedText.length < currentPhrase.length) {
+        const timeout = setTimeout(() => {
+          setDisplayedText(currentPhrase.slice(0, displayedText.length + 1))
+        }, typingSpeed)
+        return () => clearTimeout(timeout)
+      } else {
+        const timeout = setTimeout(() => {
+          setIsTyping(false)
+        }, pauseDuration)
+        return () => clearTimeout(timeout)
+      }
+    } else {
+      const timeout = setTimeout(() => {
+        setDisplayedText("")
+        setCurrentPhraseIndex((prev) => (prev + 1) % phrases.length)
+        setIsTyping(true)
+      }, 300)
+      return () => clearTimeout(timeout)
+    }
+  }, [displayedText, isTyping, currentPhraseIndex, phrases, typingSpeed, pauseDuration])
+
+  return displayedText
+}
+
 export default function Hero() {
   const [mounted, setMounted] = useState(false)
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false)
+  const { scrollY } = useScroll()
+
+  const typingPhrases = ["tạo nhanh 5×", "tiết kiệm chi phí 30%", "A/B test tự động"]
+  const typedText = useTypingEffect(typingPhrases, 80, 1200)
+
+  const y = useTransform(scrollY, [0, 500], [0, 150])
+  const opacity = useTransform(scrollY, [0, 300], [1, 0])
+
+  const parallaxLayer1 = useTransform(scrollY, [0, 1000], [0, 50])
+  const parallaxLayer2 = useTransform(scrollY, [0, 1000], [0, 150])
+  const parallaxLayer3 = useTransform(scrollY, [0, 1000], [0, 250])
 
   useEffect(() => {
     setMounted(true)
+    const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)")
+    setPrefersReducedMotion(mediaQuery.matches)
+
+    const handleChange = () => setPrefersReducedMotion(mediaQuery.matches)
+    mediaQuery.addEventListener("change", handleChange)
+    return () => mediaQuery.removeEventListener("change", handleChange)
   }, [])
 
-  const stats = [
-    { value: 500, suffix: "+", label: "Chiến dịch thành công" },
-    { value: 98, suffix: "%", label: "Khách hàng hài lòng" },
-    { value: 15, suffix: "M+", label: "Doanh thu tạo ra" },
-  ]
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.15,
+        delayChildren: 0.2,
+      },
+    },
+  }
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 30 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.8,
+        ease: [0.25, 0.46, 0.45, 0.94],
+      },
+    },
+  }
 
   return (
-    <section className="relative min-h-screen flex items-center pt-8 pb-16 overflow-hidden">
-      {/* Background Video */}
-      <div className="absolute inset-0 z-1">
-        {mounted && (
-          <iframe
-            src="https://www.youtube.com/embed/IZkRgWfDlHc?autoplay=1&mute=1&loop=1&controls=0&showinfo=0&rel=0&modestbranding=1&playlist=IZkRgWfDlHc&playsinline=1&disablekb=1&fs=0&iv_load_policy=3&cc_load_policy=0&start=1"
-            className="w-full h-full object-cover opacity-30"
+    <>
+      <section className="relative min-h-screen flex items-center pt-28 pb-16 overflow-hidden">
+        <motion.div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            y: prefersReducedMotion ? 0 : parallaxLayer1,
+            zIndex: -10,
+          }}
+        >
+          <div
+            className="absolute inset-0 opacity-10"
             style={{
-              filter: "brightness(1.2) contrast(0.9)",
-              pointerEvents: "none",
-              position: "absolute",
-              top: "50%",
-              left: "50%",
-              width: "177.77vh",
-              minWidth: "100vw",
-              height: "56.25vw",
-              minHeight: "100vh",
-              transform: "translate(-50%, -50%)",
+              backgroundImage:
+                "linear-gradient(to right, rgba(201, 74, 74, 0.3) 1px, transparent 1px), linear-gradient(to bottom, rgba(201, 74, 74, 0.3) 1px, transparent 1px)",
+              backgroundSize: "80px 80px",
             }}
-            allow="autoplay; encrypted-media"
-            frameBorder="0"
-            title="Background Video"
           />
-        )}
-        <div className="absolute inset-0 bg-gradient-to-br from-red-50 via-white to-gray-50" />
-        <div className="absolute inset-0 bg-gradient-to-b from-white/30 via-white/20 to-white/10" />
-      </div>
+          <svg className="absolute inset-0 w-full h-full opacity-15" xmlns="http://www.w3.org/2000/svg">
+            <motion.line
+              x1="0"
+              y1="30%"
+              x2="100%"
+              y2="30%"
+              stroke="#C94A4A"
+              strokeWidth="1"
+              strokeDasharray="20 10"
+              animate={
+                prefersReducedMotion
+                  ? {}
+                  : {
+                      strokeDashoffset: [0, -30],
+                    }
+              }
+              transition={{
+                duration: 8,
+                repeat: Number.POSITIVE_INFINITY,
+                ease: "linear",
+              }}
+            />
+            <motion.line
+              x1="0"
+              y1="70%"
+              x2="100%"
+              y2="70%"
+              stroke="#5A2A3A"
+              strokeWidth="1"
+              strokeDasharray="20 10"
+              animate={
+                prefersReducedMotion
+                  ? {}
+                  : {
+                      strokeDashoffset: [0, -30],
+                    }
+              }
+              transition={{
+                duration: 10,
+                repeat: Number.POSITIVE_INFINITY,
+                ease: "linear",
+              }}
+            />
+          </svg>
+        </motion.div>
 
-      <div className="relative z-30 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="max-w-5xl mx-auto text-center lg:text-left">
+        <motion.div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            y: prefersReducedMotion ? 0 : parallaxLayer2,
+            zIndex: 0,
+          }}
+        >
+          <svg className="absolute inset-0 w-full h-full opacity-12" xmlns="http://www.w3.org/2000/svg">
+            <motion.line
+              x1="25%"
+              y1="0"
+              x2="25%"
+              y2="100%"
+              stroke="#C94A4A"
+              strokeWidth="1.5"
+              strokeDasharray="15 8"
+              animate={
+                prefersReducedMotion
+                  ? {}
+                  : {
+                      strokeDashoffset: [0, -23],
+                    }
+              }
+              transition={{
+                duration: 6,
+                repeat: Number.POSITIVE_INFINITY,
+                ease: "linear",
+              }}
+            />
+            <motion.line
+              x1="75%"
+              y1="0"
+              x2="75%"
+              y2="100%"
+              stroke="#5A2A3A"
+              strokeWidth="1.5"
+              strokeDasharray="15 8"
+              animate={
+                prefersReducedMotion
+                  ? {}
+                  : {
+                      strokeDashoffset: [0, -23],
+                    }
+              }
+              transition={{
+                duration: 7,
+                repeat: Number.POSITIVE_INFINITY,
+                ease: "linear",
+              }}
+            />
+            <motion.path
+              d="M 0 20 Q 25 40, 50 30 T 100 50"
+              stroke="#C94A4A"
+              strokeWidth="1"
+              fill="none"
+              strokeDasharray="12 6"
+              animate={
+                prefersReducedMotion
+                  ? {}
+                  : {
+                      strokeDashoffset: [0, -18],
+                    }
+              }
+              transition={{
+                duration: 9,
+                repeat: Number.POSITIVE_INFINITY,
+                ease: "linear",
+              }}
+            />
+            <motion.path
+              d="M 100 80 Q 75 60, 50 70 T 0 50"
+              stroke="#5A2A3A"
+              strokeWidth="1"
+              fill="none"
+              strokeDasharray="12 6"
+              animate={
+                prefersReducedMotion
+                  ? {}
+                  : {
+                      strokeDashoffset: [0, -18],
+                    }
+              }
+              transition={{
+                duration: 11,
+                repeat: Number.POSITIVE_INFINITY,
+                ease: "linear",
+              }}
+            />
+          </svg>
+        </motion.div>
+
+        <motion.div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            y: prefersReducedMotion ? 0 : parallaxLayer3,
+            zIndex: 10,
+          }}
+        >
+          <div
+            className="absolute inset-0 opacity-10"
+            style={{
+              backgroundImage:
+                "linear-gradient(to right, rgba(90, 42, 58, 0.4) 1px, transparent 1px), linear-gradient(to bottom, rgba(90, 42, 58, 0.4) 1px, transparent 1px)",
+              backgroundSize: "40px 40px",
+            }}
+          />
+          <svg className="absolute inset-0 w-full h-full opacity-15" xmlns="http://www.w3.org/2000/svg">
+            <motion.line
+              x1="0"
+              y1="50%"
+              x2="100%"
+              y2="50%"
+              stroke="#C94A4A"
+              strokeWidth="0.5"
+              strokeDasharray="10 5"
+              animate={
+                prefersReducedMotion
+                  ? {}
+                  : {
+                      strokeDashoffset: [0, -15],
+                    }
+              }
+              transition={{
+                duration: 4,
+                repeat: Number.POSITIVE_INFINITY,
+                ease: "linear",
+              }}
+            />
+            <motion.line
+              x1="50%"
+              y1="0"
+              x2="50%"
+              y2="100%"
+              stroke="#5A2A3A"
+              strokeWidth="0.5"
+              strokeDasharray="10 5"
+              animate={
+                prefersReducedMotion
+                  ? {}
+                  : {
+                      strokeDashoffset: [0, -15],
+                    }
+              }
+              transition={{
+                duration: 5,
+                repeat: Number.POSITIVE_INFINITY,
+                ease: "linear",
+                delay: 1,
+              }}
+            />
+          </svg>
+        </motion.div>
+
+        <motion.div className="absolute inset-0 z-0" style={{ y }}>
+          <div className="absolute inset-0 bg-gradient-to-br from-vietsolve-red to-vietsolve-burgundy" />
+
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="space-y-8"
-          >
-            <div className="space-y-6">
-              <motion.div
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.6, delay: 0.2 }}
-                className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-red-50 via-gray-50 to-red-50 border border-red-200 rounded-full text-sm text-gray-900 font-medium backdrop-blur-sm"
-              >
-                <div className="w-2 h-2 bg-green-500 rounded-full mr-3 animate-pulse"></div>
-                <span>Agency Marketing Toàn Diện</span>
-              </motion.div>
+            className="absolute inset-0 bg-gradient-to-tr from-vietsolve-red/50 via-transparent to-vietsolve-burgundy/50"
+            animate={{
+              opacity: [0.3, 0.6, 0.3],
+              scale: [1, 1.05, 1],
+            }}
+            transition={{
+              duration: 8,
+              repeat: Number.POSITIVE_INFINITY,
+              ease: "easeInOut",
+            }}
+          />
 
-              <motion.h1
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 1, delay: 0.3 }}
-                className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-tight"
-              >
-                <span className="block text-gray-900 mb-2">AGENCY MARKETING</span>
-                <span className="block text-gray-900 mb-2">TOÀN DIỆN CHO</span>
-                <span
-                  className={cn(
-                    "block mb-2 bg-gradient-to-r from-red-600 via-gray-900 to-red-700 bg-clip-text text-transparent",
-                    pacifico.className,
-                  )}
-                  style={{
-                    textShadow: "0 0 40px rgba(220, 38, 38, 0.3)",
-                  }}
+          <motion.div
+            className="absolute top-20 right-20 w-72 h-72 bg-gradient-to-br from-vietsolve-red/20 to-vietsolve-burgundy/20 rounded-full blur-3xl"
+            animate={{
+              scale: [1, 1.2, 1],
+              opacity: [0.3, 0.5, 0.3],
+              x: [0, 30, 0],
+              y: [0, -20, 0],
+            }}
+            transition={{
+              duration: 6,
+              repeat: Number.POSITIVE_INFINITY,
+              ease: "easeInOut",
+            }}
+          />
+          <motion.div
+            className="absolute bottom-20 left-20 w-96 h-96 bg-gradient-to-tr from-vietsolve-burgundy/20 to-vietsolve-red/20 rounded-full blur-3xl"
+            animate={{
+              scale: [1, 1.3, 1],
+              opacity: [0.2, 0.4, 0.2],
+              x: [0, -40, 0],
+              y: [0, 30, 0],
+            }}
+            transition={{
+              duration: 8,
+              repeat: Number.POSITIVE_INFINITY,
+              ease: "easeInOut",
+              delay: 1,
+            }}
+          />
+
+          <motion.div
+            className="absolute top-1/2 left-1/3 w-64 h-64 bg-gradient-to-br from-vietsolve-red/15 to-vietsolve-burgundy/15 rounded-full blur-2xl"
+            animate={{
+              scale: [1, 1.15, 1],
+              opacity: [0.2, 0.35, 0.2],
+              rotate: [0, 180, 360],
+            }}
+            transition={{
+              duration: 10,
+              repeat: Number.POSITIVE_INFINITY,
+              ease: "linear",
+            }}
+          />
+
+          {mounted && (
+            <div className="absolute inset-0 overflow-hidden">
+              <iframe
+                src="https://www.youtube.com/embed/IZkRgWfDlHc?autoplay=1&mute=1&loop=1&controls=0&showinfo=0&rel=0&modestbranding=1&playlist=IZkRgWfDlHc&playsinline=1&disablekb=1&fs=0&iv_load_policy=3&cc_load_policy=0&start=0"
+                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none"
+                style={{
+                  opacity: 0.4,
+                  width: "300vw",
+                  height: "169vw",
+                  minWidth: "177.78vh",
+                  minHeight: "100vh",
+                  border: "none",
+                }}
+                allow="autoplay; encrypted-media"
+                title="Background Video"
+              />
+            </div>
+          )}
+
+          <div className="absolute inset-0 bg-gradient-to-br from-black/30 via-transparent to-black/40" />
+
+          <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808008_1px,transparent_1px),linear-gradient(to_bottom,#80808008_1px,transparent_1px)] bg-[size:64px_64px]" />
+
+          <svg className="absolute inset-0 w-full h-full pointer-events-none" xmlns="http://www.w3.org/2000/svg">
+            <motion.line
+              x1="0"
+              y1="20%"
+              x2="100%"
+              y2="20%"
+              stroke="url(#gradient1)"
+              strokeWidth="2"
+              strokeDasharray="10 5"
+              initial={{ pathLength: 0, opacity: 0 }}
+              animate={{ pathLength: 1, opacity: [0, 0.6, 0] }}
+              transition={{ duration: 3, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
+            />
+            <motion.line
+              x1="0"
+              y1="80%"
+              x2="100%"
+              y2="80%"
+              stroke="url(#gradient2)"
+              strokeWidth="2"
+              strokeDasharray="10 5"
+              initial={{ pathLength: 0, opacity: 0 }}
+              animate={{ pathLength: 1, opacity: [0, 0.6, 0] }}
+              transition={{ duration: 3, repeat: Number.POSITIVE_INFINITY, ease: "linear", delay: 1.5 }}
+            />
+            <motion.line
+              x1="15%"
+              y1="0"
+              x2="15%"
+              y2="100%"
+              stroke="url(#gradient3)"
+              strokeWidth="2"
+              strokeDasharray="10 5"
+              initial={{ pathLength: 0, opacity: 0 }}
+              animate={{ pathLength: 1, opacity: [0, 0.5, 0] }}
+              transition={{ duration: 4, repeat: Number.POSITIVE_INFINITY, ease: "linear", delay: 0.5 }}
+            />
+            <motion.line
+              x1="85%"
+              y1="0"
+              x2="85%"
+              y2="100%"
+              stroke="url(#gradient4)"
+              strokeWidth="2"
+              strokeDasharray="10 5"
+              initial={{ pathLength: 0, opacity: 0 }}
+              animate={{ pathLength: 1, opacity: [0, 0.5, 0] }}
+              transition={{ duration: 4, repeat: Number.POSITIVE_INFINITY, ease: "linear", delay: 2 }}
+            />
+            <motion.path
+              d="M 0 0 L 30 30 L 60 20 L 100 50"
+              stroke="url(#gradient5)"
+              strokeWidth="1.5"
+              fill="none"
+              strokeDasharray="8 4"
+              initial={{ pathLength: 0, opacity: 0 }}
+              animate={{ pathLength: 1, opacity: [0, 0.7, 0] }}
+              transition={{ duration: 5, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
+            />
+            {[
+              { cx: "10%", cy: "25%", delay: 0 },
+              { cx: "90%", cy: "30%", delay: 0.5 },
+              { cx: "20%", cy: "75%", delay: 1 },
+              { cx: "80%", cy: "70%", delay: 1.5 },
+            ].map((node, i) => (
+              <motion.g key={i}>
+                <motion.circle
+                  cx={node.cx}
+                  cy={node.cy}
+                  r="4"
+                  fill="#C94A4A"
+                  initial={{ scale: 0, opacity: 0 }}
+                  animate={{ scale: [0, 1, 1, 0], opacity: [0, 1, 1, 0] }}
+                  transition={{ duration: 3, repeat: Number.POSITIVE_INFINITY, delay: node.delay }}
+                />
+                <motion.circle
+                  cx={node.cx}
+                  cy={node.cy}
+                  r="8"
+                  fill="none"
+                  stroke="#C94A4A"
+                  strokeWidth="1"
+                  initial={{ scale: 0, opacity: 0 }}
+                  animate={{ scale: [0, 1.5, 2], opacity: [0, 0.6, 0] }}
+                  transition={{ duration: 3, repeat: Number.POSITIVE_INFINITY, delay: node.delay }}
+                />
+              </motion.g>
+            ))}
+            <defs>
+              <linearGradient id="gradient1" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stopColor="#C94A4A" stopOpacity="0" />
+                <stop offset="50%" stopColor="#C94A4A" stopOpacity="0.8" />
+                <stop offset="100%" stopColor="#5A2A3A" stopOpacity="0" />
+              </linearGradient>
+              <linearGradient id="gradient2" x1="100%" y1="0%" x2="0%" y2="0%">
+                <stop offset="0%" stopColor="#5A2A3A" stopOpacity="0" />
+                <stop offset="50%" stopColor="#C94A4A" stopOpacity="0.8" />
+                <stop offset="100%" stopColor="#C94A4A" stopOpacity="0" />
+              </linearGradient>
+              <linearGradient id="gradient3" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stopColor="#C94A4A" stopOpacity="0" />
+                <stop offset="50%" stopColor="#5A2A3A" stopOpacity="0.7" />
+                <stop offset="100%" stopColor="#C94A4A" stopOpacity="0" />
+              </linearGradient>
+              <linearGradient id="gradient4" x1="0%" y1="100%" x2="0%" y2="0%">
+                <stop offset="0%" stopColor="#5A2A3A" stopOpacity="0" />
+                <stop offset="50%" stopColor="#C94A4A" stopOpacity="0.7" />
+                <stop offset="100%" stopColor="#5A2A3A" stopOpacity="0" />
+              </linearGradient>
+              <linearGradient id="gradient5" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="#C94A4A" stopOpacity="0.3" />
+                <stop offset="50%" stopColor="#5A2A3A" stopOpacity="0.8" />
+                <stop offset="100%" stopColor="#C94A4A" stopOpacity="0.3" />
+              </linearGradient>
+            </defs>
+          </svg>
+
+          <motion.div
+            className="absolute top-0 left-0 w-64 h-px bg-gradient-to-r from-vietsolve-red via-white to-transparent"
+            initial={{ scaleX: 0, opacity: 0 }}
+            animate={{ scaleX: [0, 1, 1, 0], opacity: [0, 1, 1, 0] }}
+            transition={{ duration: 4, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
+            style={{ transformOrigin: "left" }}
+          />
+          <motion.div
+            className="absolute top-0 right-0 w-px h-64 bg-gradient-to-b from-vietsolve-burgundy via-white to-transparent"
+            initial={{ scaleY: 0, opacity: 0 }}
+            animate={{ scaleY: [0, 1, 1, 0], opacity: [0, 1, 1, 0] }}
+            transition={{ duration: 4, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut", delay: 1 }}
+            style={{ transformOrigin: "top" }}
+          />
+          <motion.div
+            className="absolute bottom-0 right-0 w-64 h-px bg-gradient-to-l from-vietsolve-red via-white to-transparent"
+            initial={{ scaleX: 0, opacity: 0 }}
+            animate={{ scaleX: [0, 1, 1, 0], opacity: [0, 1, 1, 0] }}
+            transition={{ duration: 4, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut", delay: 2 }}
+            style={{ transformOrigin: "right" }}
+          />
+          <motion.div
+            className="absolute bottom-0 left-0 w-px h-64 bg-gradient-to-t from-vietsolve-burgundy via-white to-transparent"
+            initial={{ scaleY: 0, opacity: 0 }}
+            animate={{ scaleY: [0, 1, 1, 0], opacity: [0, 1, 1, 0] }}
+            transition={{ duration: 4, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut", delay: 3 }}
+            style={{ transformOrigin: "bottom" }}
+          />
+        </motion.div>
+
+        <motion.div className="relative z-30 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" style={{ opacity }}>
+          <div className="max-w-5xl mx-auto text-center lg:text-left">
+            <motion.div variants={containerVariants} initial="hidden" animate="visible" className="space-y-8">
+              <div className="space-y-6">
+                <motion.div
+                  variants={itemVariants}
+                  whileHover={{ scale: 1.05 }}
+                  className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-vietsolve-red via-vietsolve-burgundy to-vietsolve-red bg-[length:200%_100%] rounded-full text-sm text-white font-semibold shadow-lg shadow-vietsolve-red/30 backdrop-blur-sm"
                 >
-                  Doanh nghiệp
-                </span>
-                <span className="block text-gray-700">MỌI QUY MÔ</span>
-              </motion.h1>
+                  <motion.div
+                    animate={{
+                      scale: [1, 1.2, 1],
+                      rotate: [0, 5, -5, 0],
+                    }}
+                    transition={{
+                      duration: 2,
+                      repeat: Number.POSITIVE_INFINITY,
+                      ease: "easeInOut",
+                    }}
+                  >
+                    <Sparkles className="w-4 h-4 mr-2" />
+                  </motion.div>
+                  <motion.span
+                    animate={{ backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"] }}
+                    transition={{ duration: 3, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
+                  >
+                    Agency Marketing Toàn Diện
+                  </motion.span>
+                  <motion.div
+                    className="ml-2"
+                    animate={{ rotate: 360 }}
+                    transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
+                  >
+                    <Zap className="w-4 h-4" />
+                  </motion.div>
+                </motion.div>
 
-              <motion.p
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.6 }}
-                className="text-lg sm:text-xl text-gray-700 leading-relaxed max-w-3xl mx-auto lg:mx-0"
+                <motion.h1
+                  variants={itemVariants}
+                  className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-tight"
+                >
+                  <motion.span
+                    className="block mb-2 text-white drop-shadow-lg"
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.8, delay: 0.5 }}
+                  >
+                    Agency Marketing sáng tạo bằng AI
+                  </motion.span>
+                  <motion.span
+                    className="block bg-gradient-to-r from-vietsolve-red via-vietsolve-burgundy to-vietsolve-red bg-clip-text text-transparent drop-shadow-lg"
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.8, delay: 0.7 }}
+                  >
+                    nhanh hơn 5×, chi phí tối ưu tới 30%
+                  </motion.span>
+                </motion.h1>
+
+                <motion.p
+                  variants={itemVariants}
+                  className="text-lg sm:text-xl text-white leading-relaxed max-w-3xl mx-auto lg:mx-0 font-medium drop-shadow-lg"
+                >
+                  <motion.span
+                    className="inline-flex items-center"
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6, delay: 0.9 }}
+                  >
+                    <TrendingUp className="w-5 h-5 mr-2 text-vietsolve-red" />
+                    Từ ý tưởng → nội dung → chiến dịch đa kênh.
+                  </motion.span>
+                  <br />
+                  <motion.span
+                    className="inline-flex items-center text-gray-100 min-h-[1.5em]"
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6, delay: 1.1 }}
+                  >
+                    <span className="bg-gradient-to-r from-vietsolve-red to-vietsolve-burgundy bg-clip-text text-transparent font-bold">
+                      {typedText}
+                    </span>
+                    <motion.span
+                      className="inline-block w-0.5 h-5 bg-vietsolve-red ml-1"
+                      animate={{ opacity: [1, 0, 1] }}
+                      transition={{ duration: 0.8, repeat: Number.POSITIVE_INFINITY }}
+                    />
+                  </motion.span>
+                  <span className="block text-gray-100 mt-1">— tối ưu CPC/CPA theo thời gian thực.</span>
+                </motion.p>
+              </div>
+
+              <motion.div
+                variants={itemVariants}
+                className="flex flex-col sm:flex-row gap-4 items-center justify-center lg:justify-start"
               >
-                Chúng tôi thấu hiểu <span className="text-red-600 font-semibold">khách hàng</span> và triển khai{" "}
-                <span className="text-red-600 font-semibold">chiến lược marketing</span> tạo ra{" "}
-                <span className="text-red-600 font-semibold">kết quả đo lường được</span>. Từ SEO, mạng xã hội đến nội
-                dung và email marketing.
-              </motion.p>
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.5, delay: 1.3 }}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  <Link href="/get-started">
+                    <AnimatedButton
+                      variant="slim"
+                      className="bg-gradient-to-r from-vietsolve-red to-vietsolve-burgundy text-white hover:from-vietsolve-burgundy hover:to-vietsolve-red shadow-lg shadow-vietsolve-red/50 hover:shadow-xl hover:shadow-vietsolve-red/60 transition-all"
+                    >
+                      <span className="flex items-center font-semibold">
+                        Nhận Demo 15'
+                        <motion.div
+                          animate={{ x: [0, 5, 0] }}
+                          transition={{ duration: 1.5, repeat: Number.POSITIVE_INFINITY }}
+                        >
+                          <ArrowRight className="ml-2 h-4 w-4" />
+                        </motion.div>
+                      </span>
+                    </AnimatedButton>
+                  </Link>
+                </motion.div>
+
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.5, delay: 1.5 }}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  <Link href="/case-studies">
+                    <AnimatedButton
+                      variant="slim"
+                      className="bg-white text-gray-900 hover:bg-gray-50 border-2 border-gray-300 hover:border-vietsolve-red shadow-md hover:shadow-lg transition-all"
+                    >
+                      <span className="flex items-center font-semibold">
+                        <Play className="mr-2 h-4 w-4 text-vietsolve-red" />
+                        Xem Case Study
+                      </span>
+                    </AnimatedButton>
+                  </Link>
+                </motion.div>
+              </motion.div>
+            </motion.div>
+          </div>
+        </motion.div>
+      </section>
+
+      <section className="relative z-20 -mt-8 pb-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+            className="bg-gradient-to-br from-white via-vietsolve-red/10 to-white rounded-3xl shadow-2xl border-2 border-vietsolve-red/20 p-8 md:p-12 backdrop-blur-sm relative overflow-hidden"
+          >
+            <motion.div
+              className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-vietsolve-red/10 to-transparent rounded-bl-full"
+              animate={{ rotate: [0, 90, 0] }}
+              transition={{ duration: 10, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
+            />
+            <motion.div
+              className="absolute bottom-0 left-0 w-32 h-32 bg-gradient-to-tr from-vietsolve-burgundy/10 to-transparent rounded-tr-full"
+              animate={{ rotate: [0, -90, 0] }}
+              transition={{ duration: 10, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
+            />
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12 pb-8 border-b-2 border-vietsolve-red/30 relative z-10">
+              {[
+                { value: "ROI +38%", label: "Tăng trưởng trung bình", delay: 0 },
+                { value: "-60%", label: "Thời gian triển khai", delay: 0.1 },
+                { value: ">1.2M", label: "Lượt xem/chiến dịch", delay: 0.2 },
+              ].map((metric, index) => (
+                <motion.div
+                  key={index}
+                  className="text-center p-6 rounded-2xl bg-gradient-to-br from-vietsolve-red/10 to-vietsolve-burgundy/10 border border-vietsolve-red/30 shadow-md hover:shadow-lg transition-all"
+                  initial={{ opacity: 0, scale: 0.8, y: 20 }}
+                  whileInView={{ opacity: 1, scale: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: metric.delay }}
+                  whileHover={{ scale: 1.05, y: -5 }}
+                >
+                  <motion.div
+                    className="font-bold bg-gradient-to-r from-vietsolve-red to-vietsolve-burgundy bg-clip-text text-transparent mb-2 text-3xl"
+                    initial={{ opacity: 0 }}
+                    whileInView={{ opacity: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.8, delay: metric.delay + 0.3 }}
+                  >
+                    {metric.value}
+                  </motion.div>
+                  <div className="text-sm text-gray-700 font-medium">{metric.label}</div>
+                </motion.div>
+              ))}
             </div>
 
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.8 }}
-              className="flex flex-col gap-6 items-center justify-center lg:justify-start lg:items-start"
+              className="text-center mb-8 relative z-10"
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.4 }}
             >
-              <Link href="/get-started">
-                <AnimatedButton variant="slim" className="bg-red-600 text-white hover:bg-red-700">
-                  <span className="flex items-center">
-                    Bắt đầu ngay
-                    <ArrowRight className="ml-2 h-4 w-4" />
-                  </span>
-                </AnimatedButton>
-              </Link>
-
-              <div className="flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-6">
-                <div className="flex items-center space-x-3">
-                  <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center shadow-md border border-gray-200">
-                    <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none">
-                      <path
-                        d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
-                        fill="#4285F4"
-                      />
-                      <path
-                        d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
-                        fill="#34A853"
-                      />
-                      <path
-                        d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
-                        fill="#FBBC05"
-                      />
-                      <path
-                        d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
-                        fill="#EA4335"
-                      />
-                    </svg>
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium text-gray-900">Đối tác Google</p>
-                    <p className="text-xs text-gray-600">Agency được chứng nhận</p>
-                  </div>
-                </div>
-
-                <div className="flex items-center space-x-3">
-                  <div className="w-10 h-10 bg-red-600 rounded-xl flex items-center justify-center shadow-md">
-                    <svg className="w-6 h-6 text-white" viewBox="0 0 24 24" fill="currentColor">
-                      <path d="M12 2L3.09 8.26l1.42 1.42L12 4.16l7.49 5.52 1.42-1.42L12 2z" />
-                      <path d="M12 6L6.5 10.5v7h3v-5h5v5h3v-7L12 6z" />
-                    </svg>
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium text-gray-900">Được BBB công nhận</p>
-                    <p className="text-xs text-gray-600">Xếp hạng A+</p>
-                  </div>
-                </div>
-
-                <div className="flex items-center space-x-3">
-                  <div className="w-10 h-10 bg-green-600 rounded-xl flex items-center justify-center shadow-md">
-                    <svg className="w-6 h-6 text-white" viewBox="0 0 24 24" fill="currentColor">
-                      <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium text-gray-900">Agency được xác thực</p>
-                    <p className="text-xs text-gray-600">Đối tác đáng tin cậy</p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Stats moved below badges */}
-              <CountingStats stats={stats} />
+              <p className="text-sm font-bold text-gray-700 uppercase tracking-wider flex items-center justify-center">
+                <motion.span
+                  className="w-12 h-px bg-gradient-to-r from-transparent to-vietsolve-red mr-3"
+                  initial={{ width: 0 }}
+                  whileInView={{ width: 48 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.8, delay: 0.5 }}
+                />
+                Đối tác tin cậy
+                <motion.span
+                  className="w-12 h-px bg-gradient-to-l from-transparent to-vietsolve-red ml-3"
+                  initial={{ width: 0 }}
+                  whileInView={{ width: 48 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.8, delay: 0.5 }}
+                />
+              </p>
             </motion.div>
+            <div className="grid grid-cols-2 md:grid-cols-6 gap-8 items-center justify-items-center relative z-10">
+              {[
+                { src: "/google-logo.png", alt: "Google Partner" },
+                { src: "/facebook-meta-logo.jpg", alt: "Meta Partner" },
+                { src: "/hubspot-logo.png", alt: "HubSpot Partner" },
+                { src: "/shopify-logo.png", alt: "Shopify Partner" },
+                { src: "/salesforce-logo.png", alt: "Salesforce Partner" },
+                { src: "/mailchimp-logo-abstract.png", alt: "Mailchimp Partner" },
+              ].map((logo, index) => (
+                <motion.div
+                  key={index}
+                  className="flex items-center justify-center h-16 w-full p-4 rounded-xl bg-white/50 backdrop-blur-sm border border-gray-200 grayscale hover:grayscale-0 transition-all hover:shadow-md hover:border-vietsolve-red"
+                  whileHover={{ scale: 1.1, y: -5, rotate: [0, -2, 2, 0] }}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.6 + index * 0.1, duration: 0.5 }}
+                >
+                  <img src={logo.src || "/placeholder.svg"} alt={logo.alt} className="h-8 object-contain" />
+                </motion.div>
+              ))}
+            </div>
           </motion.div>
         </div>
-      </div>
-    </section>
+      </section>
+    </>
   )
 }
