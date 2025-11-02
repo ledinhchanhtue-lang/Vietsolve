@@ -7,6 +7,7 @@ import AnimatedButton from "./animated-button"
 import CountingStats from "./counting-stats"
 import Link from "next/link"
 import { cn } from "@/lib/utils"
+import { useState, useEffect } from "react"
 
 const pacifico = Pacifico({
   subsets: ["latin"],
@@ -15,34 +16,47 @@ const pacifico = Pacifico({
 })
 
 export default function Hero() {
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+    console.log("[v0] Hero component mounted successfully")
+  }, [])
+
   const stats = [
     { value: 500, suffix: "+", label: "Chiến dịch thành công" },
     { value: 98, suffix: "%", label: "Khách hàng hài lòng" },
     { value: 15, suffix: "M+", label: "Doanh thu tạo ra" },
   ]
 
+  console.log("[v0] Hero component rendering, mounted:", mounted)
+
   return (
     <section className="relative min-h-screen flex items-center pt-8 pb-16 overflow-hidden">
       {/* Background Video */}
       <div className="absolute inset-0 z-0">
-        <iframe
-          src="https://www.youtube.com/embed/IZkRgWfDlHc?autoplay=1&mute=1&loop=1&controls=0&showinfo=0&rel=0&modestbranding=1&playlist=IZkRgWfDlHc&playsinline=1&disablekb=1&fs=0&iv_load_policy=3&cc_load_policy=0&start=1"
-          className="w-full h-full object-cover opacity-30"
-          style={{
-            filter: "brightness(1.2) contrast(0.9)",
-            pointerEvents: "none",
-            position: "absolute",
-            top: "50%",
-            left: "50%",
-            width: "177.77vh",
-            minWidth: "100vw",
-            height: "56.25vw",
-            minHeight: "100vh",
-            transform: "translate(-50%, -50%)",
-          }}
-          allow="autoplay; encrypted-media"
-          frameBorder="0"
-        />
+        {mounted && (
+          <iframe
+            src="https://www.youtube.com/embed/IZkRgWfDlHc?autoplay=1&mute=1&loop=1&controls=0&showinfo=0&rel=0&modestbranding=1&playlist=IZkRgWfDlHc&playsinline=1&disablekb=1&fs=0&iv_load_policy=3&cc_load_policy=0&start=1"
+            className="w-full h-full object-cover opacity-30"
+            style={{
+              filter: "brightness(1.2) contrast(0.9)",
+              pointerEvents: "none",
+              position: "absolute",
+              top: "50%",
+              left: "50%",
+              width: "177.77vh",
+              minWidth: "100vw",
+              height: "56.25vw",
+              minHeight: "100vh",
+              transform: "translate(-50%, -50%)",
+            }}
+            allow="autoplay; encrypted-media"
+            frameBorder="0"
+            title="Background Video"
+          />
+        )}
+        <div className="absolute inset-0 bg-gradient-to-br from-red-50 via-white to-gray-50" />
         <div className="absolute inset-0 bg-gradient-to-b from-white/30 via-white/20 to-white/10" />
       </div>
 
