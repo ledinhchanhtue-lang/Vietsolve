@@ -9,8 +9,6 @@ import AnimatedFooter from "@/components/animated-footer"
 import BackgroundPaths from "@/components/background-paths"
 
 export default function Home() {
-  console.log("[v0] Home page rendering")
-
   return (
     <div className="relative min-h-screen bg-white">
       <BackgroundPaths />

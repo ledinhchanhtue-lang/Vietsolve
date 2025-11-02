@@ -20,7 +20,6 @@ export default function Hero() {
 
   useEffect(() => {
     setMounted(true)
-    console.log("[v0] Hero component mounted successfully")
   }, [])
 
   const stats = [
@@ -28,8 +27,6 @@ export default function Hero() {
     { value: 98, suffix: "%", label: "Khách hàng hài lòng" },
     { value: 15, suffix: "M+", label: "Doanh thu tạo ra" },
   ]
-
-  console.log("[v0] Hero component rendering, mounted:", mounted)
 
   return (
     <section className="relative min-h-screen flex items-center pt-8 pb-16 overflow-hidden">
