@@ -7,8 +7,17 @@ const nextConfig = {
     ignoreBuildErrors: true,
   },
   images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'youtube.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'www.youtube.com',
+      },
+    ],
     unoptimized: true,
-    domains: ['youtube.com', 'www.youtube.com'],
   },
   async headers() {
     return [
