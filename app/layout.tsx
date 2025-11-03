@@ -2,12 +2,7 @@ import "./globals.css"
 import { Inter } from "next/font/google"
 import type React from "react"
 import type { Metadata } from "next"
-import dynamic from "next/dynamic"
-
-const MouseMoveEffect = dynamic(() => import("@/components/mouse-move-effect"), {
-  ssr: false,
-  loading: () => null,
-})
+import { ClientMouseEffect } from "@/components/client-mouse-effect"
 
 const inter = Inter({
   subsets: ["latin"],
@@ -25,12 +20,12 @@ export const metadata: Metadata = {
 export default function RootLayout({
   children,
 }: {
-  children: React.NodeNode
+  children: React.ReactNode
 }) {
   return (
     <html lang="vi" className={inter.variable}>
       <body className="font-sans bg-background text-foreground antialiased">
-        <MouseMoveEffect />
+        <ClientMouseEffect />
         {children}
       </body>
     </html>
