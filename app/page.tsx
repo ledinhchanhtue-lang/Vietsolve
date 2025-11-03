@@ -9,7 +9,7 @@ import FAQSection from "@/components/faq-section"
 import AnimatedFooter from "@/components/animated-footer"
 import ClientBackgrounds from "@/components/client-backgrounds"
 
-const generateStatic = "force-static"
+export const dynamic = "force-static"
 
 export default function Home() {
   return (
