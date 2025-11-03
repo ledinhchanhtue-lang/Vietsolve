@@ -3,8 +3,9 @@ import AnimatedFooter from "@/components/animated-footer"
 import BlogPage from "@/components/blog-page"
 
 export const metadata = {
-  title: "Blog & Insights - VietSolve",
-  description: "Chia sẻ kiến thức, kinh nghiệm và góc nhìn mới về truyền thông, thương hiệu & công nghệ.",
+  title: "VietSolve Blog – Insights & Vision",
+  description:
+    "Khám phá chiến lược, sáng tạo và công nghệ giúp thương hiệu Việt vươn tầm quốc tế cùng VietSolve Agency.",
 }
 
 export default function Blog() {

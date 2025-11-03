@@ -96,7 +96,7 @@ export default function Hero() {
 
   return (
     <>
-      <section className="relative min-h-screen flex items-center pt-28 pb-16 overflow-hidden">
+      <section className="relative min-h-screen flex items-center pt-28 pb-16 overflow-hidden content-auto">
         <motion.div
           className="absolute inset-0 pointer-events-none"
           style={{
@@ -386,6 +386,7 @@ export default function Hero() {
                 }}
                 allow="autoplay; encrypted-media"
                 title="Background Video"
+                loading="lazy"
               />
             </div>
           )}
@@ -687,7 +688,7 @@ export default function Hero() {
         </motion.div>
       </section>
 
-      <section className="relative z-20 -mt-8 pb-16">
+      <section className="relative z-20 -mt-8 pb-16 content-auto">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 50 }}

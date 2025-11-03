@@ -94,6 +94,11 @@
   .animate-ripple {
     animation: ripple 0.6s ease-out forwards;
   }
+
+  /* Added content-visibility for performance optimization */
+  .content-auto {
+    content-visibility: auto;
+  }
 }
 
 @keyframes fade-in {
@@ -169,7 +174,11 @@
   /* Disable all custom animations for reduced motion */
   .animate-light-sweep,
   .animate-pulse-slow,
-  .animate-ripple {
-    animation: none !important;
+  .animate-ripple,
+  /* Disable all animations for reduced motion */
+    * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }

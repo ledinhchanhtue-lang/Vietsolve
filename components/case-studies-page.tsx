@@ -18,6 +18,8 @@ import {
   Play,
   ChevronLeft,
   ChevronRight,
+  Plus,
+  Minus,
 } from "lucide-react"
 import Image from "next/image"
 import { useRouter, useSearchParams } from "next/navigation"
@@ -25,12 +27,22 @@ import CountingStats from "@/components/counting-stats"
 import GlowButton from "@/components/glow-button"
 import GlossyIcon from "@/components/glossy-icon"
 
-const categories = ["Tất cả", "Marketing", "Công nghệ", "Sáng tạo", "AI & Automation", "Branding"]
+const categories = [
+  "Tất cả",
+  "Marketing",
+  "Công nghệ",
+  "Sáng tạo",
+  "AI & Automation",
+  "Branding",
+  "Ecommerce",
+  "Livestream",
+]
+
 const sortOptions = [
   { value: "latest", label: "Mới nhất" },
-  { value: "roi", label: "Hiệu quả cao (ROAS/ROI)" },
-  { value: "duration", label: "Thời lượng dự án" },
-  { value: "budget", label: "Ngân sách" },
+  { value: "roas", label: "ROAS cao nhất" },
+  { value: "cpa", label: "CPA thấp nhất" },
+  { value: "views", label: "View cao nhất" },
 ]
 
 const caseStudies = [
@@ -38,15 +50,17 @@ const caseStudies = [
     id: 1,
     title: "Thương hiệu thời trang x TikTok",
     category: "Marketing",
-    industry: "Thời trang",
-    description: "Chiến dịch viral giúp thương hiệu thời trang Việt tăng 300% doanh số trong 3 tháng",
+    industry: "Fashion",
+    description: "Chiến dịch viral tăng 300% doanh số trong 3 tháng với ROAS 5.2x",
     thumbnail: "/fashion-brand-campaign.jpg",
     videoPreview: "/fashion-preview.mp4",
-    kpiBadges: ["+300% Doanh số", "ROAS 5.2x"],
-    roi: 520,
-    duration: 3,
-    budget: 150,
-    datePublished: "2024-10-15",
+    kpiBadges: ["ROAS 5.2x", "CPA -27%"],
+    platform: "TikTok",
+    duration: "4 tuần",
+    roas: 5.2,
+    cpa: 27,
+    views: 5000000,
+    featured: true,
     brand: "Fashion Brand X",
     objective: "Tăng nhận diện thương hiệu và doanh số cho thương hiệu thời trang mới trên thị trường Việt Nam",
     challenge: "Thị trường thời trang cạnh tranh cao, ngân sách marketing hạn chế, cần tạo viral nhanh",
@@ -70,6 +84,8 @@ const caseStudies = [
     ],
     beforeImage: "/fashion-ad-before-traditional-design.jpg",
     afterImage: "/fashion-ad-after-ai-modern-vibrant.jpg",
+    datePublished: "2024-10-15",
+    budget: 150,
   },
   {
     id: 2,
@@ -233,6 +249,24 @@ const caseStudies = [
   },
 ]
 
+const faqs = [
+  {
+    question: "Tiêu chí nào để chọn case study hiển thị?",
+    answer:
+      "Chúng tôi chọn các case có KPI rõ ràng, được khách hàng đồng ý công khai, và đại diện cho nhiều ngành nghề khác nhau. Mỗi case đều có số liệu thực tế được xác thực.",
+  },
+  {
+    question: "Làm sao xác thực KPI trong case study?",
+    answer:
+      "Tất cả KPI đều được trích xuất từ dashboard thực tế (Google Analytics, Facebook Ads Manager, TikTok Ads...) và được khách hàng xác nhận trước khi công bố.",
+  },
+  {
+    question: "Case study có NDA không?",
+    answer:
+      "Một số case nhạy cảm có NDA và không được công khai. Nếu bạn muốn xem case tương tự ngành của mình, vui lòng liên hệ để được tư vấn riêng.",
+  },
+]
+
 export default function CaseStudiesPage() {
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -246,6 +280,10 @@ export default function CaseStudiesPage() {
   const [beforeAfterSlider, setBeforeAfterSlider] = useState(50)
   const [currentGalleryIndex, setCurrentGalleryIndex] = useState(0)
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false)
+
+  // Added state for visible cases and expanded FAQ
+  const [visibleCases, setVisibleCases] = useState(12)
+  const [expandedFaq, setExpandedFaq] = useState<number | null>(null)
 
   const { scrollY } = useScroll()
   const heroY = useTransform(scrollY, [0, 500], [0, prefersReducedMotion ? 0 : 150])
@@ -298,12 +336,12 @@ export default function CaseStudiesPage() {
     // Sort
     const sorted = [...filtered].sort((a, b) => {
       switch (selectedSort) {
-        case "roi":
-          return b.roi - a.roi
-        case "duration":
-          return a.duration - b.duration
-        case "budget":
-          return a.budget - b.budget
+        case "roas":
+          return b.roas - a.roas
+        case "cpa":
+          return a.cpa - b.cpa
+        case "views":
+          return b.views - a.views
         case "latest":
         default:
           return new Date(b.datePublished).getTime() - new Date(a.datePublished).getTime()
@@ -312,6 +350,17 @@ export default function CaseStudiesPage() {
 
     return sorted
   }, [selectedCategory, selectedSort, debouncedSearch])
+
+  const featuredCases = useMemo(() => {
+    return filteredAndSortedCases.filter((c) => c.featured).slice(0, 3)
+  }, [filteredAndSortedCases])
+
+  const regularCases = useMemo(() => {
+    return filteredAndSortedCases.filter((c) => !c.featured)
+  }, [filteredAndSortedCases])
+
+  const visibleRegularCases = regularCases.slice(0, visibleCases)
+  const hasMore = visibleCases < regularCases.length
 
   const trackEvent = useCallback((eventName: string, params?: Record<string, any>) => {
     if (typeof window !== "undefined" && (window as any).gtag) {
@@ -381,8 +430,8 @@ export default function CaseStudiesPage() {
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdSchema) }} />
 
-      <main className="min-h-screen bg-white">
-        <section className="relative pt-32 pb-24 px-6 overflow-hidden bg-gradient-to-br from-white via-red-50/20 to-white">
+      <main className="min-h-screen bg-white font-sans">
+        <section className="relative pt-32 pb-24 px-6 md:px-8 overflow-hidden bg-gradient-to-br from-white via-red-50/20 to-white">
           {/* Animated background particles */}
           <div className="absolute inset-0 overflow-hidden pointer-events-none">
             {!prefersReducedMotion &&
@@ -536,38 +585,44 @@ export default function CaseStudiesPage() {
           </div>
         </section>
 
-        <section className="py-16 px-6 bg-gradient-to-br from-gray-50 to-white">
+        <section className="py-16 px-6 md:px-8 bg-gradient-to-br from-gray-50 to-white">
           <div className="max-w-7xl mx-auto">
             <CountingStats
               stats={[
                 { value: 38, suffix: "%", label: "ROI trung bình" },
-                { value: 60, suffix: "%", label: "Giảm thời gian triển khai" },
-                { value: 1.2, suffix: "M+", label: "Lượt xem/chiến dịch" },
+                { value: 1.2, suffix: "M+", label: "views/campaign" },
+                { value: 50, suffix: "+", label: "thương hiệu" },
               ]}
             />
           </div>
         </section>
 
-        <section className="py-20 px-6 bg-white">
-          <div className="max-w-7xl mx-auto">
-            <motion.div
-              className="grid md:grid-cols-2 lg:grid-cols-3 gap-8"
-              layout
-              transition={{ opacity: { duration: 0.18 } }}
-            >
-              <AnimatePresence mode="popLayout">
-                {filteredAndSortedCases.map((caseStudy, index) => (
+        {featuredCases.length > 0 && (
+          <section className="py-24 px-6 md:px-8 bg-white">
+            <div className="max-w-7xl mx-auto">
+              <motion.h2
+                className="text-3xl md:text-4xl font-bold text-gray-900 mb-12 text-center"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+              >
+                Case{" "}
+                <span className="bg-gradient-to-r from-vietsolve-red to-vietsolve-burgundy bg-clip-text text-transparent">
+                  nổi bật
+                </span>
+              </motion.h2>
+
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {featuredCases.map((caseStudy, index) => (
                   <motion.div
                     key={caseStudy.id}
-                    layout
                     initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: 20 }}
-                    transition={{ duration: 0.4, delay: index * 0.08 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.4, delay: index * 0.1 }}
                     className="group cursor-pointer"
                     onClick={() => handleCaseClick(caseStudy)}
-                    whileHover={{ y: prefersReducedMotion ? 0 : -8 }}
-                    onViewportEnter={() => trackEvent("case_card_view", { case_id: caseStudy.id })}
+                    whileHover={{ y: prefersReducedMotion ? 0 : -6 }}
                   >
                     <div className="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 border border-gray-100 hover:border-transparent relative">
                       <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
@@ -576,8 +631,7 @@ export default function CaseStudiesPage() {
                         </div>
                       </div>
 
-                      {/* Image/Video preview */}
-                      <div className="relative h-64 overflow-hidden">
+                      <div className="relative aspect-video overflow-hidden">
                         <motion.div
                           className="absolute inset-0"
                           whileHover={{ scale: prefersReducedMotion ? 1 : 1.05 }}
@@ -644,21 +698,14 @@ export default function CaseStudiesPage() {
                         </motion.div>
                       </div>
 
-                      {/* Content */}
                       <div className="p-6 relative z-10">
-                        <h3
-                          className="text-xl font-bold text-gray-900 mb-2 line-clamp-2"
-                          style={{ fontFamily: "'Space Grotesk', sans-serif" }}
-                        >
-                          {caseStudy.title}
-                        </h3>
-
-                        <p className="text-gray-600 mb-4 line-clamp-2 text-sm">{caseStudy.description}</p>
+                        <h3 className="text-xl font-bold text-gray-900 mb-2 line-clamp-2">{caseStudy.title}</h3>
+                        <p className="text-gray-600 mb-4 line-clamp-1 text-sm">{caseStudy.description}</p>
 
                         <div className="flex items-center justify-between">
                           <span className="text-sm text-gray-500">{caseStudy.industry}</span>
                           <div className="text-vietsolve-red font-semibold flex items-center gap-2 group-hover:gap-3 transition-all text-sm">
-                            Xem chi tiết
+                            Xem case
                             <motion.span
                               animate={{ x: [0, 5, 0] }}
                               transition={{ duration: 1.5, repeat: Number.POSITIVE_INFINITY }}
@@ -671,8 +718,168 @@ export default function CaseStudiesPage() {
                     </div>
                   </motion.div>
                 ))}
+              </div>
+            </div>
+          </section>
+        )}
+
+        <section className="py-24 px-6 md:px-8 bg-gradient-to-br from-gray-50 to-white">
+          <div className="max-w-7xl mx-auto">
+            <motion.div
+              className="columns-1 md:columns-2 lg:columns-3 gap-8 space-y-8"
+              layout
+              transition={{ opacity: { duration: 0.18 } }}
+            >
+              <AnimatePresence mode="popLayout">
+                {visibleRegularCases.map((caseStudy, index) => (
+                  <motion.div
+                    key={caseStudy.id}
+                    layout
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 20 }}
+                    transition={{ duration: 0.4, delay: index * 0.08 }}
+                    className="group cursor-pointer break-inside-avoid"
+                    onClick={() => handleCaseClick(caseStudy)}
+                    whileHover={{ y: prefersReducedMotion ? 0 : -6 }}
+                    onViewportEnter={() => trackEvent("case_card_view", { case_id: caseStudy.id })}
+                  >
+                    <div className="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 border border-gray-100 hover:border-transparent relative">
+                      <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
+                        <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-vietsolve-red to-vietsolve-burgundy p-[1px]">
+                          <div className="w-full h-full bg-white rounded-2xl" />
+                        </div>
+                      </div>
+
+                      <div className="relative aspect-[4/3] overflow-hidden">
+                        <motion.div
+                          className="absolute inset-0"
+                          whileHover={{ scale: prefersReducedMotion ? 1 : 1.05 }}
+                          transition={{ duration: 0.6 }}
+                        >
+                          {caseStudy.videoPreview && !prefersReducedMotion ? (
+                            <video
+                              src={caseStudy.videoPreview}
+                              className="w-full h-full object-cover"
+                              muted
+                              loop
+                              playsInline
+                              onMouseEnter={(e) => e.currentTarget.play()}
+                              onMouseLeave={(e) => {
+                                e.currentTarget.pause()
+                                e.currentTarget.currentTime = 0
+                              }}
+                            />
+                          ) : (
+                            <Image
+                              src={caseStudy.thumbnail || "/placeholder.svg?height=400&width=600"}
+                              alt={caseStudy.title}
+                              fill
+                              className="object-cover"
+                              loading="lazy"
+                            />
+                          )}
+                        </motion.div>
+
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-300" />
+
+                        <div className="absolute top-4 right-4 flex flex-col gap-2">
+                          {caseStudy.kpiBadges.map((badge, i) => (
+                            <motion.div
+                              key={i}
+                              className="bg-gradient-to-r from-vietsolve-red to-vietsolve-burgundy text-white px-3 py-1.5 rounded-full text-xs font-semibold shadow-lg backdrop-blur-sm"
+                              initial={{ scale: 0, rotate: -180 }}
+                              animate={{ scale: 1, rotate: 0 }}
+                              transition={{ delay: index * 0.08 + i * 0.1, type: "spring" }}
+                            >
+                              {badge}
+                            </motion.div>
+                          ))}
+                        </div>
+
+                        {/* Category chip */}
+                        <div className="absolute top-4 left-4">
+                          <span className="inline-block px-3 py-1 bg-white/90 backdrop-blur-sm text-vietsolve-red text-xs font-semibold rounded-full">
+                            {caseStudy.category}
+                          </span>
+                        </div>
+
+                        {/* Play icon overlay */}
+                        <motion.div
+                          className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                          initial={false}
+                        >
+                          <motion.div
+                            className="w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-xl"
+                            whileHover={{ scale: 1.1 }}
+                          >
+                            <Play className="w-8 h-8 text-vietsolve-red ml-1" />
+                          </motion.div>
+                        </motion.div>
+
+                        <div className="absolute top-4 left-4 w-12 h-12 bg-white rounded-lg shadow-lg flex items-center justify-center">
+                          <Sparkles className="w-6 h-6 text-vietsolve-red" />
+                        </div>
+                      </div>
+
+                      <div className="p-6 relative z-10">
+                        <h3 className="text-lg font-bold text-gray-900 mb-2 line-clamp-2">{caseStudy.title}</h3>
+                        <p className="text-gray-600 mb-4 line-clamp-2 text-sm">{caseStudy.description}</p>
+
+                        <div className="flex flex-wrap gap-2 mb-4">
+                          <span className="px-3 py-1 bg-blue-50 text-blue-700 text-xs font-semibold rounded-full">
+                            {caseStudy.platform}
+                          </span>
+                          <span className="px-3 py-1 bg-purple-50 text-purple-700 text-xs font-semibold rounded-full">
+                            {caseStudy.industry}
+                          </span>
+                          <span className="px-3 py-1 bg-green-50 text-green-700 text-xs font-semibold rounded-full">
+                            {caseStudy.duration}
+                          </span>
+                        </div>
+
+                        <div className="flex items-center gap-3 mb-4">
+                          {caseStudy.kpiBadges.map((badge, i) => (
+                            <div
+                              key={i}
+                              className="px-3 py-1.5 bg-gradient-to-r from-vietsolve-red to-vietsolve-burgundy text-white text-xs font-bold rounded-full"
+                            >
+                              {badge}
+                            </div>
+                          ))}
+                        </div>
+
+                        <div className="text-vietsolve-red font-semibold flex items-center gap-2 group-hover:gap-3 transition-all text-sm">
+                          Xem case
+                          <motion.span
+                            animate={{ x: [0, 5, 0] }}
+                            transition={{ duration: 1.5, repeat: Number.POSITIVE_INFINITY }}
+                          >
+                            →
+                          </motion.span>
+                        </div>
+                      </div>
+                    </div>
+                  </motion.div>
+                ))}
               </AnimatePresence>
             </motion.div>
+
+            {hasMore && (
+              <motion.div
+                className="text-center mt-12"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.3 }}
+              >
+                <button
+                  onClick={() => setVisibleCases((prev) => prev + 12)}
+                  className="px-8 py-3 bg-gradient-to-r from-vietsolve-red to-vietsolve-burgundy text-white font-semibold rounded-full hover:shadow-lg hover:shadow-vietsolve-red/30 transition-all"
+                >
+                  Xem thêm
+                </button>
+              </motion.div>
+            )}
 
             {filteredAndSortedCases.length === 0 && (
               <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center py-20">
@@ -721,6 +928,72 @@ export default function CaseStudiesPage() {
             >
               <GlowButton href="/contact" size="lg">
                 Gửi yêu cầu case theo ngành
+              </GlowButton>
+            </motion.div>
+          </div>
+        </section>
+
+        <section className="py-24 px-6 md:px-8 bg-white">
+          <div className="max-w-4xl mx-auto">
+            <motion.h2
+              className="text-3xl md:text-4xl font-bold text-gray-900 mb-12 text-center"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+            >
+              Câu hỏi{" "}
+              <span className="bg-gradient-to-r from-vietsolve-red to-vietsolve-burgundy bg-clip-text text-transparent">
+                thường gặp
+              </span>
+            </motion.h2>
+
+            <div className="space-y-4">
+              {faqs.map((faq, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: index * 0.1 }}
+                  className="border border-gray-200 rounded-xl overflow-hidden"
+                >
+                  <button
+                    onClick={() => setExpandedFaq(expandedFaq === index ? null : index)}
+                    className="w-full px-6 py-4 flex items-center justify-between text-left hover:bg-gray-50 transition-colors"
+                  >
+                    <span className="font-semibold text-gray-900">{faq.question}</span>
+                    {expandedFaq === index ? (
+                      <Minus className="w-5 h-5 text-vietsolve-red flex-shrink-0" />
+                    ) : (
+                      <Plus className="w-5 h-5 text-gray-400 flex-shrink-0" />
+                    )}
+                  </button>
+                  <AnimatePresence>
+                    {expandedFaq === index && (
+                      <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: "auto", opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.3 }}
+                        className="overflow-hidden"
+                      >
+                        <div className="px-6 pb-4 text-gray-600">{faq.answer}</div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </motion.div>
+              ))}
+            </div>
+
+            <motion.div
+              className="text-center mt-12"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.3 }}
+            >
+              <GlowButton href="/contact" size="lg">
+                Book a Strategy Session
               </GlowButton>
             </motion.div>
           </div>
