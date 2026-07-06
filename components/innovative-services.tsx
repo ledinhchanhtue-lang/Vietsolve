@@ -5,53 +5,29 @@ import { useState } from "react"
 import { Instagram, Youtube, Shield, CheckCircle, DollarSign } from "lucide-react"
 import AnimatedButton from "./animated-button"
 import Link from "next/link"
-
-const services = [
-  {
-    title: "Mạng xã hội trả phí",
-    description:
-      "Thúc đẩy tăng trưởng và tương tác với quảng cáo mạng xã hội dựa trên dữ liệu, sử dụng chiến lược nhắm mục tiêu để nâng tầm thương hiệu của bạn.",
-    mockup: "social",
-  },
-  {
-    title: "Google Ads",
-    description:
-      "Tiếp cận khách hàng vào đúng thời điểm với Google Ads, thúc đẩy lưu lượng truy cập và doanh số thông qua quảng cáo trực tuyến có mục tiêu.",
-    mockup: "google-ads",
-  },
-  {
-    title: "Email / SMS",
-    description:
-      "Tiếp cận khách hàng với email và SMS marketing có mục tiêu thúc đẩy doanh số, tăng trưởng và lòng trung thành.",
-    mockup: "email",
-  },
-  {
-    title: "SEO",
-    description:
-      "Nâng cao khả năng hiển thị trên công cụ tìm kiếm với dịch vụ SEO, bao gồm kiểm tra, phân tích từ khóa và tối ưu hóa.",
-    mockup: "seo",
-  },
-  {
-    title: "Phân tích",
-    description:
-      "Theo dõi hiệu suất và thu thập thông tin chi tiết với giải pháp phân tích và báo cáo toàn diện cho các quyết định dựa trên dữ liệu.",
-    mockup: "analytics",
-  },
-  {
-    title: "Phát triển Web",
-    description:
-      "Chúng tôi tạo ra mọi thứ từ website đơn giản đến phức tạp, với các gói linh hoạt và giải pháp tùy chỉnh phù hợp với nhu cầu của bạn.",
-    mockup: "web-dev",
-    badges: [
-      { icon: <Shield className="w-4 h-4" />, text: "Bảo mật SSL" },
-      { icon: <DollarSign className="w-4 h-4" />, text: "Không phí hàng tháng" },
-      { icon: <CheckCircle className="w-4 h-4" />, text: "99.9% Uptime" },
-    ],
-  },
-]
+import { useLanguage } from "@/lib/i18n"
 
 export default function InnovativeServices() {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
+  const { t } = useLanguage()
+
+  const services = [
+    { title: t.services.socialTitle, description: t.services.socialDesc, mockup: "social" },
+    { title: t.services.googleTitle, description: t.services.googleDesc, mockup: "google-ads" },
+    { title: t.services.emailTitle, description: t.services.emailDesc, mockup: "email" },
+    { title: t.services.seoTitle, description: t.services.seoDesc, mockup: "seo" },
+    { title: t.services.analyticsTitle, description: t.services.analyticsDesc, mockup: "analytics" },
+    {
+      title: t.services.webDevTitle,
+      description: t.services.webDevDesc,
+      mockup: "web-dev",
+      badges: [
+        { icon: <Shield className="w-4 h-4" />, text: t.services.badgeSsl },
+        { icon: <DollarSign className="w-4 h-4" />, text: t.services.badgeNoMonthly },
+        { icon: <CheckCircle className="w-4 h-4" />, text: t.services.badgeUptime },
+      ],
+    },
+  ]
 
   return (
     <section className="py-24 bg-white relative">
@@ -63,12 +39,8 @@ export default function InnovativeServices() {
           viewport={{ once: true }}
           className="text-center mb-16"
         >
-          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 mb-6">
-            Dịch vụ sáng tạo cho tăng trưởng
-          </h2>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Giải pháp tùy chỉnh để tối ưu hóa, đổi mới và phát triển.
-          </p>
+          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 mb-6">{t.services.title}</h2>
+          <p className="text-xl text-gray-600 max-w-3xl mx-auto">{t.services.subtitle}</p>
         </motion.div>
 
         <div className="grid grid-cols-1 gap-8">
@@ -84,7 +56,7 @@ export default function InnovativeServices() {
                 whileHover={{ y: -5 }}
                 onHoverStart={() => setHoveredIndex(index)}
                 onHoverEnd={() => setHoveredIndex(null)}
-                className="bg-gray-50 border border-gray-200 rounded-2xl p-8 backdrop-blur-sm hover:border-gray-300 transition-all duration-300 group shadow-sm"
+                className="bg-gray-50 border border-gray-200 rounded-2xl p-8 hover:border-gray-300 transition-all duration-300 group shadow-sm"
               >
                 <div className="aspect-video bg-white rounded-lg mb-6 overflow-hidden relative border border-gray-200 shadow-sm">
                   <div className="absolute inset-0 bg-gradient-to-br from-gray-50 to-gray-100 p-4">
@@ -172,8 +144,6 @@ export default function InnovativeServices() {
                             <div>
                               <div className="text-xs text-gray-600 mb-1">Growth</div>
                               <motion.div
-                                animate={{ scale: [1, 1.1, 1] }}
-                                transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY }}
                                 className="text-lg font-bold text-green-600"
                               >
                                 +23%
@@ -207,8 +177,6 @@ export default function InnovativeServices() {
                         <div className="bg-white rounded-lg p-3 h-full border border-gray-200">
                           <div className="flex items-center space-x-2 mb-4">
                             <motion.div
-                              animate={{ rotate: [0, 360] }}
-                              transition={{ duration: 10, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
                               className="w-8 h-8 rounded-full bg-white flex items-center justify-center border border-gray-200"
                             >
                               <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none">
@@ -239,8 +207,6 @@ export default function InnovativeServices() {
                             <div className="flex justify-between text-xs">
                               <span className="text-gray-600">Impressions</span>
                               <motion.span
-                                animate={{ opacity: [0.5, 1, 0.5] }}
-                                transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY }}
                                 className="text-green-600"
                               >
                                 +15.2K
@@ -249,8 +215,6 @@ export default function InnovativeServices() {
                             <div className="flex justify-between text-xs">
                               <span className="text-gray-600">Clicks</span>
                               <motion.span
-                                animate={{ opacity: [0.5, 1, 0.5] }}
-                                transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY, delay: 0.5 }}
                                 className="text-blue-600"
                               >
                                 1,247
@@ -293,7 +257,7 @@ export default function InnovativeServices() {
                 transition={{ duration: 0.6, delay: (index + 2) * 0.1 }}
                 viewport={{ once: true }}
                 whileHover={{ y: -5 }}
-                className="bg-gray-50 border border-gray-200 rounded-2xl p-8 backdrop-blur-sm hover:border-gray-300 transition-all duration-300 group shadow-sm"
+                className="bg-gray-50 border border-gray-200 rounded-2xl p-8 hover:border-gray-300 transition-all duration-300 group shadow-sm"
               >
                 <div className="aspect-video bg-white rounded-lg mb-6 overflow-hidden relative border border-gray-200 shadow-sm">
                   <div className="absolute inset-0 bg-gradient-to-br from-gray-50 to-gray-100 p-4">
@@ -308,13 +272,9 @@ export default function InnovativeServices() {
                         <div className="bg-white rounded-lg p-3 h-full border border-gray-200">
                           <div className="space-y-2 mb-3">
                             <motion.div
-                              animate={{ width: ["100%", "90%", "100%"] }}
-                              transition={{ duration: 3, repeat: Number.POSITIVE_INFINITY }}
                               className="bg-gray-200 h-2 rounded"
                             ></motion.div>
                             <motion.div
-                              animate={{ width: ["75%", "85%", "75%"] }}
-                              transition={{ duration: 3, repeat: Number.POSITIVE_INFINITY, delay: 0.5 }}
                               className="bg-gray-200 h-2 rounded"
                             ></motion.div>
                           </div>
@@ -350,16 +310,12 @@ export default function InnovativeServices() {
                             <div className="bg-gray-100 rounded p-2 border border-gray-200">
                               <div className="text-xs text-gray-600">Traffic</div>
                               <motion.div
-                                animate={{ width: ["60%", "80%", "60%"] }}
-                                transition={{ duration: 3, repeat: Number.POSITIVE_INFINITY }}
                                 className="bg-gray-300 h-1 rounded mt-1"
                               ></motion.div>
                             </div>
                             <div className="bg-gray-100 rounded p-2 border border-gray-200">
                               <div className="text-xs text-gray-600">Ranking</div>
                               <motion.div
-                                animate={{ width: ["75%", "90%", "75%"] }}
-                                transition={{ duration: 3, repeat: Number.POSITIVE_INFINITY, delay: 1 }}
                                 className="bg-green-500 h-1 rounded mt-1"
                               ></motion.div>
                             </div>
@@ -389,8 +345,6 @@ export default function InnovativeServices() {
                             <div className="bg-gray-100 rounded p-2 border border-gray-200">
                               <div className="text-xs text-gray-600">Ranking</div>
                               <motion.div
-                                animate={{ color: ["#10b981", "#3b82f6", "#10b981"] }}
-                                transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY }}
                                 className="text-xs font-bold mt-1"
                               >
                                 #1
@@ -405,8 +359,6 @@ export default function InnovativeServices() {
                             <div className="bg-gray-100 rounded p-2 border border-gray-200">
                               <div className="text-xs text-gray-600">Clicks</div>
                               <motion.div
-                                animate={{ scale: [1, 1.1, 1] }}
-                                transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY }}
                                 className="text-xs text-gray-900 mt-1"
                               >
                                 2.1K
@@ -444,7 +396,7 @@ export default function InnovativeServices() {
               transition={{ duration: 0.6, delay: 0.5 }}
               viewport={{ once: true }}
               whileHover={{ y: -5 }}
-              className="bg-gray-50 border border-gray-200 rounded-2xl p-8 backdrop-blur-sm hover:border-gray-300 transition-all duration-300 group shadow-sm"
+              className="bg-gray-50 border border-gray-200 rounded-2xl p-8 hover:border-gray-300 transition-all duration-300 group shadow-sm"
             >
               <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                 <div className="md:col-span-1 flex flex-col justify-between">
@@ -473,7 +425,7 @@ export default function InnovativeServices() {
                   <div className="flex justify-end items-center">
                     <Link href="/services#web-development">
                       <AnimatedButton className="bg-blue-600 text-white hover:bg-blue-700 px-6 py-2">
-                        <span className="flex items-center">Tìm hiểu thêm</span>
+                        <span className="flex items-center">{t.services.learnMore}</span>
                       </AnimatedButton>
                     </Link>
                   </div>
@@ -506,8 +458,6 @@ export default function InnovativeServices() {
                         <div className="bg-white rounded-b-lg p-3 h-[calc(100%-36px)] grid grid-cols-3 gap-3 border border-gray-200">
                           <div className="col-span-3 flex justify-between items-center mb-2">
                             <motion.div
-                              animate={{ width: ["60px", "80px", "60px"] }}
-                              transition={{ duration: 3, repeat: Number.POSITIVE_INFINITY }}
                               className="bg-gray-200 h-4 rounded"
                             ></motion.div>
                             <div className="flex space-x-2">
@@ -517,8 +467,6 @@ export default function InnovativeServices() {
                             </div>
                           </div>
                           <motion.div
-                            animate={{ opacity: [0.7, 1, 0.7] }}
-                            transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY }}
                             className="col-span-3 h-20 bg-gray-200 rounded mb-3"
                           ></motion.div>
                           <div className="bg-gray-200 h-24 rounded"></div>

@@ -7,10 +7,12 @@ import { useState } from "react"
 import { motion } from "framer-motion"
 import { Instagram, Twitter, Linkedin, Youtube, Mail, Phone, MapPin, ArrowRight } from "lucide-react"
 import AnimatedButton from "./animated-button"
+import { useLanguage } from "@/lib/i18n"
 
 export default function AnimatedFooter() {
   const [email, setEmail] = useState("")
   const [isSubscribed, setIsSubscribed] = useState(false)
+  const { t } = useLanguage()
 
   const handleSubscribe = (e: React.FormEvent) => {
     e.preventDefault()
@@ -31,11 +33,8 @@ export default function AnimatedFooter() {
             viewport={{ once: true }}
             className="text-center mb-12"
           >
-            <h3 className="text-3xl sm:text-4xl font-bold text-white mb-4">Luôn dẫn đầu xu hướng</h3>
-            <p className="text-xl text-gray-300 max-w-2xl mx-auto">
-              Nhận thông tin chi tiết độc quyền, chiến lược thương hiệu và mẹo tăng trưởng được gửi đến hộp thư của bạn
-              hàng tuần.
-            </p>
+            <h3 className="text-3xl sm:text-4xl font-bold text-white mb-4">{t.footer.newsletterTitle}</h3>
+            <p className="text-xl text-gray-300 max-w-2xl mx-auto">{t.footer.newsletterDesc}</p>
           </motion.div>
 
           <motion.form
@@ -52,7 +51,7 @@ export default function AnimatedFooter() {
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Nhập email của bạn"
+                  placeholder={t.footer.emailPlaceholder}
                   className="w-full px-4 py-3 bg-gray-800 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 transition-colors"
                   required
                 />
@@ -66,7 +65,7 @@ export default function AnimatedFooter() {
               </AnimatedButton>
             </div>
             {isSubscribed && (
-              <p className="text-green-400 text-center mt-4 animate-fade-in">Cảm ơn bạn đã đăng ký! 🎉</p>
+              <p className="text-green-400 text-center mt-4 animate-fade-in">{t.footer.subscribed}</p>
             )}
           </motion.form>
         </div>
@@ -92,10 +91,7 @@ export default function AnimatedFooter() {
                 className="w-auto h-20 brightness-0 invert transition-transform duration-300 group-hover:scale-105"
               />
             </div>
-            <p className="text-gray-300 text-lg leading-relaxed max-w-md mx-auto lg:mx-0">
-              Trao quyền cho các chuyên gia sáng tạo và doanh nhân xây dựng thương hiệu mạnh mẽ thúc đẩy sức hút thực sự
-              và tăng trưởng bền vững trong thị trường cạnh tranh ngày nay.
-            </p>
+            <p className="text-gray-300 text-lg leading-relaxed max-w-md mx-auto lg:mx-0">{t.footer.description}</p>
 
             {/* Social Links */}
             <div className="flex space-x-6 justify-center lg:justify-start">
@@ -131,15 +127,15 @@ export default function AnimatedFooter() {
               transition={{ duration: 0.8, delay: 0.2 }}
               viewport={{ once: true }}
             >
-              <h4 className="text-lg font-semibold text-white mb-6">Dịch vụ</h4>
+              <h4 className="text-lg font-semibold text-white mb-6">{t.footer.servicesTitle}</h4>
               <ul className="space-y-4">
                 {[
-                  "Phát triển nhận diện thương hiệu",
-                  "Marketing kỹ thuật số",
-                  "Sáng tạo nội dung",
-                  "SEO & Phân tích",
-                  "Quản lý mạng xã hội",
-                  "Marketing hiệu suất",
+                  t.footer.service1,
+                  t.footer.service2,
+                  t.footer.service3,
+                  t.footer.service4,
+                  t.footer.service5,
+                  t.footer.service6,
                 ].map((link, index) => (
                   <motion.li
                     key={link}
@@ -167,7 +163,7 @@ export default function AnimatedFooter() {
               transition={{ duration: 0.8, delay: 0.4 }}
               viewport={{ once: true }}
             >
-              <h4 className="text-lg font-semibold text-white mb-6">Liên hệ</h4>
+              <h4 className="text-lg font-semibold text-white mb-6">{t.footer.contactTitle}</h4>
               <div className="space-y-4">
                 <div className="flex items-center space-x-3 text-gray-300 justify-center sm:justify-start">
                   <Mail className="h-5 w-5 text-blue-500" />
@@ -179,7 +175,7 @@ export default function AnimatedFooter() {
                 </div>
                 <div className="flex items-center space-x-3 text-gray-300 justify-center sm:justify-start">
                   <MapPin className="h-5 w-5 text-blue-500" />
-                  <span>12 Tôn Đức Thắng, TP.HCM </span>
+                  <span>{t.footer.address}</span>
                 </div>
               </div>
 
@@ -189,7 +185,7 @@ export default function AnimatedFooter() {
                     className="w-full bg-red-600 text-white hover:bg-red-700"
                     gradient="radial-gradient(circle, rgba(220,38,38,0.2) 0%, rgba(185,28,28,0.1) 50%, rgba(153,27,27,0) 100%)"
                   >
-                    Bắt đầu dự án của bạn
+                    {t.footer.startProject}
                   </AnimatedButton>
                 </Link>
               </div>
@@ -206,16 +202,18 @@ export default function AnimatedFooter() {
           className="border-t border-gray-700 pt-8"
         >
           <div className="flex flex-col sm:flex-row justify-between items-center space-y-4 sm:space-y-0 text-center sm:text-left">
-            <p className="text-gray-400 text-sm">© {new Date().getFullYear()} VietSolve. Đã đăng ký bản quyền.</p>
+            <p className="text-gray-400 text-sm">
+              © {new Date().getFullYear()} VietSolve. {t.footer.copyright}
+            </p>
             <div className="flex space-x-6 text-sm">
               <Link href="#" className="text-gray-400 hover:text-white transition-colors">
-                Chính sách bảo mật
+                {t.footer.privacy}
               </Link>
               <Link href="#" className="text-gray-400 hover:text-white transition-colors">
-                Điều khoản dịch vụ
+                {t.footer.terms}
               </Link>
               <Link href="#" className="text-gray-400 hover:text-white transition-colors">
-                Chính sách Cookie
+                {t.footer.cookie}
               </Link>
             </div>
           </div>

@@ -2,29 +2,32 @@
 
 import { motion } from "framer-motion"
 import { Lightbulb, Users, Rocket } from "lucide-react"
-
-const steps = [
-  {
-    number: "01",
-    title: "Khám phá",
-    description: "Chúng tôi tìm hiểu sâu về doanh nghiệp, mục tiêu và thách thức của bạn.",
-    icon: <Lightbulb className="w-8 h-8" />,
-  },
-  {
-    number: "02",
-    title: "Thiết kế",
-    description: "Đội ngũ của chúng tôi tạo ra các giải pháp sáng tạo phù hợp với nhu cầu riêng của bạn.",
-    icon: <Users className="w-8 h-8" />,
-  },
-  {
-    number: "03",
-    title: "Triển khai",
-    description: "Chúng tôi thực hiện chính xác và hỗ trợ bạn trong từng bước.",
-    icon: <Rocket className="w-8 h-8" />,
-  },
-]
+import { useLanguage } from "@/lib/i18n"
 
 export default function HowWeWork() {
+  const { t } = useLanguage()
+
+  const steps = [
+    {
+      number: "01",
+      title: t.howWeWork.step1Title,
+      description: t.howWeWork.step1Desc,
+      icon: <Lightbulb className="w-8 h-8" />,
+    },
+    {
+      number: "02",
+      title: t.howWeWork.step2Title,
+      description: t.howWeWork.step2Desc,
+      icon: <Users className="w-8 h-8" />,
+    },
+    {
+      number: "03",
+      title: t.howWeWork.step3Title,
+      description: t.howWeWork.step3Desc,
+      icon: <Rocket className="w-8 h-8" />,
+    },
+  ]
+
   return (
     <section className="py-20 lg:py-32 bg-gradient-to-b from-white to-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -36,11 +39,9 @@ export default function HowWeWork() {
           className="text-center mb-16"
         >
           <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-red-600 via-red-700 to-gray-900 bg-clip-text text-transparent mb-4">
-            Cách chúng tôi làm việc
+            {t.howWeWork.title}
           </h2>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Quy trình đã được chứng minh của chúng tôi đảm bảo kết quả xuất sắc cho mọi dự án
-          </p>
+          <p className="text-xl text-gray-600 max-w-3xl mx-auto">{t.howWeWork.subtitle}</p>
         </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">

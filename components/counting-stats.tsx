@@ -56,44 +56,11 @@ export default function CountingStats({ stats }: CountingStatsProps) {
               textShadow: "0 0 30px rgba(59, 130, 246, 0.8), 0 0 60px rgba(147, 51, 234, 0.6)",
             }}
           >
-            <motion.span
-              animate={
-                isInView
-                  ? {
-                      textShadow: [
-                        "0 0 30px rgba(59, 130, 246, 0.8), 0 0 60px rgba(147, 51, 234, 0.6)",
-                        "0 0 40px rgba(147, 51, 234, 1), 0 0 80px rgba(236, 72, 153, 0.8)",
-                        "0 0 30px rgba(59, 130, 246, 0.8), 0 0 60px rgba(147, 51, 234, 0.6)",
-                      ],
-                      scale: [1, 1.05, 1],
-                    }
-                  : {}
-              }
-              transition={{
-                duration: 2,
-                repeat: Number.POSITIVE_INFINITY,
-                ease: "easeInOut",
-              }}
-            >
+            <span>
               {counts[index]}
               {stat.suffix}
-            </motion.span>
-            <motion.div
-              className="absolute -inset-4 bg-gradient-to-r from-blue-500/30 via-purple-500/30 to-pink-500/30 rounded-lg blur-xl"
-              animate={
-                isInView
-                  ? {
-                      opacity: [0.4, 0.8, 0.4],
-                      scale: [1, 1.2, 1],
-                    }
-                  : {}
-              }
-              transition={{
-                duration: 2,
-                repeat: Number.POSITIVE_INFINITY,
-                ease: "easeInOut",
-              }}
-            />
+            </span>
+            <div className="absolute -inset-4 bg-gradient-to-r from-blue-500/20 via-purple-500/20 to-pink-500/20 rounded-lg blur-xl opacity-50" />
           </motion.div>
           <div className="text-sm text-gray-400">{stat.label}</div>
         </div>

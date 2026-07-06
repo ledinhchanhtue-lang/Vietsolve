@@ -3,42 +3,44 @@
 import { motion } from "framer-motion"
 import { useState } from "react"
 import { DollarSign, TrendingUp, Target, Briefcase, Palette, Home, BarChart3 } from "lucide-react"
-
-const businessTypes = [
-  {
-    id: "retail",
-    name: "Bán lẻ",
-    icon: <Briefcase className="w-6 h-6" />,
-    multiplier: 3.2,
-    description: "Thương mại điện tử & Cửa hàng",
-  },
-  {
-    id: "real-estate",
-    name: "Bất động sản",
-    icon: <Home className="w-6 h-6" />,
-    multiplier: 4.1,
-    description: "Môi giới & Quản lý tài sản",
-  },
-  {
-    id: "artist",
-    name: "Nghệ sĩ",
-    icon: <Palette className="w-6 h-6" />,
-    multiplier: 2.8,
-    description: "Nhạc sĩ & Nhà sáng tạo nội dung",
-  },
-  {
-    id: "professional",
-    name: "Dịch vụ chuyên nghiệp",
-    icon: <Target className="w-6 h-6" />,
-    multiplier: 3.7,
-    description: "Tư vấn & Nhà cung cấp dịch vụ",
-  },
-]
+import { useLanguage } from "@/lib/i18n"
 
 export default function ROICalculatorHome() {
   const [selectedBudget, setSelectedBudget] = useState(5000)
   const [selectedBusiness, setSelectedBusiness] = useState("retail")
   const [conversionRate, setConversionRate] = useState(5)
+  const { t } = useLanguage()
+
+  const businessTypes = [
+    {
+      id: "retail",
+      name: t.roi.retailName,
+      icon: <Briefcase className="w-6 h-6" />,
+      multiplier: 3.2,
+      description: t.roi.retailDesc,
+    },
+    {
+      id: "real-estate",
+      name: t.roi.realEstateName,
+      icon: <Home className="w-6 h-6" />,
+      multiplier: 4.1,
+      description: t.roi.realEstateDesc,
+    },
+    {
+      id: "artist",
+      name: t.roi.artistName,
+      icon: <Palette className="w-6 h-6" />,
+      multiplier: 2.8,
+      description: t.roi.artistDesc,
+    },
+    {
+      id: "professional",
+      name: t.roi.professionalName,
+      icon: <Target className="w-6 h-6" />,
+      multiplier: 3.7,
+      description: t.roi.professionalDesc,
+    },
+  ]
 
   const selectedBusinessType = businessTypes.find((b) => b.id === selectedBusiness)
   const multiplier = selectedBusinessType?.multiplier || 3.2
@@ -54,7 +56,7 @@ export default function ROICalculatorHome() {
   }
 
   return (
-    <section className="py-24 bg-gray-50 relative backdrop-blur-sm">
+    <section className="py-24 bg-gray-50 relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -63,26 +65,18 @@ export default function ROICalculatorHome() {
           viewport={{ once: true }}
           className="text-center mb-16"
         >
-          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 mb-6">Tính toán ROI của bạn</h2>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Xem bạn có thể tạo ra bao nhiêu doanh thu với các chiến lược marketing đã được chứng minh của chúng tôi
-          </p>
+          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 mb-6">{t.roi.title}</h2>
+          <p className="text-xl text-gray-600 max-w-3xl mx-auto">{t.roi.subtitle}</p>
         </motion.div>
 
-        <div className="bg-white border border-gray-200 rounded-3xl p-8 backdrop-blur-sm relative overflow-hidden shadow-sm">
-          {/* Subtle animated background */}
-          <motion.div
+        <div className="bg-white border border-gray-200 rounded-3xl p-8 relative overflow-hidden shadow-sm">
+          {/* Subtle static background */}
+          <div
             className="absolute inset-0 opacity-10"
-            animate={{
-              background: [
-                "radial-gradient(circle at 20% 20%, rgba(59,130,246,0.1) 0%, transparent 50%)",
-                "radial-gradient(circle at 80% 80%, rgba(147,51,234,0.1) 0%, transparent 50%)",
-                "radial-gradient(circle at 20% 80%, rgba(34,197,94,0.1) 0%, transparent 50%)",
-                "radial-gradient(circle at 80% 20%, rgba(249,115,22,0.1) 0%, transparent 50%)",
-                "radial-gradient(circle at 20% 20%, rgba(59,130,246,0.1) 0%, transparent 50%)",
-              ],
+            style={{
+              background:
+                "radial-gradient(circle at 20% 20%, rgba(59,130,246,0.1) 0%, transparent 50%), radial-gradient(circle at 80% 80%, rgba(147,51,234,0.1) 0%, transparent 50%)",
             }}
-            transition={{ duration: 15, repeat: Number.POSITIVE_INFINITY }}
           />
 
           <div className="relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-12">
@@ -90,9 +84,7 @@ export default function ROICalculatorHome() {
             <div className="space-y-8">
               {/* Business Type Selection */}
               <div>
-                <label className="block text-lg font-medium text-gray-900 mb-4">
-                  Chọn loại hình doanh nghiệp của bạn
-                </label>
+                <label className="block text-lg font-medium text-gray-900 mb-4">{t.roi.selectBusiness}</label>
                 <div className="grid grid-cols-2 gap-3">
                   {businessTypes.map((business) => (
                     <motion.button
@@ -126,7 +118,7 @@ export default function ROICalculatorHome() {
 
               {/* Budget Slider */}
               <div>
-                <label className="block text-lg font-medium text-gray-900 mb-4">Ngân sách Marketing hàng tháng</label>
+                <label className="block text-lg font-medium text-gray-900 mb-4">{t.roi.monthlyBudget}</label>
                 <div className="relative">
                   <input
                     type="range"
@@ -144,13 +136,13 @@ export default function ROICalculatorHome() {
                 </div>
                 <div className="text-center mt-4">
                   <span className="text-3xl font-bold text-gray-900">${selectedBudget.toLocaleString()}</span>
-                  <span className="text-gray-600 ml-2">/tháng</span>
+                  <span className="text-gray-600 ml-2">{t.roi.perMonth}</span>
                 </div>
               </div>
 
               {/* Conversion Rate Slider */}
               <div>
-                <label className="block text-lg font-medium text-gray-900 mb-4">Tỷ lệ chuyển đổi mục tiêu</label>
+                <label className="block text-lg font-medium text-gray-900 mb-4">{t.roi.conversionTarget}</label>
                 <div className="relative">
                   <input
                     type="range"
@@ -175,12 +167,9 @@ export default function ROICalculatorHome() {
               <div className="bg-blue-50 border border-blue-200 rounded-xl p-4">
                 <div className="flex items-center space-x-3 mb-2">
                   <BarChart3 className="w-5 h-5 text-blue-600" />
-                  <span className="text-sm font-medium text-gray-900">Dựa trên dữ liệu khách hàng thực tế</span>
+                  <span className="text-sm font-medium text-gray-900">{t.roi.disclaimerTitle}</span>
                 </div>
-                <p className="text-xs text-gray-700 leading-relaxed">
-                  Các dự báo này dựa trên dữ liệu hiệu suất thực tế từ khách hàng hiện tại của chúng tôi trong các loại
-                  hình doanh nghiệp và phạm vi ngân sách tương tự. Kết quả cá nhân có thể khác nhau.
-                </p>
+                <p className="text-xs text-gray-700 leading-relaxed">{t.roi.disclaimerBody}</p>
               </div>
             </div>
 
@@ -247,7 +236,7 @@ export default function ROICalculatorHome() {
                   >
                     ${calculateMonthlyRevenue(selectedBudget, conversionRate).toLocaleString()}
                   </motion.div>
-                  <div className="text-gray-600 text-sm">Doanh thu hàng tháng</div>
+                  <div className="text-gray-600 text-sm">{t.roi.monthlyRevenue}</div>
                 </div>
 
                 <div className="bg-gray-50 rounded-2xl p-6 border border-gray-200 text-center shadow-sm">
@@ -260,7 +249,7 @@ export default function ROICalculatorHome() {
                   >
                     ${calculateROI(selectedBudget, conversionRate).toLocaleString()}
                   </motion.div>
-                  <div className="text-gray-600 text-sm">Doanh thu hàng năm</div>
+                  <div className="text-gray-600 text-sm">{t.roi.annualRevenue}</div>
                 </div>
               </div>
             </div>

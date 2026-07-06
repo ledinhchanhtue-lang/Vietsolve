@@ -7,7 +7,7 @@ import AnimatedButton from "./animated-button"
 import CountingStats from "./counting-stats"
 import Link from "next/link"
 import { cn } from "@/lib/utils"
-import { useState, useEffect } from "react"
+import { useLanguage } from "@/lib/i18n"
 
 const pacifico = Pacifico({
   subsets: ["latin"],
@@ -16,46 +16,30 @@ const pacifico = Pacifico({
 })
 
 export default function Hero() {
-  const [mounted, setMounted] = useState(false)
-
-  useEffect(() => {
-    setMounted(true)
-    console.log("[v0] Hero component mounted successfully")
-  }, [])
+  const { t } = useLanguage()
 
   const stats = [
-    { value: 500, suffix: "+", label: "Chiến dịch thành công" },
-    { value: 98, suffix: "%", label: "Khách hàng hài lòng" },
-    { value: 15, suffix: "M+", label: "Doanh thu tạo ra" },
+    { value: 500, suffix: "+", label: t.hero.stat1 },
+    { value: 98, suffix: "%", label: t.hero.stat2 },
+    { value: 15, suffix: "M+", label: t.hero.stat3 },
   ]
-
-  console.log("[v0] Hero component rendering, mounted:", mounted)
 
   return (
     <section className="relative min-h-screen flex items-center pt-8 pb-16 overflow-hidden">
-      {/* Background Video */}
-      <div className="absolute inset-0 z-1">
-        {mounted && (
-          <iframe
-            src="https://www.youtube.com/embed/IZkRgWfDlHc?autoplay=1&mute=1&loop=1&controls=0&showinfo=0&rel=0&modestbranding=1&playlist=IZkRgWfDlHc&playsinline=1&disablekb=1&fs=0&iv_load_policy=3&cc_load_policy=0&start=1"
-            className="w-full h-full object-cover opacity-30"
-            style={{
-              filter: "brightness(1.2) contrast(0.9)",
-              pointerEvents: "none",
-              position: "absolute",
-              top: "50%",
-              left: "50%",
-              width: "177.77vh",
-              minWidth: "100vw",
-              height: "56.25vw",
-              minHeight: "100vh",
-              transform: "translate(-50%, -50%)",
-            }}
-            allow="autoplay; encrypted-media"
-            frameBorder="0"
-            title="Background Video"
-          />
-        )}
+      {/* Background Video — native <video> for smooth, GPU-accelerated playback */}
+      <div className="absolute inset-0 z-1 overflow-hidden">
+        <video
+          className="absolute inset-0 w-full h-full object-cover opacity-30"
+          style={{ filter: "brightness(1.2) contrast(0.9)", pointerEvents: "none" }}
+          src="/videos/hero-bg.mp4"
+          poster="/videos/hero-poster.jpg"
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="metadata"
+          aria-hidden="true"
+        />
         <div className="absolute inset-0 bg-gradient-to-br from-red-50 via-white to-gray-50" />
         <div className="absolute inset-0 bg-gradient-to-b from-white/30 via-white/20 to-white/10" />
       </div>
@@ -76,7 +60,7 @@ export default function Hero() {
                 className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-red-50 via-gray-50 to-red-50 border border-red-200 rounded-full text-sm text-gray-900 font-medium backdrop-blur-sm"
               >
                 <div className="w-2 h-2 bg-green-500 rounded-full mr-3 animate-pulse"></div>
-                <span>Agency Marketing Toàn Diện</span>
+                <span>{t.hero.badge}</span>
               </motion.div>
 
               <motion.h1
@@ -85,8 +69,8 @@ export default function Hero() {
                 transition={{ duration: 1, delay: 0.3 }}
                 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-tight"
               >
-                <span className="block text-gray-900 mb-2">AGENCY MARKETING</span>
-                <span className="block text-gray-900 mb-2">TOÀN DIỆN CHO</span>
+                <span className="block text-gray-900 mb-2">{t.hero.title1}</span>
+                <span className="block text-gray-900 mb-2">{t.hero.title2}</span>
                 <span
                   className={cn(
                     "block mb-2 bg-gradient-to-r from-red-600 via-gray-900 to-red-700 bg-clip-text text-transparent",
@@ -96,9 +80,9 @@ export default function Hero() {
                     textShadow: "0 0 40px rgba(220, 38, 38, 0.3)",
                   }}
                 >
-                  Doanh nghiệp
+                  {t.hero.titleAccent}
                 </span>
-                <span className="block text-gray-700">MỌI QUY MÔ</span>
+                <span className="block text-gray-700">{t.hero.title3}</span>
               </motion.h1>
 
               <motion.p
@@ -107,10 +91,13 @@ export default function Hero() {
                 transition={{ duration: 0.8, delay: 0.6 }}
                 className="text-lg sm:text-xl text-gray-700 leading-relaxed max-w-3xl mx-auto lg:mx-0"
               >
-                Chúng tôi thấu hiểu <span className="text-red-600 font-semibold">khách hàng</span> và triển khai{" "}
-                <span className="text-red-600 font-semibold">chiến lược marketing</span> tạo ra{" "}
-                <span className="text-red-600 font-semibold">kết quả đo lường được</span>. Từ SEO, mạng xã hội đến nội
-                dung và email marketing.
+                {t.hero.descP1}
+                <span className="text-red-600 font-semibold">{t.hero.descH1}</span>
+                {t.hero.descP2}
+                <span className="text-red-600 font-semibold">{t.hero.descH2}</span>
+                {t.hero.descP3}
+                <span className="text-red-600 font-semibold">{t.hero.descH3}</span>
+                {t.hero.descP4}
               </motion.p>
             </div>
 
@@ -123,7 +110,7 @@ export default function Hero() {
               <Link href="/get-started">
                 <AnimatedButton variant="slim" className="bg-red-600 text-white hover:bg-red-700">
                   <span className="flex items-center">
-                    Bắt đầu ngay
+                    {t.hero.ctaStart}
                     <ArrowRight className="ml-2 h-4 w-4" />
                   </span>
                 </AnimatedButton>
@@ -152,8 +139,8 @@ export default function Hero() {
                     </svg>
                   </div>
                   <div>
-                    <p className="text-sm font-medium text-gray-900">Đối tác Google</p>
-                    <p className="text-xs text-gray-600">Agency được chứng nhận</p>
+                    <p className="text-sm font-medium text-gray-900">{t.hero.googlePartner}</p>
+                    <p className="text-xs text-gray-600">{t.hero.googlePartnerSub}</p>
                   </div>
                 </div>
 
@@ -165,8 +152,8 @@ export default function Hero() {
                     </svg>
                   </div>
                   <div>
-                    <p className="text-sm font-medium text-gray-900">Được BBB công nhận</p>
-                    <p className="text-xs text-gray-600">Xếp hạng A+</p>
+                    <p className="text-sm font-medium text-gray-900">{t.hero.bbb}</p>
+                    <p className="text-xs text-gray-600">{t.hero.bbbSub}</p>
                   </div>
                 </div>
 
@@ -177,8 +164,8 @@ export default function Hero() {
                     </svg>
                   </div>
                   <div>
-                    <p className="text-sm font-medium text-gray-900">Agency được xác thực</p>
-                    <p className="text-xs text-gray-600">Đối tác đáng tin cậy</p>
+                    <p className="text-sm font-medium text-gray-900">{t.hero.verified}</p>
+                    <p className="text-xs text-gray-600">{t.hero.verifiedSub}</p>
                   </div>
                 </div>
               </div>

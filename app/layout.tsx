@@ -3,12 +3,13 @@ import { Inter } from "next/font/google"
 import type React from "react"
 import type { Metadata } from "next"
 import MouseMoveEffect from "@/components/mouse-move-effect"
+import { LanguageProvider } from "@/lib/i18n"
 
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "Amane Soft - Giải pháp phần mềm tiên tiến",
-  description: "Amane Soft cung cấp giải pháp phần mềm sáng tạo, hiệu suất cao cho doanh nghiệp của tương lai.",
+  title: "Viet Solve - Agency Marketing toàn diện",
+  description: "Viet Solve là agency marketing toàn diện cho doanh nghiệp mọi quy mô: SEO, mạng xã hội, nội dung và email marketing với kết quả đo lường được.",
     generator: 'v0.app'
 }
 
@@ -20,8 +21,10 @@ export default function RootLayout({
   return (
     <html lang="vi">
       <body className={`${inter.className} bg-background text-foreground antialiased`}>
-        <MouseMoveEffect />
-        {children}
+        <LanguageProvider>
+          <MouseMoveEffect />
+          {children}
+        </LanguageProvider>
       </body>
     </html>
   )
