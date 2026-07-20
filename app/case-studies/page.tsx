@@ -1,19 +1,13 @@
 import type { Metadata } from "next"
-import Navbar from "@/components/navbar"
-import AnimatedFooter from "@/components/animated-footer"
-import CaseStudiesPage from "@/components/case-studies-page"
+import { WorkPage } from "@/components/pages/work-page"
 
 export const metadata: Metadata = {
-  title: "Dự án tiêu biểu - VietSolve",
-  description: "Những giải pháp sáng tạo & đổi mới giúp doanh nghiệp Việt tăng trưởng vượt bậc.",
+  title: "Dự án Branding, Website, AI & Growth",
+  description:
+    "Những dự án nơi chiến lược, sáng tạo và công nghệ được kết nối để giải quyết một bài toán cụ thể.",
+  alternates: { canonical: "/case-studies" },
 }
 
-export default function CaseStudies() {
-  return (
-    <div className="min-h-screen bg-white">
-      <Navbar />
-      <CaseStudiesPage />
-      <AnimatedFooter />
-    </div>
-  )
+export default function Page() {
+  return <WorkPage />
 }
