@@ -2,19 +2,17 @@ import BackgroundStripes from "@/components/background-stripes"
 import AnimatedBackground from "@/components/animated-background"
 import Navbar from "@/components/navbar"
 import AnimatedFooter from "@/components/animated-footer"
-import ContactPage from "@/components/contact-page"
-import BackgroundPaths from "@/components/background-paths"
+import CustomerInquiry from "@/components/customer-inquiry"
 
-export default function Contact() {
+export default function InquiryPage() {
   return (
-    <div className="relative min-h-screen bg-white">
-      <BackgroundPaths />
+    <div className="relative min-h-screen bg-black">
       <AnimatedBackground />
       <BackgroundStripes />
 
       <div className="relative z-10">
         <Navbar />
-        <ContactPage />
+        <CustomerInquiry />
         <AnimatedFooter />
       </div>
     </div>

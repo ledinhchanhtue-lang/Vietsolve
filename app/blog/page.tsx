@@ -1,13 +1,18 @@
-import type { Metadata } from "next"
-import { InsightsPage } from "@/components/pages/insights-page"
+import Navbar from "@/components/navbar"
+import AnimatedFooter from "@/components/animated-footer"
+import BlogPage from "@/components/blog-page"
 
-export const metadata: Metadata = {
-  title: "Insights về AI, Growth & Creative Technology",
-  description:
-    "Góc nhìn của VietSolve về hệ thống AI, tăng trưởng và công nghệ sáng tạo dành cho doanh nghiệp Việt Nam.",
-  alternates: { canonical: "/blog" },
+export const metadata = {
+  title: "Blog & Insights - VietSolve",
+  description: "Chia sẻ kiến thức, kinh nghiệm và góc nhìn mới về truyền thông, thương hiệu & công nghệ.",
 }
 
-export default function Page() {
-  return <InsightsPage />
+export default function Blog() {
+  return (
+    <div className="min-h-screen bg-white">
+      <Navbar />
+      <BlogPage />
+      <AnimatedFooter />
+    </div>
+  )
 }

@@ -1,135 +1,93 @@
-# VietSolve — Website
-
-## Định vị
-**VietSolve — AI-powered Growth Agency cho doanh nghiệp Việt Nam.**
-Không phải marketing agency phổ thông, cũng không phải công ty chỉ bán chatbot. Kết hợp chiến lược + sáng tạo + công nghệ AI.
+# Vietsolve — Website Marketing
 
 ## Repository
-- **Remote chính:** https://github.com/hoang27077-agenai/Vietsolve (không có quyền ghi)
-- **Fork đang push:** https://github.com/ledinhchanhtue-lang/Vietsolve — branch `local-update`
-- **Local:** `D:\Công việc\Viet Solve\Vietsolve`
+- **Remote:** https://github.com/hoang27077-agenai/Vietsolve (branch: `local-update`)
+- **Thư mục local:** `D:\Công việc\Viet Solve\Vietsolve`
 
-## Tech stack
-Next.js 15 (App Router) · React 19 · TypeScript · Tailwind 3 · framer-motion · static export (`output: 'export'`).
+## Tổng quan
+Website marketing **Next.js 15 (App Router) + React 19 + TypeScript + Tailwind 3 + shadcn/ui + framer-motion**. Ngôn ngữ: song ngữ VI/EN (mặc định VI). Template gốc từ v0.app (tên nội bộ `motion-records-website`).
 
+## Lệnh
 ```bash
 npm install
 npm run dev      # http://localhost:3000
-npm run build    # → out/
-npx wrangler pages deploy out --project-name=vietsolve --branch=main --commit-dirty=true
+npm run build    # production (ignoreBuildErrors=true nên không fail lint/type)
+npm run start
 ```
-
----
-
-## ⚠️ NGUYÊN TẮC SỐ 1 — KHÔNG BAO GIỜ RENDER DỮ LIỆU GIẢ
-
-Website cũ chứa rất nhiều nội dung bịa. Toàn bộ đã bị xóa. **Đừng thêm lại.**
-
-Đã xóa: badge Google Partner / BBB A+ / "Agency được chứng nhận" (không có giấy tờ) · SĐT `+1 (555) 123-4567` và `0909.xxx.xxx` · 2 địa chỉ mâu thuẫn · email `.com` vs `.vn` không khớp · ROI calculator USD ("1840% ROI", "$92,000/năm") kèm câu "dựa trên dữ liệu khách hàng thực tế" · 9 bài blog bịa (tác giả giả, ngày giả, CEO giả "Nguyễn Văn An") · 6 case study bịa + số liệu bịa (+300%, ROI 450%, 500K downloads) · 3 testimonial người Mỹ giả · tên khách hàng thật bị gán sai (Nordic Naturals, Ladipage) · `motionmedia.com`, "Motion Records" · 18 file ảnh không tồn tại · form giả `setTimeout` rồi vứt data.
-
-### Cách hệ thống chặn dữ liệu giả
-
-**`lib/site-config.ts`** — mọi thông tin liên hệ có cờ `verified`. UI **chỉ render khi `verified === true`**.
-```ts
-email: verified("contact@vietsolve.vn")   // hiện
-phone: unverified<string>()               // KHÔNG hiện
-address: unverified<...>()                // KHÔNG hiện
-certifications: []                        // rỗng có chủ đích
-```
-→ Muốn hiện SĐT/địa chỉ: điền giá trị thật rồi đổi `verified: true`. Section tự xuất hiện.
-
-**`lib/content/projects.ts`** — `metrics: []` mặc định. Chỉ thêm số liệu khi có `source`. Dự án mô tả bằng **cái đã làm**, không bằng kết quả bịa. `image: null` → tự sinh visual thương hiệu (không phải ảnh vỡ, không phải stock).
-
-**`lib/content/insights.ts`** — rỗng có chủ đích. Bài viết chỉ hiện khi `published: true` và có tác giả + ngày thật.
-
----
+- Chạy dev bằng terminal riêng (đóng terminal = tắt server = ERR_CONNECTION_REFUSED).
+- **Deploy lên Cloudflare Pages:**
+  ```bash
+  npm run build && npx wrangler pages deploy out --project-name=vietsolve --branch=main --commit-dirty=true
+  ```
 
 ## Cấu trúc
-
 ```
-app/
-  page.tsx            # Homepage (12 section)
-  services/           # Năng lực (route giữ /services cho SEO)
-  ai-systems/         # MỚI — trang riêng cho AI & automation
-  case-studies/       # Selected Work
-  about/  blog/  contact/  privacy/  terms/
-  sitemap.ts  robots.ts  not-found.tsx
+app/          # routes: about, artists, blog, case-studies, contact, get-started, inquiry, services, success-stories
+components/   # hero, navbar, animated-footer, how-we-work, innovative-services, roi-calculator-home, background-*, ...
+  ui/         # shadcn/ui
 lib/
-  site-config.ts      # ⭐ nguồn sự thật cho thông tin doanh nghiệp
-  i18n.tsx            # VI/EN, `vi` định nghĩa shape, `en` bị ép khớp
-  content/
-    navigation.ts  capabilities.ts  projects.ts  insights.ts
-components/
-  kit/                # section, buttons, page-hero
-  visuals/            # lac-constellation, system-canvas, capability-visual
-  home/               # hero, collaborations, problems, operating-system,
-                      # ai-workflow, selected-work, why-vietsolve, insights-teaser
-  sections/           # capabilities, final-cta, ai-readiness
-  pages/              # services, ai-systems, work, about, insights, contact, legal
-  work/  insights/  ui/
+  utils.ts    # cn()
+  i18n.tsx    # HỆ THỐNG SONG NGỮ (xem dưới)
+public/videos/hero-bg.mp4   # video nền hero (đã nén 42MB→11MB, 720p, faststart, no audio)
+public/videos/hero-poster.jpg  # poster frame cho video
 ```
+Alias `@/` = gốc dự án.
 
-## Homepage journey
-Hero (live system canvas) → Collaborations → Problems → VietSolve OS (5 bước) → Capabilities (4 trụ) → Interactive AI Workflow → Selected Work → Why VietSolve → Insights → Final CTA.
+## Song ngữ VI / EN — `lib/i18n.tsx`
+- `LanguageProvider` (context) + hook `useLanguage()` → `{ lang, setLang, toggle, t }`.
+- Từ điển `translations` gồm `vi`/`en` (92 key mỗi bên, khớp 1-1).
+- Lưu `localStorage("lang")`, cập nhật `<html lang>`. Provider bọc trong `app/layout.tsx`.
+- Nút chuyển **VI/EN** ở `navbar.tsx` (desktop + mobile).
+- **Đã dịch trang chủ:** navbar, hero, how-we-work, innovative-services, roi-calculator-home, animated-footer.
+- **Chưa dịch:** các trang con (about, services, blog, contact, case-studies, get-started...). Muốn thêm: thêm key vào CẢ `vi` và `en`, dùng `t.<section>.<key>`, component phải `"use client"`.
 
-## Design system
-- **Màu:** obsidian `#07090D` · graphite `#11141A` · ivory `#F4F1EA` · **VietSolve Red `#E21B2D`** (chỉ ≤5%, dùng cho CTA / node active / data path) · coral `#FF4D58` · steel `#A7AFBC`.
-- **Font:** Manrope (display) · Be Vietnam Pro (body, có dấu tiếng Việt) · JetBrains Mono (label/data).
-- **Surface class:** `.surface-dark` `.surface-graphite` `.surface-ivory` — dùng thay vì tự viết bg/text.
-- **Type scale:** `text-h1` `text-h2` `text-h3` `text-body-lg` `text-eyebrow` (fluid clamp).
-- **Section rhythm:** `py-section` (72→160px). Container max 1360px.
+## Đã đổi tên thương hiệu
+"Amane Soft" (template cũ) → **Viet Solve** ở `app/layout.tsx`, `animated-footer.tsx`, và các component dùng thật.
 
-### ⚠️ `lib/utils.ts` — tailwind-merge đã được extend
-`cn()` dùng `extendTailwindMerge`. **Bắt buộc** — nếu không, tailwind-merge đoán nhầm `text-h2` là màu chữ và `cn("text-h2","text-ivory")` sẽ **xóa mất `text-h2`** (mọi heading tụt về 16px — đã từng xảy ra). Thêm token màu/size mới thì phải khai báo trong file này.
+## Hiệu năng (đã tối ưu — trước đây rất lag)
+- **Video nền hero** (`hero.tsx`): thay iframe YouTube bằng `<video>` local `/videos/hero-bg.mp4` (nén 42→11MB, 720p, faststart, bỏ audio, có poster).
+- **`mouse-move-effect.tsx`**: bỏ setState mỗi mousemove → ghi DOM qua ref + throttle rAF.
+- **`background-paths.tsx` / `background-stripes.tsx`**: SVG tĩnh (bỏ framer-motion), giảm path, 200vh.
+- **`animated-background.tsx`** (canvas): chỉ vẽ viewport, 4 orb, cap 30fps.
+- **`navbar.tsx`**: bỏ animation viền + box-shadow nhấp nháy vô hạn.
+- **`counting-stats.tsx`**: bỏ blur-xl animate scale + text-shadow vô hạn.
+- **`innovative-services.tsx`**: bỏ 12 micro-animation vô hạn; gỡ `backdrop-blur-sm`.
+- **`roi-calculator-home.tsx`**: bỏ gradient động 15s; gỡ `backdrop-blur-sm`.
+- **Kết quả:** 0 animation vô hạn trên trang chủ; chỉ còn 1 canvas nền 30fps.
 
-## Chim Lạc
-`components/visuals/lac-constellation.tsx` — biểu tượng được diễn giải thành data constellation (node + path), không phải minh họa dân gian. `LacConstellation` (có animation vẽ 1 lần) và `LacMark` (tĩnh, cho footer). Cũng dùng trong OG image.
+## Đã xóa code chết
+`animated-cubes`, `brand-strategy`, `business-selector`, `cta`, `cursor-effect`, `features`, `footer` (cũ), `interactive-cta`, `services-page`, `success-stories` (cũ), `testimonials`, `theme-provider`.
 
-## Motion
-- Hero canvas: chạy 1 lượt khi vào viewport rồi **dừng**.
-- Workflow demo: chỉ chạy khi bấm, tự dừng, có nút Chạy lại.
-- Không có animation vô hạn nào ngoài vài node pulse nhỏ (CSS).
-- `prefers-reduced-motion` được tôn trọng toàn site (globals.css + check trong JS).
+## Deploy — Cloudflare Pages
+> Chuyển từ Vercel (Hobby chặn web thương mại → 402) sang **Cloudflare Pages** (miễn phí, cho thương mại).
 
-## Form liên hệ — GỬI THẬT
-`components/pages/contact-page.tsx`:
-- Có `NEXT_PUBLIC_CONTACT_ENDPOINT` → POST JSON tới đó.
-- Không có → mở mailto soạn sẵn tới email đã verified.
-- **Không bao giờ giả vờ gửi thành công.** Lỗi thì giữ nguyên dữ liệu + chỉ sang email.
-- Label luôn hiện, validate rõ, `aria-invalid`, focus về field lỗi đầu tiên.
+- **Static export:** `next.config.mjs` có `output: 'export'` → `npm run build` tạo thư mục **`out/`** (~13MB kèm video).
+- **Project Pages:** `vietsolve` — URL: **https://vietsolve.pages.dev**
+- **Custom domains:** vietsolve.vn + www.vietsolve.vn → CNAME tới `vietsolve.pages.dev`.
+- **Wrangler:** đã `wrangler login` OAuth vào Cloudflare của user.
 
-→ **Nên làm:** tạo Cloudflare Pages Function hoặc dùng Formspree, rồi set `NEXT_PUBLIC_CONTACT_ENDPOINT`.
+## Tên miền — TRẠNG THÁI (cập nhật 20/07/2026)
+Đăng ký tại **Mắt Bão** (id.matbao.net, tài khoản Lê Đình Chánh Tuệ). DNS chuyển về **Cloudflare** (`ledinhchanhtue@gmail.com`, account id `33aa8c17e4415cd24e7444a8b7beee5b`).
 
-## SEO
-Metadata riêng từng trang · canonical · OG + Twitter card + `/og.png` (1200×630, sinh từ `next/og` rồi lưu tĩnh) · `sitemap.ts` chỉ liệt kê route có thật · `robots.ts` · Organization schema (chỉ dữ liệu verified) · 1 H1/trang.
+### vietsolve.vn — ✅ ĐANG CHẠY LIVE
+- DNS zone Cloudflare (zone id `757478975aeea2fa2c4719e1181b606d`, NS `adele + damian .ns.cloudflare.com`). Zone **active**.
+- Web: CNAME `@` và `www` → `vietsolve.pages.dev` (proxied). **https://vietsolve.vn = 200, SSL ok.**
+- **Email Lark GIỮ NGUYÊN:** `MX×3 larksuite.com`, `TXT SPF`, `TXT lark verification`. **Đừng đổi/xóa MX.**
 
-Sitemap/robots cần `export const dynamic = "force-static"` vì dùng `output: 'export'`.
+### vietsolve.com — ⏳ chờ trỏ DNS
+- Mắt Bão đã gọi điện xác nhận **gỡ hết khóa** (ClientHold đã xóa, không còn vấn đề gì).
+- **Bước tiếp theo:** add zone vào Cloudflare → hoàn tất onboarding (Free plan) → đổi NS ở Mắt Bão (cần OTP từ user) → gắn vietsolve.com + www vào Pages project `vietsolve`. Không có email trên .com nên đơn giản.
 
-## Hạ tầng
-- **Hosting:** Cloudflare Pages, project `vietsolve` → https://vietsolve.pages.dev
-  (Vercel Hobby chặn web thương mại trên custom domain → HTTP 402. Đã bỏ.)
-- **vietsolve.vn** — 🟢 LIVE. Zone `757478975aeea2fa2c4719e1181b606d`, NS `adele/damian.ns.cloudflare.com`.
-- **Email Lark GIỮ NGUYÊN:** `MX×3 larksuite.com` + SPF + verify TXT. **ĐỪNG ĐỘNG VÀO MX.**
-- **vietsolve.com** — Mắt Bão đã gỡ khóa. Chưa trỏ. Cần: add zone → onboarding → đổi NS (OTP) → gắn custom domain vào Pages.
-- **Sau khi deploy: purge cache** (dash → Caching → Purge Everything). Route mới có thể bị edge cache 404 nếu request trúng lúc đang propagate — đã gặp với `/ai-systems` và `/terms`.
+### Lưu ý thao tác Mắt Bão
+- Đổi NS cần tắt "Xác thực DNS" + nhập OTP email/SMS (bước chính chủ).
+- Nút "Lưu thay đổi" NS chỉ bật khi gõ phím thật (form_input tool đôi khi không trigger).
 
-## Email công ty
-Lark Standard F3, org `LJKNZL57744`, admin `ujpwldb6q2it.jp.larksuite.com/admin`. F3 không có catch-all; admin không set forward hộ được (mỗi người tự cài trong Lark Mail).
+## Email công ty — Lark (Feishu)
+- Tổ chức **Viet Solve** trên Lark (gói Standard F3, ID `LJKNZL57744`).
+- Admin console: `ujpwldb6q2it.jp.larksuite.com/admin`.
+- Email @vietsolve.vn chạy trên Lark.
+- **Lark F3 KHÔNG có catch-all**, admin không set auto-forward hộ user được (mỗi người tự cài).
+- Đã xóa nhân sự nghỉ việc: **Chris** (chris@) và **Duy Tran** (duytran@) — tài nguyên chuyển về Tue Le.
 
----
-
-## 📋 CẦN CHỦ WEBSITE CUNG CẤP
-
-| Mục | Ở đâu | Ghi chú |
-|---|---|---|
-| Xác nhận `contact@vietsolve.vn` có người đọc | `lib/site-config.ts` | Đang render |
-| Hotline thật | `site-config.ts` → `contact.phone` | Chưa hiện |
-| Địa chỉ thật | `site-config.ts` → `contact.address` | Chưa hiện |
-| Link social thật | `site-config.ts` → `social` | Chưa hiện |
-| Logo khách hàng | `/public/images/clients/` | Đang hiện tên chữ |
-| Ảnh dự án | `/public/images/work/` → `projects.ts` `image` | Đang dùng visual sinh tự động |
-| Số liệu kết quả + nguồn | `projects.ts` → `metrics` | Đang rỗng |
-| Bài viết thật | `insights.ts` | `/blog` đang là empty state |
-| Thành viên team | chưa có section | Không tạo người giả |
-| Endpoint form | `NEXT_PUBLIC_CONTACT_ENDPOINT` | Đang fallback mailto |
-| Giấy tờ chứng nhận | `site-config.ts` → `certifications` | Chỉ thêm khi có URL xác minh |
+## Truy cập
+Cloudflare (Wrangler CLI + dashboard), Mắt Bão, Gmail, Lark Admin — qua Chrome extension. OTP/xác thực chính chủ do user tự làm.
