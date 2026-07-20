@@ -1,82 +1,93 @@
 # Vietsolve — Website Marketing
 
 ## Repository
-- **Remote:** https://github.com/hoang27077-agenai/Vietsolve
-- **Branch đã tải về:** `local-update`
-- **Clone command:** `git clone --branch local-update https://github.com/hoang27077-agenai/Vietsolve.git`
+- **Remote:** https://github.com/hoang27077-agenai/Vietsolve (branch: `local-update`)
 - **Thư mục local:** `D:\Công việc\Viet Solve\Vietsolve`
 
 ## Tổng quan
-Website marketing của Vietsolve, xây dựng bằng **Next.js 15 (App Router)** + **React 19** + **TypeScript**, style bằng **Tailwind CSS 3**, UI dùng **shadcn/ui** (Radix UI primitives) và animation bằng **framer-motion**. Ngôn ngữ hiển thị: tiếng Việt (`<html lang="vi">`).
+Website marketing **Next.js 15 (App Router) + React 19 + TypeScript + Tailwind 3 + shadcn/ui + framer-motion**. Ngôn ngữ: song ngữ VI/EN (mặc định VI). Template gốc từ v0.app (tên nội bộ `motion-records-website`).
 
-> Lưu ý: `package.json` vẫn còn tên nội bộ `motion-records-website` (template gốc từ v0.app). Tên hiển thị "Amane Soft" đã được đổi thành **Viet Solve** ở layout/footer/features.
-
-## Hiệu năng (đã tối ưu)
-Trang chủ trước đây bị giật do quá nhiều hiệu ứng nền chạy đồng thời. Đã xử lý:
-- **Video nền hero**: thay iframe YouTube (nặng, hay không autoplay) bằng thẻ `<video>` gốc phát file local `public/videos/hero-bg.mp4` — mượt, GPU-accelerated. Muốn đổi video: thay file này.
-- **`mouse-move-effect.tsx`**: bỏ `setState` mỗi lần rê chuột, ghi thẳng DOM qua `ref` + throttle bằng `requestAnimationFrame`.
-- **`background-paths.tsx` / `background-stripes.tsx`**: giảm số SVG path animation (360 → 56), hạ chiều cao layer `800vh → 200vh`.
-- **`animated-background.tsx`** (canvas): chỉ vẽ vùng viewport thay vì toàn trang, giảm orb (6→4), giới hạn ~30fps.
-- Gỡ `backdrop-blur-sm` khỏi các thẻ nền đục nằm trên background động (`innovative-services`, `roi-calculator-home`) — nguyên nhân chính gây giật khi cuộn.
-
-### Audit sâu (dọn mạnh tay)
-- **`navbar.tsx`**: gỡ 2 animation vô hạn (đổi màu viền + **box-shadow nhấp nháy**) — thanh nav luôn hiển thị nên đây là chi phí repaint liên tục; chuyển thành viền/shadow tĩnh.
-- **`counting-stats.tsx`**: gỡ animation vô hạn `text-shadow` + lớp `blur-xl` bị animate `scale` (rasterize lại filter mờ mỗi frame) → tĩnh.
-- **`innovative-services.tsx`**: gỡ 12 animation vô hạn của các mockup nhỏ (chạy mãi kể cả ngoài màn hình); giữ animation xuất-hiện-khi-cuộn-tới (`whileInView`, chạy 1 lần).
-- **`roi-calculator-home.tsx`**: gỡ animation gradient vô hạn 15s trên card lớn → gradient tĩnh.
-- **`background-paths.tsx` / `background-stripes.tsx`**: chuyển hẳn sang SVG **tĩnh** (bỏ hết framer-motion) — giữ hình trang trí, bỏ toàn bộ animation.
-- **Kết quả**: mọi component trang chủ = **0 animation vô hạn**; chỉ còn 1 canvas nền ở 30fps.
-
-### Đã xóa code chết (không import ở đâu)
-`animated-cubes`, `brand-strategy`, `business-selector`, `cta`, `cursor-effect`, `features`, `footer` (bản dùng thật là `animated-footer`), `interactive-cta`, `services-page`, `success-stories` (bản dùng thật là `success-stories-redesign`), `testimonials`, `theme-provider`. Số module Next.js giảm 1511 → 1458.
-
-> ⚠️ Ghi chú thiết kế: các con số thống kê trong `counting-stats` dùng chữ trắng (`text-white`) — vốn cho nền tối của template gốc. Trên nền hero sáng có thể khó đọc; cân nhắc đổi sang `text-gray-900`.
-
-## Song ngữ (VI / EN)
-Hệ thống i18n nhẹ, client-side (không đổi cấu trúc route):
-- **`lib/i18n.tsx`**: `LanguageProvider` (context) + hook `useLanguage()` trả về `{ lang, setLang, toggle, t }`; từ điển `translations` gồm `vi` và `en` (92 key mỗi bên, khớp 1-1). Ngôn ngữ lưu ở `localStorage("lang")` và cập nhật `document.documentElement.lang`. Mặc định: **vi**.
-- Provider bọc trong `app/layout.tsx`.
-- Nút chuyển **VI/EN** ở `navbar.tsx` (desktop + mobile).
-- Đã dịch các component trang chủ: `navbar`, `hero`, `how-we-work`, `innovative-services`, `roi-calculator-home`, `animated-footer` (dùng `const { t } = useLanguage()`).
-- **Cách thêm chữ mới**: thêm key vào CẢ `vi` và `en` trong `lib/i18n.tsx`, rồi dùng `t.<section>.<key>` trong component (component phải là `"use client"`).
-- **Chưa dịch** (còn tiếng Việt tĩnh): các trang con `app/about`, `app/services`, `app/blog`, `app/contact`, `app/case-studies`, `app/get-started`, v.v. — làm tương tự khi cần.
-
-## Công nghệ chính
-- Next.js `^15.1.6`, React `^19`, TypeScript `^5`
-- Tailwind CSS `^3.4.17` + `tailwindcss-animate`
-- shadcn/ui + Radix UI (`components/ui/`)
-- framer-motion `^11`, lucide-react (icons), recharts (charts), react-hook-form
-
-## Lệnh thường dùng
+## Lệnh
 ```bash
-npm install       # cài dependencies
-npm run dev       # chạy dev server tại http://localhost:3000
-npm run build     # build production
-npm run start     # chạy bản production
-npm run lint      # kiểm tra lint (eslint + next)
+npm install
+npm run dev      # http://localhost:3000
+npm run build    # production (ignoreBuildErrors=true nên không fail lint/type)
+npm run start
 ```
+- Chạy dev bằng terminal riêng (đóng terminal = tắt server = ERR_CONNECTION_REFUSED).
+- **Deploy lên Cloudflare Pages:**
+  ```bash
+  npm run build && npx wrangler pages deploy out --project-name=vietsolve --branch=main --commit-dirty=true
+  ```
 
-## Cấu trúc thư mục
+## Cấu trúc
 ```
-app/            # Next.js App Router — mỗi thư mục con là 1 route
-  about/  artists/  blog/  case-studies/  contact/
-  get-started/  inquiry/  services/  success-stories/
-  layout.tsx    # root layout (font Inter, metadata, MouseMoveEffect)
-  page.tsx      # trang chủ
-  globals.css   # global styles + Tailwind
-components/      # React components (hero, navbar, footer, services, ...)
-  ui/           # shadcn/ui primitives
-hooks/          # custom React hooks
+app/          # routes: about, artists, blog, case-studies, contact, get-started, inquiry, services, success-stories
+components/   # hero, navbar, animated-footer, how-we-work, innovative-services, roi-calculator-home, background-*, ...
+  ui/         # shadcn/ui
 lib/
-  utils.ts      # helper (cn() cho classnames)
-public/         # static assets
-styles/         # style bổ sung
-.claude/
-  launch.json   # cấu hình dev server (npm run dev, port 3000)
+  utils.ts    # cn()
+  i18n.tsx    # HỆ THỐNG SONG NGỮ (xem dưới)
+public/videos/hero-bg.mp4   # video nền hero (đã nén 42MB→11MB, 720p, faststart, no audio)
+public/videos/hero-poster.jpg  # poster frame cho video
 ```
+Alias `@/` = gốc dự án.
 
-## Alias import
-`@/` trỏ tới thư mục gốc dự án (xem `tsconfig.json` / `components.json`). Ví dụ: `@/components/hero`, `@/lib/utils`.
+## Song ngữ VI / EN — `lib/i18n.tsx`
+- `LanguageProvider` (context) + hook `useLanguage()` → `{ lang, setLang, toggle, t }`.
+- Từ điển `translations` gồm `vi`/`en` (92 key mỗi bên, khớp 1-1).
+- Lưu `localStorage("lang")`, cập nhật `<html lang>`. Provider bọc trong `app/layout.tsx`.
+- Nút chuyển **VI/EN** ở `navbar.tsx` (desktop + mobile).
+- **Đã dịch trang chủ:** navbar, hero, how-we-work, innovative-services, roi-calculator-home, animated-footer.
+- **Chưa dịch:** các trang con (about, services, blog, contact, case-studies, get-started...). Muốn thêm: thêm key vào CẢ `vi` và `en`, dùng `t.<section>.<key>`, component phải `"use client"`.
 
-## Ghi chú
-- `pnpm-lock.yaml` và `package-lock.json` cùng tồn tại — nên chọn 1 package manager. Hiện `launch.json` cấu hình dùng `npm`.
+## Đã đổi tên thương hiệu
+"Amane Soft" (template cũ) → **Viet Solve** ở `app/layout.tsx`, `animated-footer.tsx`, và các component dùng thật.
+
+## Hiệu năng (đã tối ưu — trước đây rất lag)
+- **Video nền hero** (`hero.tsx`): thay iframe YouTube bằng `<video>` local `/videos/hero-bg.mp4` (nén 42→11MB, 720p, faststart, bỏ audio, có poster).
+- **`mouse-move-effect.tsx`**: bỏ setState mỗi mousemove → ghi DOM qua ref + throttle rAF.
+- **`background-paths.tsx` / `background-stripes.tsx`**: SVG tĩnh (bỏ framer-motion), giảm path, 200vh.
+- **`animated-background.tsx`** (canvas): chỉ vẽ viewport, 4 orb, cap 30fps.
+- **`navbar.tsx`**: bỏ animation viền + box-shadow nhấp nháy vô hạn.
+- **`counting-stats.tsx`**: bỏ blur-xl animate scale + text-shadow vô hạn.
+- **`innovative-services.tsx`**: bỏ 12 micro-animation vô hạn; gỡ `backdrop-blur-sm`.
+- **`roi-calculator-home.tsx`**: bỏ gradient động 15s; gỡ `backdrop-blur-sm`.
+- **Kết quả:** 0 animation vô hạn trên trang chủ; chỉ còn 1 canvas nền 30fps.
+
+## Đã xóa code chết
+`animated-cubes`, `brand-strategy`, `business-selector`, `cta`, `cursor-effect`, `features`, `footer` (cũ), `interactive-cta`, `services-page`, `success-stories` (cũ), `testimonials`, `theme-provider`.
+
+## Deploy — Cloudflare Pages
+> Chuyển từ Vercel (Hobby chặn web thương mại → 402) sang **Cloudflare Pages** (miễn phí, cho thương mại).
+
+- **Static export:** `next.config.mjs` có `output: 'export'` → `npm run build` tạo thư mục **`out/`** (~13MB kèm video).
+- **Project Pages:** `vietsolve` — URL: **https://vietsolve.pages.dev**
+- **Custom domains:** vietsolve.vn + www.vietsolve.vn → CNAME tới `vietsolve.pages.dev`.
+- **Wrangler:** đã `wrangler login` OAuth vào Cloudflare của user.
+
+## Tên miền — TRẠNG THÁI (cập nhật 20/07/2026)
+Đăng ký tại **Mắt Bão** (id.matbao.net, tài khoản Lê Đình Chánh Tuệ). DNS chuyển về **Cloudflare** (`ledinhchanhtue@gmail.com`, account id `33aa8c17e4415cd24e7444a8b7beee5b`).
+
+### vietsolve.vn — ✅ ĐANG CHẠY LIVE
+- DNS zone Cloudflare (zone id `757478975aeea2fa2c4719e1181b606d`, NS `adele + damian .ns.cloudflare.com`). Zone **active**.
+- Web: CNAME `@` và `www` → `vietsolve.pages.dev` (proxied). **https://vietsolve.vn = 200, SSL ok.**
+- **Email Lark GIỮ NGUYÊN:** `MX×3 larksuite.com`, `TXT SPF`, `TXT lark verification`. **Đừng đổi/xóa MX.**
+
+### vietsolve.com — ⏳ chờ trỏ DNS
+- Mắt Bão đã gọi điện xác nhận **gỡ hết khóa** (ClientHold đã xóa, không còn vấn đề gì).
+- **Bước tiếp theo:** add zone vào Cloudflare → hoàn tất onboarding (Free plan) → đổi NS ở Mắt Bão (cần OTP từ user) → gắn vietsolve.com + www vào Pages project `vietsolve`. Không có email trên .com nên đơn giản.
+
+### Lưu ý thao tác Mắt Bão
+- Đổi NS cần tắt "Xác thực DNS" + nhập OTP email/SMS (bước chính chủ).
+- Nút "Lưu thay đổi" NS chỉ bật khi gõ phím thật (form_input tool đôi khi không trigger).
+
+## Email công ty — Lark (Feishu)
+- Tổ chức **Viet Solve** trên Lark (gói Standard F3, ID `LJKNZL57744`).
+- Admin console: `ujpwldb6q2it.jp.larksuite.com/admin`.
+- Email @vietsolve.vn chạy trên Lark.
+- **Lark F3 KHÔNG có catch-all**, admin không set auto-forward hộ user được (mỗi người tự cài).
+- Đã xóa nhân sự nghỉ việc: **Chris** (chris@) và **Duy Tran** (duytran@) — tài nguyên chuyển về Tue Le.
+
+## Truy cập
+Cloudflare (Wrangler CLI + dashboard), Mắt Bão, Gmail, Lark Admin — qua Chrome extension. OTP/xác thực chính chủ do user tự làm.
