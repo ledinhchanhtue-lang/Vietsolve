@@ -4,127 +4,71 @@
 
 @layer base {
   :root {
-    /* shadcn semantic tokens — light surface */
+    /* Updated to red and black color scheme for VietSolve branding */
     --background: 0 0% 100%;
-    --foreground: 222 18% 8%;
+    --foreground: 222 47% 11%;
     --card: 0 0% 100%;
-    --card-foreground: 222 18% 8%;
+    --card-foreground: 222 47% 11%;
     --popover: 0 0% 100%;
-    --popover-foreground: 222 18% 8%;
-    --primary: 355 78% 50%; /* #E21B2D */
+    --popover-foreground: 222 47% 11%;
+    --primary: 0 84% 60%; /* Red primary color */
     --primary-foreground: 0 0% 100%;
-    --secondary: 40 33% 94%; /* warm ivory */
-    --secondary-foreground: 222 18% 8%;
-    --muted: 40 20% 96%;
-    --muted-foreground: 220 9% 46%;
-    --accent: 40 33% 94%;
-    --accent-foreground: 222 18% 8%;
-    --destructive: 355 78% 50%;
+    --secondary: 220 14% 96%;
+    --secondary-foreground: 222 47% 11%;
+    --muted: 220 14% 96%;
+    --muted-foreground: 215 16% 47%;
+    --accent: 220 14% 96%;
+    --accent-foreground: 222 47% 11%;
+    --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
     --border: 220 13% 91%;
     --input: 220 13% 91%;
-    --ring: 355 78% 50%;
-    --radius: 0.75rem;
-
-    /* brand raw values for inline use */
-    --obsidian: #07090d;
-    --graphite: #11141a;
-    --ivory: #f4f1ea;
-    --vs-red: #e21b2d;
-    --vs-coral: #ff4d58;
-  }
-
-  * {
-    @apply border-border;
-  }
-
-  html {
-    -webkit-text-size-adjust: 100%;
-  }
-
-  body {
-    @apply bg-white text-obsidian antialiased;
-  }
-
-  /* Visible focus for keyboard users only */
-  :focus-visible {
-    outline: 2px solid var(--vs-red);
-    outline-offset: 3px;
-    border-radius: 4px;
-  }
-
-  /* Dark surfaces invert the focus ring for contrast */
-  .surface-dark :focus-visible,
-  .surface-graphite :focus-visible {
-    outline-color: var(--vs-coral);
-  }
-
-  ::selection {
-    background: var(--vs-red);
-    color: #fff;
+    --ring: 0 84% 60%; /* Red ring color */
+    --radius: 0.5rem;
   }
 }
 
-@layer components {
-  /* Dark editorial surface used by most sections */
-  .surface-dark {
-    @apply bg-obsidian text-ivory;
+@layer base {
+  * {
+    @apply border-border;
   }
-
-  .surface-graphite {
-    @apply bg-graphite text-ivory;
-  }
-
-  .surface-ivory {
-    @apply bg-ivory text-obsidian;
-  }
-
-  /* Hairline borders tuned per surface */
-  .hairline {
-    @apply border border-black/[0.08];
-  }
-
-  .surface-dark .hairline,
-  .surface-graphite .hairline {
-    @apply border-white/[0.10];
-  }
-
-  /* Standard vertical rhythm for a page section */
-  .section-y {
-    @apply py-section;
+  body {
+    /* Changed from bg-black text-foreground to light theme */
+    @apply bg-white text-gray-900;
   }
 }
 
 @layer utilities {
-  /* Content column for long-form reading (articles) */
-  .prose-column {
-    max-width: 44rem; /* ~704px */
+  .animate-fade-in {
+    animation: fade-in 0.5s ease-in-out;
   }
 
-  .text-balance {
-    text-wrap: balance;
+  .animate-gradient-x {
+    animation: gradient-x 3s ease infinite;
   }
 
-  .text-pretty {
-    text-wrap: pretty;
-  }
-
-  /* Grid/pattern backdrop for dark system visuals */
-  .grid-backdrop {
-    background-image: linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
-    background-size: 48px 48px;
+  .bg-size-200 {
+    background-size: 200% 200%;
   }
 }
 
-/* Respect the user's motion preference across the whole site */
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes gradient-x {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
   }
 }

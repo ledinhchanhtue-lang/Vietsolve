@@ -1,42 +1,28 @@
-import type { Metadata } from "next"
-import { Hero } from "@/components/home/hero"
-import { Collaborations } from "@/components/home/collaborations"
-import { Capabilities } from "@/components/sections/capabilities"
-import { OperatingSystem } from "@/components/home/operating-system"
-import { SelectedWork } from "@/components/home/selected-work"
-import { WhyVietSolve } from "@/components/home/why-vietsolve"
-import { FinalCta } from "@/components/sections/final-cta"
+import BackgroundStripes from "@/components/background-stripes"
+import AnimatedBackground from "@/components/animated-background"
+import Navbar from "@/components/navbar"
+import Hero from "@/components/hero"
+import HowWeWork from "@/components/how-we-work"
+import InnovativeServices from "@/components/innovative-services"
+import ROICalculatorHome from "@/components/roi-calculator-home"
+import AnimatedFooter from "@/components/animated-footer"
+import BackgroundPaths from "@/components/background-paths"
 
-export const metadata: Metadata = {
-  title: "VietSolve — AI Agency, Automation & Digital Growth",
-  description:
-    "VietSolve là AI-powered Growth Agency giúp doanh nghiệp Việt xây dựng thương hiệu, website, AI Agent và hệ thống automation phục vụ bán hàng và vận hành.",
-  alternates: { canonical: "/" },
-}
-
-/**
- * Homepage — seven sections.
- *
- * Deliberately trimmed. Removed from here:
- *  - "The real problem" as a standalone section → condensed into the
- *    Capabilities intro.
- *  - The Live System Demo → it duplicated the hero canvas. The component is
- *    kept and now runs only on /ai-systems.
- *  - Insights → hidden until there are at least three real articles.
- *
- * Rhythm: big hero → short collaborations → big capabilities → short process →
- * big work → short why → big CTA.
- */
-export default function HomePage() {
+export default function Home() {
   return (
-    <>
-      <Hero />
-      <Collaborations />
-      <Capabilities variant="compact" />
-      <OperatingSystem compact />
-      <SelectedWork />
-      <WhyVietSolve />
-      <FinalCta />
-    </>
+    <div className="relative min-h-screen bg-white">
+      <BackgroundPaths />
+      <AnimatedBackground />
+      <BackgroundStripes />
+
+      <div className="relative z-40">
+        <Navbar />
+        <Hero />
+        <HowWeWork />
+        <InnovativeServices />
+        <ROICalculatorHome />
+        <AnimatedFooter />
+      </div>
+    </div>
   )
 }

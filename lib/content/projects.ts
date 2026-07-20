@@ -15,8 +15,10 @@
  *  `image` path. Add verified outcomes to `metrics` with a `source` note.
  */
 
-import type { Bilingual } from "./capabilities"
-import type { CapabilityId } from "./capabilities"
+/** Bilingual string pair. */
+export type Bilingual<T = string> = { vi: T; en: T }
+/** Which capability a project primarily exercised. */
+export type CapabilityId = "ai-agents" | "digital-products" | "brand-growth" | "media-creative"
 
 export type ProjectCategory = "ai-systems" | "digital-products" | "brand-growth" | "media"
 

@@ -18,7 +18,8 @@
  *  The listing, the homepage teaser and the sitemap all pick it up automatically.
  */
 
-import type { Bilingual } from "./capabilities"
+/** Bilingual string pair. */
+export type Bilingual<T = string> = { vi: T; en: T }
 
 export type InsightCategory = "ai-systems" | "growth" | "creative-technology" | "founders-view"
 

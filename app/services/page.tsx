@@ -1,13 +1,19 @@
-import type { Metadata } from "next"
-import { ServicesPage } from "@/components/pages/services-page"
+import Navbar from "@/components/navbar"
+import AnimatedFooter from "@/components/animated-footer"
+import SolutionsPage from "@/components/solutions-page"
 
-export const metadata: Metadata = {
-  title: "Năng lực AI, Automation, Website & Growth",
+export const metadata = {
+  title: "Dịch vụ VietSolve – Intelligent • Creative • Innovation",
   description:
-    "VietSolve giúp doanh nghiệp từ xác định bài toán, xây thương hiệu, phát triển nền tảng số đến triển khai AI và automation.",
-  alternates: { canonical: "/services" },
+    "VietSolve cung cấp dịch vụ toàn diện giúp doanh nghiệp Việt tăng trưởng bằng trí tuệ, sáng tạo và công nghệ AI.",
 }
 
-export default function Page() {
-  return <ServicesPage />
+export default function Services() {
+  return (
+    <div className="min-h-screen bg-white">
+      <Navbar />
+      <SolutionsPage />
+      <AnimatedFooter />
+    </div>
+  )
 }
