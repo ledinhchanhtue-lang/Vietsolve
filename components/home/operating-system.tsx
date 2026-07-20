@@ -17,7 +17,16 @@ import { cn } from "@/lib/utils"
  * Replaces the old three-step "Khám phá – Thiết kế – Triển khai", which didn't
  * describe integration or ongoing optimisation at all.
  */
-export function OperatingSystem() {
+export function OperatingSystem({
+  /** Homepage uses `compact`: name + one sentence, no deliverable chips. */
+  compact = false,
+  eyebrow,
+  heading,
+}: {
+  compact?: boolean
+  eyebrow?: string
+  heading?: string
+} = {}) {
   const { t, lang } = useLanguage()
   const [active, setActive] = useState(0)
   const stepRefs = useRef<Array<HTMLLIElement | null>>([])
@@ -48,8 +57,8 @@ export function OperatingSystem() {
     <section className="surface-dark py-section" id="how-we-build">
       <Container>
         <div className="max-w-3xl">
-          <SectionEyebrow>{t.os.eyebrow}</SectionEyebrow>
-          <SectionHeading className="mt-6 text-ivory">{t.os.heading}</SectionHeading>
+          <SectionEyebrow>{eyebrow ?? t.os.eyebrow}</SectionEyebrow>
+          <SectionHeading className="mt-5 text-ivory">{heading ?? t.os.heading}</SectionHeading>
         </div>
 
         {/* Horizontal progress rail — desktop only */}
@@ -105,7 +114,10 @@ export function OperatingSystem() {
                 ref={(el) => {
                   stepRefs.current[i] = el
                 }}
-                className="relative pb-14 pl-10 last:pb-0 lg:pb-20 lg:pl-16"
+                className={cn(
+                  "relative pl-10 last:pb-0 lg:pl-16",
+                  compact ? "pb-9 lg:pb-12" : "pb-14 lg:pb-20",
+                )}
               >
                 <span
                   className={cn(
@@ -120,7 +132,12 @@ export function OperatingSystem() {
                   )}
                 </span>
 
-                <div className="grid gap-6 lg:grid-cols-[1.2fr_1fr] lg:gap-14">
+                <div
+                  className={cn(
+                    "grid gap-6",
+                    !compact && "lg:grid-cols-[1.2fr_1fr] lg:gap-14",
+                  )}
+                >
                   <div>
                     <div className="flex items-baseline gap-3">
                       <span
@@ -150,26 +167,30 @@ export function OperatingSystem() {
                     </p>
                   </div>
 
-                  <div className="lg:pt-1">
-                    <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-white/35">
-                      {t.os.deliverables}
-                    </p>
-                    <ul className="mt-3 flex flex-wrap gap-2">
-                      {step.deliverables[lang].map((d) => (
-                        <li
-                          key={d}
-                          className={cn(
-                            "rounded-full border px-3 py-1.5 font-mono text-[11px] transition-colors duration-500",
-                            on
-                              ? "border-white/12 text-ivory/70"
-                              : "border-white/[0.06] text-white/25",
-                          )}
-                        >
-                          {d}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
+                  {/* Deliverable chips are detail — /services and /ai-systems
+                      show them; the homepage timeline stays to one line each. */}
+                  {!compact && (
+                    <div className="lg:pt-1">
+                      <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-white/35">
+                        {t.os.deliverables}
+                      </p>
+                      <ul className="mt-3 flex flex-wrap gap-2">
+                        {step.deliverables[lang].map((d) => (
+                          <li
+                            key={d}
+                            className={cn(
+                              "rounded-full border px-3 py-1.5 font-mono text-[11px] transition-colors duration-500",
+                              on
+                                ? "border-white/12 text-ivory/70"
+                                : "border-white/[0.06] text-white/25",
+                            )}
+                          >
+                            {d}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
                 </div>
               </li>
             )

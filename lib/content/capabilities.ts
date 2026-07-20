@@ -17,7 +17,12 @@ export type Capability = {
   index: string
   name: Bilingual
   heading: Bilingual
+  /** Full paragraph — used on /services */
   description: Bilingual
+  /** One sentence — used in the homepage 2×2 grid */
+  shortDescription: Bilingual
+  /** Three headline services — homepage only. Full list lives on /services. */
+  highlights: Bilingual<string[]>
   services: Bilingual<string[]>
   /** Which system visual to render alongside this stage */
   visual: "agent-flow" | "web-stack" | "journey" | "creative-pipeline"
@@ -39,6 +44,14 @@ export const capabilities: Capability[] = [
     description: {
       vi: "Thiết kế AI Agent và workflow automation giúp doanh nghiệp phản hồi khách hàng, xử lý dữ liệu, tạo báo giá, cập nhật CRM và tự động hóa các tác vụ lặp lại.",
       en: "We design AI agents and automation workflows that respond to customers, process data, generate quotes, update your CRM and take over repetitive work.",
+    },
+    shortDescription: {
+      vi: "Xây AI Agent và workflow giúp doanh nghiệp xử lý khách hàng, dữ liệu và các tác vụ lặp lại.",
+      en: "AI agents and workflows that handle customers, data and repetitive work.",
+    },
+    highlights: {
+      vi: ["AI Sales Agent", "CRM Automation", "Internal Workflow"],
+      en: ["AI Sales Agent", "CRM automation", "Internal workflow"],
     },
     services: {
       vi: [
@@ -74,6 +87,14 @@ export const capabilities: Capability[] = [
     description: {
       vi: "Xây dựng website, web app và digital product có khả năng bán hàng, cá nhân hóa trải nghiệm, thu thập dữ liệu và tích hợp AI.",
       en: "We build websites, web apps and digital products that sell, personalise the experience, capture data and integrate AI.",
+    },
+    shortDescription: {
+      vi: "Website và sản phẩm số biết bán hàng, thu thập dữ liệu và kết nối vào quy trình kinh doanh.",
+      en: "Websites and digital products that sell, capture data and plug into the business.",
+    },
+    highlights: {
+      vi: ["AI-powered Website", "E-commerce", "Customer Portal"],
+      en: ["AI-powered website", "E-commerce", "Customer portal"],
     },
     services: {
       vi: [
@@ -112,6 +133,14 @@ export const capabilities: Capability[] = [
       vi: "Kết hợp chiến lược thương hiệu, nội dung, truyền thông và performance marketing để tạo ra nhận diện rõ ràng và hành trình chuyển đổi nhất quán.",
       en: "We combine brand strategy, content, communications and performance marketing into one clear identity and a consistent path to conversion.",
     },
+    shortDescription: {
+      vi: "Chiến lược thương hiệu, nội dung và performance gắn liền với hành trình chuyển đổi.",
+      en: "Brand strategy, content and performance tied to the conversion journey.",
+    },
+    highlights: {
+      vi: ["Brand Strategy", "Performance Marketing", "SEO & AI Search"],
+      en: ["Brand strategy", "Performance marketing", "SEO & AI search"],
+    },
     services: {
       vi: [
         "Brand Strategy",
@@ -148,6 +177,14 @@ export const capabilities: Capability[] = [
     description: {
       vi: "Kết hợp đội ngũ sáng tạo với AI video, AI voice và creative automation để sản xuất nội dung nhanh hơn nhưng vẫn giữ chất lượng thương hiệu.",
       en: "We pair a creative team with AI video, AI voice and creative automation to produce faster without losing brand quality.",
+    },
+    shortDescription: {
+      vi: "Sản xuất nội dung đa nền tảng nhanh hơn nhờ kết hợp đội ngũ sáng tạo với AI.",
+      en: "Multi-platform content produced faster by pairing a creative team with AI.",
+    },
+    highlights: {
+      vi: ["Key Visual", "Video & TVC", "AI Video / Voice"],
+      en: ["Key visual", "Video & TVC", "AI video / voice"],
     },
     services: {
       vi: [
@@ -253,19 +290,21 @@ export const osSteps: OsStep[] = [
 export type EngagementModel = {
   id: string
   name: Bilingual
-  description: Bilingual
-  fitFor: Bilingual<string[]>
+  /** Who this is for */
+  bestFor: Bilingual
+  /** What a typical scope covers */
+  scope: Bilingual<string[]>
 }
 
 export const engagementModels: EngagementModel[] = [
   {
     id: "ai-sprint",
     name: { vi: "AI Sprint", en: "AI Sprint" },
-    description: {
-      vi: "Đánh giá cơ hội, thiết kế giải pháp và xây prototype trong phạm vi rõ ràng.",
-      en: "Assess the opportunity, design the solution and build a prototype inside a clearly bounded scope.",
+    bestFor: {
+      vi: "Doanh nghiệp muốn thử AI trong phạm vi nhỏ, rõ ràng trước khi đầu tư lớn.",
+      en: "Teams who want to test AI in a small, clearly bounded scope before committing.",
     },
-    fitFor: {
+    scope: {
       vi: ["AI readiness", "Automation audit", "Proof of concept", "UX prototype"],
       en: ["AI readiness", "Automation audit", "Proof of concept", "UX prototype"],
     },
@@ -273,11 +312,11 @@ export const engagementModels: EngagementModel[] = [
   {
     id: "project-build",
     name: { vi: "Project Build", en: "Project Build" },
-    description: {
-      vi: "Thiết kế và triển khai một dự án hoàn chỉnh từ chiến lược đến sản phẩm.",
-      en: "Design and deliver a complete project, from strategy through to the finished product.",
+    bestFor: {
+      vi: "Doanh nghiệp cần một dự án hoàn chỉnh từ chiến lược đến sản phẩm bàn giao.",
+      en: "Businesses that need a complete project, from strategy through to a delivered product.",
     },
-    fitFor: {
+    scope: {
       vi: ["Website", "Brand system", "Campaign", "AI Agent", "Automation"],
       en: ["Website", "Brand system", "Campaign", "AI agent", "Automation"],
     },
@@ -285,25 +324,25 @@ export const engagementModels: EngagementModel[] = [
   {
     id: "growth-partnership",
     name: { vi: "Growth Partnership", en: "Growth Partnership" },
-    description: {
-      vi: "Đồng hành theo chu kỳ để triển khai, đo lường và tiếp tục tối ưu.",
-      en: "An ongoing cycle of shipping, measuring and optimising together.",
+    bestFor: {
+      vi: "Doanh nghiệp cần đồng hành liên tục để triển khai, đo lường và tối ưu theo chu kỳ.",
+      en: "Businesses that need an ongoing partner to ship, measure and optimise in cycles.",
     },
-    fitFor: {
-      vi: ["Growth", "Content", "Performance", "SEO", "Continuous optimization"],
-      en: ["Growth", "Content", "Performance", "SEO", "Continuous optimisation"],
+    scope: {
+      vi: ["Growth strategy", "Content", "Performance", "SEO", "Tối ưu liên tục"],
+      en: ["Growth strategy", "Content", "Performance", "SEO", "Continuous optimisation"],
     },
   },
   {
-    id: "enterprise-transformation",
-    name: { vi: "Enterprise Transformation", en: "Enterprise Transformation" },
-    description: {
-      vi: "Tư vấn và tích hợp nhiều nền tảng, phòng ban và luồng dữ liệu.",
-      en: "Consulting and integration across multiple platforms, departments and data flows.",
+    id: "enterprise-integration",
+    name: { vi: "Enterprise Integration", en: "Enterprise Integration" },
+    bestFor: {
+      vi: "Tổ chức nhiều phòng ban cần kết nối dữ liệu và công cụ đang phân mảnh.",
+      en: "Multi-team organisations that need to connect fragmented data and tools.",
     },
-    fitFor: {
-      vi: ["CRM", "Data", "AI system", "Multi-team workflow", "Digital transformation"],
-      en: ["CRM", "Data", "AI system", "Multi-team workflow", "Digital transformation"],
+    scope: {
+      vi: ["CRM", "Data pipeline", "AI system", "Workflow đa phòng ban", "API integration"],
+      en: ["CRM", "Data pipeline", "AI system", "Multi-team workflow", "API integration"],
     },
   },
 ]

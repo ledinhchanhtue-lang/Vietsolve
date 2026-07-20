@@ -7,8 +7,8 @@ import { Container, Section, SectionEyebrow, SectionHeading } from "@/components
 import { CapabilityVisual } from "@/components/visuals/capability-visual"
 import { AiWorkflow } from "@/components/home/ai-workflow"
 import { AiReadiness } from "@/components/sections/ai-readiness"
+import { OperatingSystem } from "@/components/home/operating-system"
 import { FinalCta } from "@/components/sections/final-cta"
-import { osSteps } from "@/lib/content/capabilities"
 import { cn } from "@/lib/utils"
 
 /**
@@ -29,13 +29,12 @@ export function AiSystemsPage() {
     { title: t.aiSystemsPage.s4Title, body: t.aiSystemsPage.s4Body, visual: "web-stack" as const },
   ]
 
+  // Four use cases, not six — enough to make the point without padding the page.
   const useCases = [
     t.aiSystemsPage.useCase1,
     t.aiSystemsPage.useCase2,
     t.aiSystemsPage.useCase3,
     t.aiSystemsPage.useCase4,
-    t.aiSystemsPage.useCase5,
-    t.aiSystemsPage.useCase6,
   ]
 
   const controls = [
@@ -91,7 +90,7 @@ export function AiSystemsPage() {
           <SectionHeading className="max-w-3xl text-ivory">
             {t.aiSystemsPage.useCasesTitle}
           </SectionHeading>
-          <ul className="mt-14 grid gap-px overflow-hidden rounded-stage border border-white/[0.08] bg-white/[0.06] sm:grid-cols-2 lg:grid-cols-3">
+          <ul className="mt-12 grid gap-px overflow-hidden rounded-stage border border-white/[0.08] bg-white/[0.06] sm:grid-cols-2">
             {useCases.map((u, i) => (
               <li key={u} className="bg-obsidian p-7 lg:p-8">
                 <span className="font-mono text-[11px] tracking-[0.14em] text-vs-red">
@@ -104,8 +103,8 @@ export function AiSystemsPage() {
         </Container>
       </Section>
 
-      {/* ---- AI readiness self-assessment ---- */}
-      <AiReadiness />
+      {/* ---- AI readiness self-assessment — sits after the demo, collapsed ---- */}
+      <AiReadiness collapsible />
 
       {/* ---- Human control ---- */}
       <Section surface="ivory">
@@ -139,31 +138,8 @@ export function AiSystemsPage() {
         </Container>
       </Section>
 
-      {/* ---- Implementation process ---- */}
-      <Section surface="graphite">
-        <Container>
-          <SectionEyebrow>{t.os.eyebrow}</SectionEyebrow>
-          <SectionHeading className="mt-6 max-w-3xl text-ivory">
-            {t.aiSystemsPage.processTitle}
-          </SectionHeading>
-
-          <ol className="mt-14 grid gap-px overflow-hidden rounded-stage border border-white/[0.08] bg-white/[0.06] sm:grid-cols-2 lg:grid-cols-5">
-            {osSteps.map((s) => (
-              <li key={s.index} className="bg-graphite p-6 lg:p-7">
-                <span className="font-mono text-[11px] tracking-[0.14em] text-vs-red">
-                  {s.index}
-                </span>
-                <h3 className="mt-4 font-display text-lg font-medium text-ivory">
-                  {s.name[lang]}
-                </h3>
-                <p className="mt-3 text-[13px] leading-relaxed text-vs-steel text-pretty">
-                  {s.description[lang]}
-                </p>
-              </li>
-            ))}
-          </ol>
-        </Container>
-      </Section>
+      {/* ---- Implementation process — shared timeline, not a second variant ---- */}
+      <OperatingSystem heading={t.aiSystemsPage.processTitle} />
 
       <FinalCta />
     </>

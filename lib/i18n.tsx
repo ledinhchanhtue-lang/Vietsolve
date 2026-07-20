@@ -38,46 +38,25 @@ const vi = {
     systemLabel: "Hệ thống đang chạy",
   },
 
-  /** Live system canvas in the hero */
+  /**
+   * Hero system canvas — four headline states.
+   * The finer steps live in each node's tooltip, not as a long visible list.
+   */
   system: {
     node1: "Lead mới",
-    node1Detail: "Khách hàng nhắn tin qua website hoặc mạng xã hội",
-    node2: "AI xác định nhu cầu",
-    node2Detail: "Phân loại yêu cầu và trích xuất thông tin quan trọng",
-    node3: "Dữ liệu vào CRM",
-    node3Detail: "Hồ sơ khách hàng được tạo và đồng bộ tự động",
-    node4: "AI Agent phản hồi",
-    node4Detail: "Trả lời trong vài giây, đúng ngữ cảnh và giọng thương hiệu",
-    node5: "Đề xuất giải pháp",
-    node5Detail: "Gợi ý sản phẩm hoặc dịch vụ phù hợp với nhu cầu",
-    node6: "Sale nhận thông báo",
-    node6Detail: "Nhân sự tiếp nhận đúng lúc, với đầy đủ ngữ cảnh",
-    node7: "Dashboard cập nhật",
-    node7Detail: "Kết quả được ghi nhận và đo lường theo thời gian thực",
+    node1Detail: "Khách nhắn tin qua website hoặc mạng xã hội",
+    node2: "AI phân tích",
+    node2Detail: "Xác định nhu cầu, phân loại yêu cầu và trích xuất thông tin",
+    node3: "CRM & workflow xử lý",
+    node3Detail: "Tạo hồ sơ, đồng bộ dữ liệu và chạy các bước tự động",
+    node4: "Sale nhận kết quả",
+    node4Detail: "Nhân sự tiếp nhận đúng lúc, với đầy đủ ngữ cảnh",
   },
 
   collaborations: {
     eyebrow: "SELECTED COLLABORATIONS",
     heading: "Đồng hành cùng những doanh nghiệp đang muốn thay đổi.",
     note: "Một số dự án tiêu biểu VietSolve đã thực hiện.",
-  },
-
-  problems: {
-    eyebrow: "THE REAL PROBLEM",
-    headingLine1: "Doanh nghiệp không thiếu công cụ.",
-    headingLine2: "Doanh nghiệp thiếu một hệ thống kết nối.",
-    body: "Marketing, sale, dữ liệu và vận hành thường được triển khai trên nhiều nền tảng rời rạc. VietSolve kết nối những điểm rời rạc đó thành một hệ thống tăng trưởng có thể vận hành, đo lường và tiếp tục tối ưu.",
-    p1Title: "Lead đến nhưng xử lý quá chậm",
-    p1Body:
-      "Khách hàng phải chờ phản hồi, dữ liệu bị thất thoát và sale phụ thuộc vào thao tác thủ công.",
-    p2Title: "Marketing và sale không kết nối",
-    p2Body:
-      "Chiến dịch tạo ra dữ liệu nhưng dữ liệu không được chuyển thành hành động hoặc doanh thu.",
-    p3Title: "Muốn ứng dụng AI nhưng không biết bắt đầu từ đâu",
-    p3Body:
-      "Doanh nghiệp mua nhiều công cụ nhưng chưa có kiến trúc hệ thống, quy trình và mục tiêu rõ ràng.",
-    disconnected: "Rời rạc",
-    connected: "Được kết nối",
   },
 
   os: {
@@ -91,6 +70,14 @@ const vi = {
     heading: "Chiến lược, sáng tạo và công nghệ trong cùng một hệ thống.",
     includes: "Bao gồm",
     discuss: "Trao đổi về năng lực này",
+    /** Condensed replacement for the old standalone "The real problem" section */
+    intro:
+      "Doanh nghiệp không thiếu công cụ. Vấn đề là marketing, sale, dữ liệu và vận hành vẫn đang hoạt động rời rạc.",
+    gap1: "Lead xử lý chậm",
+    gap2: "Dữ liệu không kết nối",
+    gap3: "Quy trình còn thủ công",
+    explore: "Xem chi tiết năng lực",
+    viewAll: "Xem tất cả năng lực",
   },
 
   workflow: {
@@ -150,8 +137,7 @@ const vi = {
     viewAll: "Xem tất cả dự án",
     delivered: "Đã triển khai",
     industry: "Lĩnh vực",
-    year: "Năm",
-    detailComingSoon: "Nội dung chi tiết đang được hoàn thiện",
+    year: "Năm",
     filterAll: "Tất cả",
     filterAiSystems: "AI Systems",
     filterDigitalProducts: "Digital Products",
@@ -176,11 +162,7 @@ const vi = {
   insights: {
     eyebrow: "INSIGHTS",
     heading: "Góc nhìn về AI, tăng trưởng và sáng tạo.",
-    pageHeading: "Ý tưởng, hệ thống và góc nhìn giúp doanh nghiệp ứng dụng AI hiệu quả hơn.",
-    empty: "Insights đang được cập nhật.",
-    emptyBody:
-      "Chúng tôi đang chuẩn bị những bài viết đầu tiên về AI, tăng trưởng và công nghệ sáng tạo.",
-    emptyCta: "Trao đổi trực tiếp với VietSolve",
+    pageHeading: "Ý tưởng, hệ thống và góc nhìn giúp doanh nghiệp ứng dụng AI hiệu quả hơn.",
     readMore: "Đọc tiếp",
     readingTime: "phút đọc",
     catAiSystems: "AI Systems",
@@ -219,8 +201,12 @@ const vi = {
     engagementEyebrow: "ENGAGEMENT MODELS",
     engagementHeading: "Cách chúng ta có thể làm việc cùng nhau.",
     engagementNote: "Phạm vi và chi phí được xác định sau khi hiểu rõ bài toán của doanh nghiệp.",
-    fitFor: "Phù hợp với",
-    engagementCta: "Trao đổi phạm vi dự án",
+    bestFor: "Phù hợp với",
+    typicalScope: "Phạm vi điển hình",
+    engagementCta: "Trao đổi phạm vi",
+    processEyebrow: "PROCESS",
+    processHeading: "Quy trình năm bước từ bài toán đến hệ thống vận hành.",
+    projectEyebrow: "SELECTED PROJECT",
   },
 
   aiSystemsPage: {
@@ -354,6 +340,8 @@ const vi = {
     scalableBody:
       "Doanh nghiệp đã có nền tảng tốt. Bước phù hợp là mở rộng AI sang nhiều quy trình và tích hợp sâu vào hệ thống hiện có.",
     discuss: "Trao đổi về kết quả này",
+    start: "Bắt đầu đánh giá",
+    hide: "Thu gọn",
   },
 
   common: {
@@ -400,40 +388,18 @@ const en: Translations = {
   system: {
     node1: "New lead",
     node1Detail: "A customer messages through the website or social channels",
-    node2: "AI identifies intent",
-    node2Detail: "Classifies the request and extracts the key details",
-    node3: "Data enters the CRM",
-    node3Detail: "A customer record is created and synced automatically",
-    node4: "AI agent responds",
-    node4Detail: "Replies in seconds, in context and in your brand voice",
-    node5: "Solution suggested",
-    node5Detail: "Recommends the product or service that fits the need",
-    node6: "Sales is notified",
-    node6Detail: "The right person picks it up at the right time, with full context",
-    node7: "Dashboard updates",
-    node7Detail: "Outcomes are recorded and measured in real time",
+    node2: "AI analyses",
+    node2Detail: "Identifies the need, classifies the request and extracts the details",
+    node3: "CRM & workflow run",
+    node3Detail: "Creates the record, syncs the data and runs the automated steps",
+    node4: "Sales gets the result",
+    node4Detail: "The right person picks it up at the right time, with full context",
   },
 
   collaborations: {
     eyebrow: "SELECTED COLLABORATIONS",
     heading: "Working with businesses ready to change.",
     note: "A selection of projects VietSolve has delivered.",
-  },
-
-  problems: {
-    eyebrow: "THE REAL PROBLEM",
-    headingLine1: "Businesses aren't short on tools.",
-    headingLine2: "They're short on a connected system.",
-    body: "Marketing, sales, data and operations usually run on separate platforms. VietSolve connects those disconnected pieces into one growth system you can operate, measure and keep improving.",
-    p1Title: "Leads arrive, but responses are too slow",
-    p1Body: "Customers wait for a reply, data leaks away, and sales depends on manual work.",
-    p2Title: "Marketing and sales aren't connected",
-    p2Body: "Campaigns generate data, but that data never turns into action or revenue.",
-    p3Title: "You want to use AI but don't know where to start",
-    p3Body:
-      "Businesses buy plenty of tools without a system architecture, a process or a clear goal.",
-    disconnected: "Disconnected",
-    connected: "Connected",
   },
 
   os: {
@@ -447,6 +413,13 @@ const en: Translations = {
     heading: "Strategy, creative and technology inside one system.",
     includes: "Includes",
     discuss: "Discuss this capability",
+    intro:
+      "Businesses aren't short on tools. The problem is that marketing, sales, data and operations still run separately.",
+    gap1: "Slow lead response",
+    gap2: "Disconnected data",
+    gap3: "Manual processes",
+    explore: "See capability detail",
+    viewAll: "View all capabilities",
   },
 
   workflow: {
@@ -506,8 +479,7 @@ const en: Translations = {
     viewAll: "View all projects",
     delivered: "Delivered",
     industry: "Industry",
-    year: "Year",
-    detailComingSoon: "Full case study in progress",
+    year: "Year",
     filterAll: "All",
     filterAiSystems: "AI Systems",
     filterDigitalProducts: "Digital Products",
@@ -533,10 +505,7 @@ const en: Translations = {
   insights: {
     eyebrow: "INSIGHTS",
     heading: "Perspectives on AI, growth and creative work.",
-    pageHeading: "Ideas, systems and perspectives to help businesses apply AI better.",
-    empty: "Insights are on the way.",
-    emptyBody: "We're preparing our first articles on AI, growth and creative technology.",
-    emptyCta: "Talk to VietSolve directly",
+    pageHeading: "Ideas, systems and perspectives to help businesses apply AI better.",
     readMore: "Read more",
     readingTime: "min read",
     catAiSystems: "AI Systems",
@@ -573,8 +542,12 @@ const en: Translations = {
     engagementEyebrow: "ENGAGEMENT MODELS",
     engagementHeading: "How we can work together.",
     engagementNote: "Scope and cost are defined once we understand the problem properly.",
-    fitFor: "Fits",
-    engagementCta: "Discuss project scope",
+    bestFor: "Best for",
+    typicalScope: "Typical scope",
+    engagementCta: "Discuss scope",
+    processEyebrow: "PROCESS",
+    processHeading: "Five steps from the business problem to a system that runs.",
+    projectEyebrow: "SELECTED PROJECT",
   },
 
   aiSystemsPage: {
@@ -708,6 +681,8 @@ const en: Translations = {
     scalableBody:
       "You have a strong base. The right next step is extending AI across more processes and integrating deeper into existing systems.",
     discuss: "Discuss this result",
+    start: "Start the assessment",
+    hide: "Collapse",
   },
 
   common: {

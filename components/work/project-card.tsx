@@ -1,5 +1,6 @@
 "use client"
 
+import Link from "next/link"
 import { useLanguage } from "@/lib/i18n"
 import { ProjectVisual } from "./project-visual"
 import { cn } from "@/lib/utils"
@@ -8,9 +9,9 @@ import type { Project } from "@/lib/content/projects"
 /**
  * Project preview.
  *
- * Only links to a detail page when one actually exists (`hasDetailPage`).
- * Otherwise it renders as a non-interactive article — no CTA leading to a 404,
- * which is what the previous blog and case-study grids did.
+ * Wraps in a link ONLY when a detail page exists. No "Xem chi tiết" CTA and no
+ * "nội dung đang hoàn thiện" placeholder — an unfinished state shouldn't be
+ * advertised on production, and a CTA must never lead to a 404.
  */
 export function ProjectCard({
   project,
@@ -24,30 +25,29 @@ export function ProjectCard({
   const { t, lang } = useLanguage()
   const feature = variant === "feature"
 
-  return (
-    <article
-      className={cn(
-        "group",
-        feature && "grid items-center gap-8 lg:grid-cols-[1.15fr_1fr] lg:gap-14",
-      )}
-    >
+  const body = (
+    <>
       <ProjectVisual
         project={project}
         priority={priority}
-        className={cn(feature ? "aspect-[16/10]" : "aspect-[4/3]")}
+        className={cn(feature ? "aspect-[16/9]" : "aspect-[4/3]")}
       />
 
-      <div className={cn(feature ? "" : "mt-6")}>
+      <div className={cn(feature ? "" : "mt-5")}>
         <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 font-mono text-[10px] uppercase tracking-[0.14em] text-white/40">
           <span className="text-vs-red">{project.industry[lang]}</span>
-          <span aria-hidden="true">·</span>
-          <span>{project.year}</span>
+          {project.year && (
+            <>
+              <span aria-hidden="true">·</span>
+              <span>{project.year}</span>
+            </>
+          )}
         </div>
 
         <h3
           className={cn(
-            "mt-4 font-display font-medium text-ivory",
-            feature ? "text-h3" : "text-xl lg:text-2xl",
+            "mt-3 font-display font-medium text-ivory",
+            feature ? "text-h3" : "text-xl",
           )}
         >
           {project.name}
@@ -56,27 +56,23 @@ export function ProjectCard({
         <p
           className={cn(
             "mt-3 leading-relaxed text-vs-steel text-pretty",
-            feature ? "max-w-xl text-base" : "text-[15px]",
+            feature ? "max-w-[60ch] text-base" : "max-w-[55ch] text-[15px]",
           )}
         >
           {project.summary[lang]}
         </p>
 
-        <div className="mt-5">
-          <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-white/35">
-            {t.work.delivered}
-          </p>
-          <ul className="mt-3 flex flex-wrap gap-2">
-            {project.deliverables[lang].map((d) => (
-              <li
-                key={d}
-                className="rounded-full border border-white/12 px-3 py-1.5 text-[12px] text-ivory/70"
-              >
-                {d}
-              </li>
-            ))}
-          </ul>
-        </div>
+        {/* Two or three capability tags — not the full deliverable list */}
+        <ul className="mt-4 flex flex-wrap gap-2">
+          {project.deliverables[lang].slice(0, feature ? 3 : 2).map((d) => (
+            <li
+              key={d}
+              className="rounded-full border border-white/12 px-3 py-1.5 text-[12px] text-ivory/70"
+            >
+              {d}
+            </li>
+          ))}
+        </ul>
 
         {/* Verified metrics only — empty by default, never invented */}
         {project.metrics.length > 0 && (
@@ -92,10 +88,28 @@ export function ProjectCard({
           </dl>
         )}
 
-        {!project.hasDetailPage && (
-          <p className="mt-6 font-mono text-[11px] text-white/30">{t.work.detailComingSoon}</p>
+        {project.hasDetailPage && (
+          <p className="mt-5 inline-flex items-center gap-1.5 text-[15px] font-medium text-ivory transition-colors duration-hover group-hover:text-vs-coral">
+            {t.work.viewProject}
+            <span aria-hidden="true">→</span>
+          </p>
         )}
       </div>
-    </article>
+    </>
   )
+
+  const wrapperClass = cn(
+    "group",
+    feature && "grid items-center gap-8 lg:grid-cols-[1.2fr_1fr] lg:gap-14",
+  )
+
+  if (project.hasDetailPage) {
+    return (
+      <Link href={`/case-studies/${project.slug}`} className={wrapperClass}>
+        {body}
+      </Link>
+    )
+  }
+
+  return <article className={wrapperClass}>{body}</article>
 }

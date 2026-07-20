@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { RotateCcw } from "lucide-react"
+import { RotateCcw, ChevronDown } from "lucide-react"
 import { useLanguage } from "@/lib/i18n"
 import { Container, Section, SectionEyebrow, SectionHeading } from "@/components/kit/section"
 import { TextLink } from "@/components/kit/buttons"
@@ -17,8 +17,14 @@ import { cn } from "@/lib/utils"
  * This asks five factual yes/no questions and returns a qualitative stage —
  * no currency, no invented savings, no personal data collected.
  */
-export function AiReadiness() {
+export function AiReadiness({
+  /** Collapsed by default so it doesn't stretch the page before anyone opts in. */
+  collapsible = false,
+}: {
+  collapsible?: boolean
+} = {}) {
   const { t } = useLanguage()
+  const [open, setOpen] = useState(!collapsible)
   const [answers, setAnswers] = useState<Array<boolean | null>>([null, null, null, null, null])
 
   const questions = [t.readiness.q1, t.readiness.q2, t.readiness.q3, t.readiness.q4, t.readiness.q5]
@@ -49,21 +55,42 @@ export function AiReadiness() {
               {t.readiness.description}
             </p>
 
-            {/* Progress */}
-            <div className="mt-9">
-              <div className="h-px w-full max-w-xs bg-white/10">
-                <div
-                  className="h-px bg-vs-red transition-all duration-500 ease-smooth"
-                  style={{ width: `${(answered / questions.length) * 100}%` }}
+            {collapsible && (
+              <button
+                type="button"
+                onClick={() => setOpen((v) => !v)}
+                aria-expanded={open}
+                aria-controls="readiness-panel"
+                className="mt-8 inline-flex min-h-[44px] items-center gap-2 rounded-full border border-white/15 px-5 text-sm text-ivory transition-colors duration-hover hover:bg-white/[0.06]"
+              >
+                {open ? t.readiness.hide : t.readiness.start}
+                <ChevronDown
+                  className={cn(
+                    "h-4 w-4 transition-transform duration-ui",
+                    open && "rotate-180",
+                  )}
+                  aria-hidden="true"
                 />
+              </button>
+            )}
+
+            {/* Progress */}
+            {open && (
+              <div className="mt-8">
+                <div className="h-px w-full max-w-xs bg-white/10">
+                  <div
+                    className="h-px bg-vs-red transition-all duration-500 ease-smooth"
+                    style={{ width: `${(answered / questions.length) * 100}%` }}
+                  />
+                </div>
+                <p className="mt-3 font-mono text-[11px] text-white/40">
+                  {answered} / {questions.length}
+                </p>
               </div>
-              <p className="mt-3 font-mono text-[11px] text-white/40">
-                {answered} / {questions.length}
-              </p>
-            </div>
+            )}
           </div>
 
-          <div>
+          <div id="readiness-panel" hidden={!open}>
             <ol className="space-y-px overflow-hidden rounded-stage border border-white/[0.08] bg-white/[0.06]">
               {questions.map((q, i) => (
                 <li

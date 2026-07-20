@@ -24,15 +24,18 @@ export function WhyVietSolve() {
       <Container>
         <div className="max-w-3xl">
           <SectionEyebrow>{t.why.eyebrow}</SectionEyebrow>
-          <SectionHeading className="mt-6 text-obsidian">{t.why.heading}</SectionHeading>
+          <SectionHeading className="mt-5 text-obsidian">{t.why.heading}</SectionHeading>
         </div>
 
-        <dl className="mt-16 grid gap-x-16 gap-y-12 md:grid-cols-2 lg:mt-20 lg:gap-y-16">
+        {/* Four statements, one line each — a short beat before the closing CTA */}
+        <dl className="mt-12 grid gap-x-14 gap-y-9 md:grid-cols-2 lg:mt-14">
           {points.map((p) => (
-            <div key={p.n} className="border-t border-black/[0.10] pt-7">
+            <div key={p.n} className="border-t border-black/[0.10] pt-6">
               <span className="font-mono text-xs tracking-[0.14em] text-vs-red">{p.n}</span>
-              <dt className="mt-4 font-display text-2xl font-medium text-obsidian">{p.title}</dt>
-              <dd className="mt-3 max-w-md text-[15px] leading-relaxed text-vs-muted text-pretty lg:text-base">
+              <dt className="mt-3 font-display text-xl font-medium text-obsidian lg:text-2xl">
+                {p.title}
+              </dt>
+              <dd className="mt-2.5 max-w-[55ch] text-[15px] leading-relaxed text-vs-muted text-pretty">
                 {p.body}
               </dd>
             </div>

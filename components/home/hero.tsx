@@ -16,7 +16,7 @@ export function Hero() {
   const { t } = useLanguage()
 
   return (
-    <section className="surface-dark relative overflow-hidden pb-16 pt-32 lg:min-h-[88vh] lg:pb-24 lg:pt-36">
+    <section className="surface-dark relative flex items-center overflow-hidden pb-16 pt-28 lg:min-h-[90vh] lg:pb-20 lg:pt-32">
       <div className="pointer-events-none absolute inset-0 grid-backdrop opacity-60" aria-hidden="true" />
       {/* One restrained red bloom — the signal colour, not a full-section gradient */}
       <div
@@ -25,8 +25,8 @@ export function Hero() {
         aria-hidden="true"
       />
 
-      <Container className="relative">
-        <div className="grid items-center gap-14 lg:grid-cols-[1.05fr_0.95fr] lg:gap-16">
+      <Container className="relative w-full">
+        <div className="grid items-center gap-12 lg:grid-cols-[1.05fr_0.95fr] lg:gap-16">
           {/* ---- Copy ---- */}
           <div>
             <SectionEyebrow>{t.hero.eyebrow}</SectionEyebrow>

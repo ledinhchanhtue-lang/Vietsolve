@@ -127,11 +127,11 @@ function AgentFlow() {
 
       <div className="mt-1 flex items-center gap-2">
         <Panel className="flex-1">
-          <Label dim>{t.system.node6}</Label>
+          <Label dim>{t.system.node4}</Label>
         </Panel>
         <Connector />
         <Panel className="flex-1">
-          <Label dim>{t.system.node7}</Label>
+          <Label dim>{t.workflow.done}</Label>
         </Panel>
       </div>
     </div>
@@ -234,7 +234,7 @@ function AutomationChain() {
     { tag: "TRIGGER", label: t.system.node1, accent: true },
     { tag: "CONDITION", label: t.workflow.service.s2 },
     { tag: "ACTION", label: t.workflow.service.s5 },
-    { tag: "ACTION", label: t.system.node6 },
+    { tag: "ACTION", label: t.system.node4 },
   ]
 
   return (

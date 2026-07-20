@@ -5,7 +5,7 @@ import { useLanguage } from "@/lib/i18n"
 import { PageHero } from "@/components/kit/page-hero"
 import { Container, Section } from "@/components/kit/section"
 import { InsightCard } from "@/components/insights/insight-card"
-import { TextLink } from "@/components/kit/buttons"
+import { PrimaryButton, SecondaryButton } from "@/components/kit/buttons"
 import { FinalCta } from "@/components/sections/final-cta"
 import { publishedInsights, type InsightCategory } from "@/lib/content/insights"
 import { cn } from "@/lib/utils"
@@ -13,9 +13,11 @@ import { cn } from "@/lib/utils"
 /**
  * Insights listing.
  *
- * With no published articles this renders a single honest empty state — no
- * ghost cards, no invented authors, no "Đọc tiếp" links into 404s.
- * The newsletter form lives here and nowhere else on the site.
+ * With nothing published this renders a short, finished-looking page that routes
+ * the visitor onward — not a "coming soon" holding page, and not the nine
+ * fabricated articles (invented authors, invented dates, 404 links) that shipped
+ * previously. The nav item and search indexing are both off until real content
+ * exists, so almost nobody lands here.
  */
 export function InsightsPage() {
   const { t } = useLanguage()
@@ -28,10 +30,26 @@ export function InsightsPage() {
     "founders-view": t.insights.catFoundersView,
   }
 
-  // Only offer filters for categories that actually have articles
   const present = Array.from(new Set(publishedInsights.map((i) => i.category)))
   const visible =
     filter === "all" ? publishedInsights : publishedInsights.filter((i) => i.category === filter)
+
+  /* ---- Empty: a short, complete page with two ways onward ---- */
+  if (publishedInsights.length === 0) {
+    return (
+      <>
+        <PageHero eyebrow={t.insights.eyebrow} heading={t.insights.pageHeading}>
+          <div className="mt-10 flex flex-col gap-3 sm:flex-row sm:items-center">
+            <PrimaryButton href="/case-studies">{t.work.viewAll}</PrimaryButton>
+            <SecondaryButton href="/contact" onDark>
+              {t.nav.cta}
+            </SecondaryButton>
+          </div>
+        </PageHero>
+        <FinalCta />
+      </>
+    )
+  }
 
   return (
     <>
@@ -39,40 +57,24 @@ export function InsightsPage() {
 
       <Section surface="dark" className="pt-0">
         <Container>
-          {publishedInsights.length === 0 ? (
-            <div className="max-w-2xl rounded-stage border border-white/[0.08] bg-graphite p-10 lg:p-14">
-              <p className="font-display text-2xl font-medium text-ivory">{t.insights.empty}</p>
-              <p className="mt-4 text-body-lg leading-relaxed text-vs-steel text-pretty">
-                {t.insights.emptyBody}
-              </p>
-              <div className="mt-8">
-                <TextLink href="/contact" onDark>
-                  {t.insights.emptyCta}
-                </TextLink>
-              </div>
+          {present.length > 1 && (
+            <div className="flex flex-wrap gap-2" role="group" aria-label={t.insights.eyebrow}>
+              <Chip active={filter === "all"} onClick={() => setFilter("all")}>
+                {t.work.filterAll}
+              </Chip>
+              {present.map((c) => (
+                <Chip key={c} active={filter === c} onClick={() => setFilter(c)}>
+                  {categoryLabels[c]}
+                </Chip>
+              ))}
             </div>
-          ) : (
-            <>
-              {present.length > 1 && (
-                <div className="flex flex-wrap gap-2" role="group" aria-label={t.insights.eyebrow}>
-                  <Chip active={filter === "all"} onClick={() => setFilter("all")}>
-                    {t.work.filterAll}
-                  </Chip>
-                  {present.map((c) => (
-                    <Chip key={c} active={filter === c} onClick={() => setFilter(c)}>
-                      {categoryLabels[c]}
-                    </Chip>
-                  ))}
-                </div>
-              )}
-
-              <div className="mt-14 grid gap-12 md:grid-cols-2 lg:grid-cols-3">
-                {visible.map((insight) => (
-                  <InsightCard key={insight.slug} insight={insight} />
-                ))}
-              </div>
-            </>
           )}
+
+          <div className="mt-14 grid gap-12 md:grid-cols-2 lg:grid-cols-3">
+            {visible.map((insight) => (
+              <InsightCard key={insight.slug} insight={insight} />
+            ))}
+          </div>
         </Container>
       </Section>
 

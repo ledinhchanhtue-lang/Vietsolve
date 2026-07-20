@@ -5,9 +5,23 @@ import { PageHero } from "@/components/kit/page-hero"
 import { Container, Section, SectionEyebrow, SectionHeading } from "@/components/kit/section"
 import { TextLink } from "@/components/kit/buttons"
 import { Capabilities } from "@/components/sections/capabilities"
+import { OperatingSystem } from "@/components/home/operating-system"
+import { ProjectCard } from "@/components/work/project-card"
 import { FinalCta } from "@/components/sections/final-cta"
 import { capabilities, engagementModels } from "@/lib/content/capabilities"
+import { featuredProject } from "@/lib/content/projects"
 
+/**
+ * /services — the full capability detail.
+ *
+ * The homepage shows a condensed 2×2 of the same four pillars; this page is
+ * where the complete service lists live. Both read from
+ * lib/content/capabilities.ts, so they can't diverge.
+ *
+ * Replaces the legacy "Intelligent / Creative / Innovation Solutions" trio and
+ * the Start / Grow / Scale package table. No pricing is shown — there is no
+ * verified price list.
+ */
 export function ServicesPage() {
   const { t, lang } = useLanguage()
 
@@ -18,8 +32,7 @@ export function ServicesPage() {
         heading={t.servicesPage.heading}
         description={t.servicesPage.description}
       >
-        {/* Capability index — jump links, so the page is navigable at a glance */}
-        <nav className="mt-12" aria-label={t.servicesPage.overviewTitle}>
+        <nav className="mt-10" aria-label={t.servicesPage.overviewTitle}>
           <ul className="grid gap-px overflow-hidden rounded-stage border border-white/[0.08] bg-white/[0.06] sm:grid-cols-2 lg:grid-cols-4">
             {capabilities.map((c) => (
               <li key={c.id}>
@@ -38,48 +51,76 @@ export function ServicesPage() {
         </nav>
       </PageHero>
 
-      <Capabilities showHeader={false} />
+      {/* Full capability stages */}
+      <Capabilities variant="full" showHeader={false} />
 
-      {/* ---- Engagement models ---- */}
+      {/* Engagement models */}
       <Section surface="ivory">
         <Container>
           <div className="max-w-3xl">
             <SectionEyebrow>{t.servicesPage.engagementEyebrow}</SectionEyebrow>
-            <SectionHeading className="mt-6 text-obsidian">
+            <SectionHeading className="mt-5 text-obsidian">
               {t.servicesPage.engagementHeading}
             </SectionHeading>
-            <p className="mt-6 text-body-lg leading-relaxed text-vs-muted text-pretty">
+            <p className="mt-5 max-w-[65ch] text-body-lg leading-relaxed text-vs-muted text-pretty">
               {t.servicesPage.engagementNote}
             </p>
           </div>
 
-          <div className="mt-16 grid gap-x-14 gap-y-12 md:grid-cols-2">
+          <div className="mt-14 grid gap-x-14 gap-y-11 md:grid-cols-2">
             {engagementModels.map((m) => (
-              <div key={m.id} className="border-t border-black/[0.10] pt-7">
-                <h3 className="font-display text-2xl font-medium text-obsidian">{m.name[lang]}</h3>
-                <p className="mt-3 max-w-md text-[15px] leading-relaxed text-vs-muted text-pretty">
-                  {m.description[lang]}
+              <div key={m.id} className="border-t border-black/[0.10] pt-6">
+                <h3 className="font-display text-xl font-medium text-obsidian lg:text-2xl">
+                  {m.name[lang]}
+                </h3>
+
+                <p className="mt-3 font-mono text-[10px] uppercase tracking-[0.16em] text-black/40">
+                  {t.servicesPage.bestFor}
+                </p>
+                <p className="mt-2 max-w-[55ch] text-[15px] leading-relaxed text-vs-muted text-pretty">
+                  {m.bestFor[lang]}
                 </p>
 
-                <p className="mt-6 font-mono text-[10px] uppercase tracking-[0.16em] text-black/40">
-                  {t.servicesPage.fitFor}
+                <p className="mt-5 font-mono text-[10px] uppercase tracking-[0.16em] text-black/40">
+                  {t.servicesPage.typicalScope}
                 </p>
-                <ul className="mt-3 flex flex-wrap gap-2">
-                  {m.fitFor[lang].map((f) => (
+                <ul className="mt-2.5 flex flex-wrap gap-2">
+                  {m.scope[lang].map((s) => (
                     <li
-                      key={f}
+                      key={s}
                       className="rounded-full border border-black/12 px-3 py-1.5 text-[12px] text-obsidian/70"
                     >
-                      {f}
+                      {s}
                     </li>
                   ))}
                 </ul>
 
-                <div className="mt-6">
+                <div className="mt-5">
                   <TextLink href="/contact">{t.servicesPage.engagementCta}</TextLink>
                 </div>
               </div>
             ))}
+          </div>
+        </Container>
+      </Section>
+
+      {/* Process — the same timeline component the homepage uses */}
+      <OperatingSystem
+        eyebrow={t.servicesPage.processEyebrow}
+        heading={t.servicesPage.processHeading}
+      />
+
+      {/* One selected project */}
+      <Section surface="graphite">
+        <Container>
+          <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
+            <SectionEyebrow>{t.servicesPage.projectEyebrow}</SectionEyebrow>
+            <TextLink href="/case-studies" onDark className="shrink-0">
+              {t.work.viewAll}
+            </TextLink>
+          </div>
+          <div className="mt-10">
+            <ProjectCard project={featuredProject} variant="feature" />
           </div>
         </Container>
       </Section>

@@ -5,38 +5,34 @@ import { useLanguage } from "@/lib/i18n"
 import { cn } from "@/lib/utils"
 
 /**
- * Hero "live system" canvas.
+ * Hero "live system" canvas — four headline states.
  *
- * Shows a real lead travelling through an AI workflow: message → intent → CRM →
- * agent reply → recommendation → sales handoff → dashboard.
+ * Lead mới → AI phân tích → CRM & workflow xử lý → Sale nhận kết quả.
+ * The finer steps live in each node's tooltip rather than being listed out, so
+ * the hero stays inside a single viewport.
  *
  * Behaviour:
- *  - Activates once when scrolled into view, steps through, then STOPS.
- *    (No perpetual animation burning frames.)
+ *  - Runs once when scrolled into view, then STOPS. No perpetual animation.
  *  - Nodes are real <button>s: keyboard focusable, each with a description.
- *  - Reduced motion → everything renders in its final state immediately.
+ *  - Reduced motion → renders the final state immediately.
  *  - Mobile gets a compact stacked list instead of the graph.
  */
 
-const VB = { w: 560, h: 420 }
+const VB = { w: 520, h: 300 }
 
 type NodeDef = {
   id: number
   x: number
   y: number
-  labelKey: `node${1 | 2 | 3 | 4 | 5 | 6 | 7}`
-  detailKey: `node${1 | 2 | 3 | 4 | 5 | 6 | 7}Detail`
-  accent?: boolean
+  labelKey: `node${1 | 2 | 3 | 4}`
+  detailKey: `node${1 | 2 | 3 | 4}Detail`
 }
 
 const NODES: NodeDef[] = [
-  { id: 1, x: 62, y: 78, labelKey: "node1", detailKey: "node1Detail" },
-  { id: 2, x: 196, y: 148, labelKey: "node2", detailKey: "node2Detail" },
-  { id: 3, x: 104, y: 286, labelKey: "node3", detailKey: "node3Detail" },
-  { id: 4, x: 300, y: 224, labelKey: "node4", detailKey: "node4Detail", accent: true },
-  { id: 5, x: 432, y: 118, labelKey: "node5", detailKey: "node5Detail" },
-  { id: 6, x: 486, y: 264, labelKey: "node6", detailKey: "node6Detail" },
-  { id: 7, x: 322, y: 356, labelKey: "node7", detailKey: "node7Detail" },
+  { id: 1, x: 76, y: 62, labelKey: "node1", detailKey: "node1Detail" },
+  { id: 2, x: 214, y: 140, labelKey: "node2", detailKey: "node2Detail" },
+  { id: 3, x: 140, y: 232, labelKey: "node3", detailKey: "node3Detail" },
+  { id: 4, x: 392, y: 92, labelKey: "node4", detailKey: "node4Detail" },
 ]
 
 /** from → to, and the step at which the edge becomes active */
@@ -45,10 +41,6 @@ const EDGES: Array<{ from: number; to: number; step: number }> = [
   { from: 2, to: 3, step: 3 },
   { from: 3, to: 4, step: 4 },
   { from: 2, to: 4, step: 4 },
-  { from: 4, to: 5, step: 5 },
-  { from: 5, to: 6, step: 6 },
-  { from: 4, to: 7, step: 7 },
-  { from: 6, to: 7, step: 7 },
 ]
 
 const byId = (id: number) => NODES.find((n) => n.id === id)!
@@ -59,7 +51,6 @@ export function SystemCanvas({ className }: { className?: string }) {
   const [step, setStep] = useState(0)
   const [hovered, setHovered] = useState<number | null>(null)
 
-  // Step through once, when the canvas first enters the viewport.
   useEffect(() => {
     const el = ref.current
     if (!el) return
@@ -73,14 +64,14 @@ export function SystemCanvas({ className }: { className?: string }) {
       return
     }
 
-    let timers: ReturnType<typeof setTimeout>[] = []
+    const timers: ReturnType<typeof setTimeout>[] = []
 
     const io = new IntersectionObserver(
       (entries) => {
         if (!entries[0]?.isIntersecting) return
         io.disconnect()
         NODES.forEach((_, i) => {
-          timers.push(setTimeout(() => setStep(i + 1), 380 + i * 420))
+          timers.push(setTimeout(() => setStep(i + 1), 400 + i * 520))
         })
       },
       { threshold: 0.35 },
@@ -99,7 +90,7 @@ export function SystemCanvas({ className }: { className?: string }) {
   return (
     <div ref={ref} className={cn("w-full", className)}>
       {/* ---------- Desktop / tablet: node graph ---------- */}
-      <div className="relative hidden aspect-[560/420] w-full sm:block">
+      <div className="relative hidden aspect-[520/300] w-full sm:block">
         <div className="absolute inset-0 rounded-stage border border-white/[0.08] bg-graphite/60 grid-backdrop" />
 
         <svg
@@ -159,7 +150,7 @@ export function SystemCanvas({ className }: { className?: string }) {
                 </span>
                 <span
                   className={cn(
-                    "whitespace-nowrap rounded-full border px-2.5 py-1 font-mono text-[10px] tracking-tight transition-all duration-500 ease-smooth lg:text-[11px]",
+                    "whitespace-nowrap rounded-full border px-3 py-1.5 font-mono text-[11px] tracking-tight transition-all duration-500 ease-smooth",
                     on
                       ? "border-white/15 bg-obsidian/85 text-ivory"
                       : "border-white/[0.07] bg-obsidian/50 text-white/35",
@@ -173,7 +164,7 @@ export function SystemCanvas({ className }: { className?: string }) {
           )
         })}
 
-        {/* Detail readout — one shared slot, so hovering never shifts layout */}
+        {/* Shared detail slot — hovering never shifts layout */}
         <div className="pointer-events-none absolute inset-x-4 bottom-4">
           <div
             className={cn(
@@ -190,7 +181,6 @@ export function SystemCanvas({ className }: { className?: string }) {
           </div>
         </div>
 
-        {/* Status chip */}
         <div className="absolute right-4 top-4 flex items-center gap-2 rounded-full border border-white/10 bg-obsidian/80 px-3 py-1.5">
           <span
             className={cn(
@@ -204,7 +194,7 @@ export function SystemCanvas({ className }: { className?: string }) {
         </div>
       </div>
 
-      {/* ---------- Mobile: compact stacked steps ---------- */}
+      {/* ---------- Mobile: compact stacked states ---------- */}
       <ol className="space-y-0 rounded-stage border border-white/[0.08] bg-graphite/60 p-5 sm:hidden">
         {NODES.map((n, i) => {
           const on = step >= n.id

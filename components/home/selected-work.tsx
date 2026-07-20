@@ -30,17 +30,15 @@ export function SelectedWork() {
           </TextLink>
         </div>
 
-        <div className="mt-16 lg:mt-20">
+        <div className="mt-12 lg:mt-16">
           <ProjectCard project={featuredProject} variant="feature" priority />
         </div>
 
+        {/* One featured project plus three — the full set lives on /case-studies */}
         {rest.length > 0 && (
-          <div className="mt-20 grid gap-14 md:grid-cols-2 lg:mt-24 lg:gap-x-16 lg:gap-y-24">
-            {rest.map((p, i) => (
-              // Offset every second card so the grid reads editorial, not tabular
-              <div key={p.slug} className={i % 2 === 1 ? "md:pt-16" : undefined}>
-                <ProjectCard project={p} />
-              </div>
+          <div className="mt-14 grid gap-10 sm:grid-cols-2 lg:mt-16 lg:grid-cols-3 lg:gap-12">
+            {rest.slice(0, 3).map((p) => (
+              <ProjectCard key={p.slug} project={p} />
             ))}
           </div>
         )}

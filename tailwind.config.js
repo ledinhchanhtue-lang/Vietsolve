@@ -76,15 +76,18 @@ module.exports = {
       },
       fontSize: {
         /* fluid display scale */
+        /* H1 caps at 72px, H2 at 56px — per the layout spec */
         h1: ["clamp(2.5rem, 5vw, 4.5rem)", { lineHeight: "1.06", letterSpacing: "-0.03em" }],
-        h2: ["clamp(2rem, 4vw, 3.75rem)", { lineHeight: "1.08", letterSpacing: "-0.025em" }],
-        h3: ["clamp(1.5rem, 2.4vw, 2.25rem)", { lineHeight: "1.16", letterSpacing: "-0.015em" }],
-        "body-lg": ["clamp(1rem, 1.2vw, 1.25rem)", { lineHeight: "1.6" }],
+        h2: ["clamp(1.875rem, 3.4vw, 3.5rem)", { lineHeight: "1.1", letterSpacing: "-0.025em" }],
+        h3: ["clamp(1.375rem, 2.2vw, 2rem)", { lineHeight: "1.18", letterSpacing: "-0.015em" }],
+        "body-lg": ["clamp(1rem, 1.1vw, 1.125rem)", { lineHeight: "1.65" }],
         eyebrow: ["0.75rem", { lineHeight: "1", letterSpacing: "0.16em" }],
       },
       spacing: {
-        section: "clamp(4.5rem, 9vw, 10rem)", // 72px → 160px
-        "section-sm": "clamp(3rem, 6vw, 6rem)",
+        /* Mobile 64–80px, desktop 96–120px — tighter than before so the page
+           doesn't read as a stack of full-height slides. */
+        section: "clamp(4rem, 7vw, 7.5rem)", // 64px → 120px
+        "section-sm": "clamp(2.75rem, 4.5vw, 5rem)", // 44px → 80px
       },
       borderRadius: {
         lg: "var(--radius)",
