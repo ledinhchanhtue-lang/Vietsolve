@@ -47,6 +47,8 @@ lib/
     projects.ts      # 4 dự án thật
     insights.ts      # rỗng (Blog empty state)
 components/
+  ui-kit/button.tsx  # ⭐ 4 loại button duy nhất của cả site
+  project-visual.tsx # visual sinh theo slug khi dự án chưa có ảnh thật
   navbar.tsx animated-footer.tsx hero.tsx
   three-pillars.tsx innovative-services.tsx featured-projects.tsx
   how-we-work.tsx home-cta.tsx
@@ -83,8 +85,12 @@ npm run build
 - `app/icon.png` + `app/apple-icon.png` — chim Lạc đỏ cắt từ logo chính thức (file convention của Next, **đừng** thêm block `icons` vào `layout.tsx`).
 - `public/og.png` — og:image + twitter:image.
 
-## Form liên hệ — GỬI THẬT
-`components/contact-page.tsx`: có `NEXT_PUBLIC_CONTACT_ENDPOINT` → POST; không có → mở mailto soạn sẵn tới email verified. Field: name, email, phone, company, interest (6 nhóm), budget, timeline, message, consent. Validate + không reset khi lỗi.
+## Trang Liên hệ — điểm chạm tư vấn, không phải form suông
+`components/contact-page.tsx` — 2 cột 42/58: trái là hướng dẫn viết brief + timeline phản hồi, phải là form trong card nổi.
+- **Gửi thật:** có `NEXT_PUBLIC_CONTACT_ENDPOINT` → POST; không có → mở mailto soạn sẵn tới email verified. Field: name, email, phone, company, interest (6 nhóm), budget, timeline, message, consent.
+- Validate xong **không reset** dữ liệu; focus tự nhảy về field lỗi đầu tiên (`setTimeout` 0 để chờ DOM) và scroll vào giữa màn hình.
+- `role="radiogroup"` + `aria-required/invalid/describedby`, lỗi dùng `role="alert"`.
+- `?service=<id>` từ trang Dịch vụ tự chọn sẵn nhóm quan tâm (useEffect chỉ chạy lúc mount).
 → **Nên làm:** tạo Cloudflare Pages Function / Formspree rồi set `NEXT_PUBLIC_CONTACT_ENDPOINT`.
 
 ## SEO
@@ -99,6 +105,26 @@ Metadata + canonical riêng từng trang. Homepage title "VietSolve — Creative
 
 ## Email công ty
 Lark Standard F3, org `LJKNZL57744`, admin `ujpwldb6q2it.jp.larksuite.com/admin`.
+
+## Baseline QA (đo thật trên vietsolve.vn, 375×812 — 2026-07-21)
+| Chỉ số | Giá trị |
+|---|---|
+| URL trả 200 | 13/13 (8 trang + og.png, hero-bg.mp4, icon.png, sitemap.xml, robots.txt) |
+| Link `href="#"` | 0 |
+| Tap target < 44px | 0 |
+| Kéo ngang mobile | không (`scrollWidth 375 = clientWidth 375`) |
+| `npx tsc --noEmit` | 0 lỗi |
+| TTFB / DOMContentLoaded / Load | 419ms / 891ms / 1.625s |
+| Transfer / request | 455 KB / 23 |
+| Ảnh thiếu `alt` | 0 |
+
+**Chưa từng chạy Lighthouse** — số trên là Navigation Timing API. Muốn điểm chính thức thì chạy PageSpeed Insights.
+
+## 🔧 NỢ KỸ THUẬT — việc còn lại
+1. **`next.config.mjs` vẫn bật `ignoreBuildErrors: true` + `ignoreDuringBuilds: true`.** Chính nó đã che 2 lỗi type thật (`variant="slim"` ở hero, union type i18n). Giờ tsc đã sạch → **nên tắt** để build tự bắt lỗi. Chờ chủ website quyết vì đổi hành vi build.
+2. **Form vẫn fallback mailto** tới khi có endpoint.
+3. **`vietsolve.com` chưa trỏ** — Mắt Bão đã gỡ khóa, cần đổi zone + NS (có OTP).
+4. **Modal case-study chưa verify bằng click thật** — `requestAnimationFrame` không chạy trong browser điều khiển qua CDP. Fix phòng thủ đã vào (bỏ `AnimatePresence` vì exit animation giữ overlay vô hình nuốt mọi click), cần click thử trên máy thật.
 
 ---
 
