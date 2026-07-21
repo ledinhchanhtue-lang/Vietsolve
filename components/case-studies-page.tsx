@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import Link from "next/link"
 import { motion } from "framer-motion"
 import { ArrowRight, X } from "lucide-react"
@@ -27,18 +27,52 @@ export default function CaseStudiesPage() {
   const [open, setOpen] = useState<string | null>(null)
   const active = projects.find((p) => p.slug === open) ?? null
 
-  // Escape closes the modal; body scroll is restored on unmount.
+  /* Modal a11y: Escape closes, body scroll locks, focus moves into the dialog
+     on open, Tab is trapped inside it, and focus returns to the card CTA that
+     opened it on close. */
+  const dialogRef = useRef<HTMLDivElement>(null)
+  const returnFocusRef = useRef<HTMLElement | null>(null)
+
   useEffect(() => {
     if (!open) return
     const prev = document.body.style.overflow
     document.body.style.overflow = "hidden"
+    returnFocusRef.current = document.activeElement as HTMLElement | null
+
+    // Initial focus lands on the close button (first focusable in the dialog)
+    setTimeout(() => {
+      dialogRef.current
+        ?.querySelector<HTMLElement>("button, a[href], [tabindex]:not([tabindex='-1'])")
+        ?.focus()
+    }, 0)
+
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setOpen(null)
+      if (e.key === "Escape") {
+        setOpen(null)
+        return
+      }
+      if (e.key !== "Tab" || !dialogRef.current) return
+      const focusables = [
+        ...dialogRef.current.querySelectorAll<HTMLElement>(
+          "button, a[href], input, select, textarea, [tabindex]:not([tabindex='-1'])",
+        ),
+      ].filter((el) => el.offsetParent !== null)
+      if (focusables.length === 0) return
+      const first = focusables[0]
+      const last = focusables[focusables.length - 1]
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault()
+        last.focus()
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault()
+        first.focus()
+      }
     }
     document.addEventListener("keydown", onKey)
     return () => {
       document.body.style.overflow = prev
       document.removeEventListener("keydown", onKey)
+      returnFocusRef.current?.focus()
     }
   }, [open])
 
@@ -262,6 +296,7 @@ export default function CaseStudiesPage() {
               initial={{ opacity: 0, y: 24 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+              ref={dialogRef}
               onClick={(e) => e.stopPropagation()}
               className="max-h-[88vh] w-full max-w-2xl overflow-y-auto rounded-t-3xl bg-white p-7 shadow-xl sm:rounded-3xl sm:p-10"
             >

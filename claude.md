@@ -58,6 +58,9 @@ components/
   ui/ (shadcn)
 ```
 
+## ⚠️ About = 7 section cố định
+Hero (copy + visual 45/55) → VietSolve là ai (manifesto + 3 statement typography) → Giá trị cốt lõi (1 lần duy nhất) → **Chim Lạc signature** → Hệ sinh thái năng lực (constellation) → Đội ngũ (diagram SVG) → Final CTA. **Đừng thêm lại**: 3 intro card trùng ý, sidebar "Định vị"/"Giá trị cốt lõi" mini, danh sách 01–07. Mỗi ý đúng 1 lần.
+
 ## Homepage journey (7 section)
 Hero → 3 trụ cột (Intelligent/Creative/Innovation) → Hệ sinh thái dịch vụ (6 nhóm) → Dự án tiêu biểu (4 dự án) → Quy trình (3 bước) → Final CTA → Footer.
 **AI/Automation** là 1 trong 6 nhóm dịch vụ — không có section AI riêng, không workflow demo trên homepage.
@@ -85,7 +88,10 @@ Homepage: tên + 1 câu + 3 highlight + link. `/services`: danh sách đầy đ�
 |---|---|
 | `service-visual.tsx` | 6 composition SVG riêng cho 6 nhóm dịch vụ (homepage + /services). Key theo `group.id` — **thêm nhóm mới phải thêm composition**, không sẽ render rỗng. |
 | `project-visual.tsx` | Thumbnail dự án: có ảnh thật → khung browser chrome; chưa có → visual sinh theo slug |
-| `lac-bird-mark.tsx` | Chim Lạc dạng line-art construction (About). **Không phải logo** — logo không bao giờ vẽ lại. |
+| `lac-signature.tsx` | Chim Lạc signature section (About) — construction light-theme, tự vẽ nét khi vào viewport, motif trống đồng trừu tượng. **Không phải logo** — logo không bao giờ vẽ lại. |
+| `about-hero-visual.tsx` | Hero About: contour Lạc + grid + keyword panels |
+| `capability-constellation.tsx` | Hệ sinh thái 7 năng lực dạng hub + node (desktop) / pills (mobile). Mô tả lấy từ tagline services.ts — không viết copy mới. |
+| `pillar-visual.tsx` | 3 micro-drawing giá trị cốt lõi (dùng chung homepage + About) |
 
 ## ⚠️ Language switcher VI/EN
 Segmented switch trong `navbar.tsx` (`LanguageToggle`): capsule trắng viền xám, **thumb đỏ trượt** bằng `translate-x` (compositor-only, tắt ở reduced-motion), 2 cell cố định `w-10` để thumb trượt đúng 1 slot, `aria-pressed` cho trạng thái. **Đừng đổi lại thành 2 ô đỏ đặc kiểu utility.**
