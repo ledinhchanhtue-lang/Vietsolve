@@ -17,7 +17,7 @@ export default function Hero() {
   const { t } = useLanguage()
 
   return (
-    <section className="relative pt-24 pb-10 overflow-hidden">
+    <section className="relative flex items-center overflow-hidden pt-28 pb-16 min-h-[80vh] lg:min-h-[88vh]">
       {/* Background Video */}
       <div className="absolute inset-0 z-0 overflow-hidden">
         <video
@@ -37,7 +37,7 @@ export default function Hero() {
         <div className="absolute inset-0 bg-white/75" />
       </div>
 
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="max-w-5xl mx-auto text-center lg:text-left space-y-6">
           <div className="space-y-5">
             <div className="inline-flex items-center px-5 py-2.5 bg-white/80 border border-red-200 rounded-full text-xs sm:text-sm text-gray-900 font-semibold tracking-wide backdrop-blur-sm">
