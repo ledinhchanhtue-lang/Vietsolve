@@ -37,13 +37,8 @@ export const metadata: Metadata = {
     follow: true,
     googleBot: { index: true, follow: true, "max-image-preview": "large" },
   },
-  icons: {
-    icon: [
-      { url: "/icon.svg", type: "image/svg+xml" },
-      { url: "/icon-light-32x32.png", sizes: "32x32", type: "image/png" },
-    ],
-    apple: "/apple-icon.png",
-  },
+  /* Favicon dùng file convention của Next: app/icon.png + app/apple-icon.png
+     (chim Lạc đỏ cắt từ logo chính thức). Bộ icon "V2" của template v0 đã xóa. */
 }
 
 /** Organization schema — only verified facts. */
