@@ -55,7 +55,6 @@ components/
   how-we-work.tsx home-cta.tsx
   solutions-page.tsx (services) about-page.tsx case-studies-page.tsx
   contact-page.tsx blog-page.tsx legal-page.tsx
-  background-paths/stripes/animated-background.tsx (nền paths nhẹ)
   ui/ (shadcn)
 ```
 
