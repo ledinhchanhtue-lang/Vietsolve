@@ -1,6 +1,19 @@
 "use client"
 
+import { useEffect, useState } from "react"
+import { ArrowUp } from "lucide-react"
 import { siteConfig, readVerified } from "@/lib/site-config"
+import { cn } from "@/lib/utils"
+
+/* Section heading → stable anchor id */
+const slug = (h: string) =>
+  h
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[̀-ͯ]/g, "")
+    .replace(/đ/g, "d")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)/g, "")
 
 /**
  * Privacy / Terms — white theme, matching the rest of the site.
@@ -96,29 +109,121 @@ export default function LegalPage({ kind }: { kind: "privacy" | "terms" }) {
     },
   }[kind]
 
+  /* Reading progress (thin LED line under the header) + active TOC section */
+  const [progress, setProgress] = useState(0)
+  const [activeId, setActiveId] = useState("")
+
+  useEffect(() => {
+    /* One scroll handler drives both: progress width, and the active section
+       (the last heading above the 35%-viewport line — a band-style observer
+       misses headings entirely when body text fills the band). */
+    const headings = [...document.querySelectorAll<HTMLElement>("#legal-body h2[id]")]
+    const onScroll = () => {
+      const doc = document.documentElement
+      const max = doc.scrollHeight - doc.clientHeight
+      setProgress(max > 0 ? Math.min(1, window.scrollY / max) : 0)
+
+      const line = window.innerHeight * 0.35
+      let current = headings[0]?.id ?? ""
+      for (const h of headings) {
+        if (h.getBoundingClientRect().top <= line) current = h.id
+        else break
+      }
+      setActiveId(current)
+    }
+    onScroll()
+    window.addEventListener("scroll", onScroll, { passive: true })
+    return () => {
+      window.removeEventListener("scroll", onScroll)
+    }
+    // Re-run when switching privacy ↔ terms
+  }, [kind])
+
   return (
     <main id="main" className="bg-white">
+      {/* Reading progress — a functional LED line, not decoration */}
+      <div
+        aria-hidden="true"
+        className="fixed inset-x-0 top-0 z-[70] h-0.5 bg-transparent"
+      >
+        <div
+          className="h-full bg-gradient-to-r from-red-600 to-red-400 shadow-[0_0_6px_rgba(220,38,38,0.5)] transition-[width] duration-150 ease-out"
+          style={{ width: `${(progress * 100).toFixed(1)}%` }}
+        />
+      </div>
+
       <section className="pt-32 pb-12 lg:pt-40 lg:pb-16 bg-gradient-to-br from-white via-red-50/30 to-gray-50/40">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <h1 className="text-4xl lg:text-5xl font-bold text-gray-900">{content.title}</h1>
-          <p className="mt-5 text-lg text-gray-600 leading-relaxed">{content.intro}</p>
+          <p className="mt-5 max-w-3xl text-lg text-gray-600 leading-relaxed">{content.intro}</p>
+          {/* These documents were written for this site in July 2026 */}
+          <p className="mt-5 text-sm font-medium text-gray-400">Cập nhật: 07/2026</p>
         </div>
       </section>
 
-      <section className="py-14 lg:py-20">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 space-y-11">
-          {content.blocks.map((block) => (
-            <div key={block.heading}>
-              <h2 className="text-xl lg:text-2xl font-bold text-gray-900">{block.heading}</h2>
-              <div className="mt-3 space-y-3">
-                {block.body.map((p) => (
-                  <p key={p} className="text-gray-600 leading-relaxed">
-                    {p}
-                  </p>
-                ))}
+      <section id="legal-body" className="py-14 lg:py-20">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid gap-12 lg:grid-cols-[220px_1fr]">
+            {/* Sticky TOC — desktop; on mobile the sections are short enough
+                that a dropdown would cost more than it saves */}
+            <nav aria-label="Mục lục" className="hidden lg:block">
+              <div className="sticky top-28">
+                <p className="text-xs font-bold uppercase tracking-wider text-gray-900">Mục lục</p>
+                <ul className="mt-4 space-y-1 border-l border-gray-200">
+                  {content.blocks.map((block) => {
+                    const id = slug(block.heading)
+                    const active = activeId === id
+                    return (
+                      <li key={id}>
+                        <a
+                          href={`#${id}`}
+                          aria-current={active ? "true" : undefined}
+                          className={cn(
+                            "-ml-px flex min-h-11 items-center border-l-2 pl-4 text-sm transition-colors",
+                            active
+                              ? "border-red-600 font-semibold text-red-700"
+                              : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-900",
+                          )}
+                        >
+                          {block.heading}
+                        </a>
+                      </li>
+                    )
+                  })}
+                </ul>
+              </div>
+            </nav>
+
+            <div className="max-w-3xl space-y-11">
+              {content.blocks.map((block) => {
+                const id = slug(block.heading)
+                return (
+                  <div key={block.heading}>
+                    <h2 id={id} className="scroll-mt-28 text-xl lg:text-2xl font-bold text-gray-900">
+                      {block.heading}
+                    </h2>
+                    <div className="mt-3 space-y-3">
+                      {block.body.map((para) => (
+                        <p key={para} className="text-gray-600 leading-relaxed">
+                          {para}
+                        </p>
+                      ))}
+                    </div>
+                  </div>
+                )
+              })}
+
+              <div className="pt-2">
+                <a
+                  href="#main"
+                  className="inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-gray-500 transition-colors hover:text-red-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-600 focus-visible:ring-offset-2 rounded-sm"
+                >
+                  <ArrowUp className="h-4 w-4" aria-hidden="true" />
+                  Về đầu trang
+                </a>
               </div>
             </div>
-          ))}
+          </div>
         </div>
       </section>
     </main>

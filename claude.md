@@ -98,6 +98,12 @@ Segmented switch trong `navbar.tsx` (`LanguageToggle`): capsule trắng viền x
 ## ⚠️ Services showcase — `components/service-showcase.tsx`
 Desktop (lg+): rail 6 tab trái + stage phải, đúng semantics tablist/tab/tabpanel + phím mũi tên (roving tabindex). Mobile giữ card xếp chồng (vẫn mang `id` anchor). Deep-link `/services#<group.id>` tự chọn tab. **Đừng xóa card mobile** — anchor từ homepage phụ thuộc vào chúng.
 
+## ⚠️ Contact = Project Brief Builder
+Cột trái có **Live Project Preview** (đổi theo tile đã chọn — tái dùng `ServiceVisual`, ghi rõ "Interface demo"; chưa chọn → mosaic 4 dự án thật). Form có **Tóm tắt brief** + progress rail 4 điểm (thông tin liên hệ / loại dự án / nội dung / consent) — pure UI state, không gửi gì thêm.
+
+## ⚠️ Hero homepage = Agency Operating Table
+4 module artifact trong `hero-tech.tsx`: brand board · media timeline (có playhead) · browser window · AI chat + chip CRM. LED sáng tuần tự Brand→Media→Website→AI 1 lần khi load. Hover: module tiến lên, module khác mờ. Mỗi module ghi "Interface demo". **Đừng thay bằng skeleton bar hay hình trừu tượng.**
+
 ## ⚠️ Contact query param
 `?service=<id>` nhận mọi `group.id` thật (kể cả `data-seo-analytics` → map về Marketing & Growth vì form không có option Data riêng), auto-select tile + scroll tới `#contact-form`. Thêm nhóm dịch vụ mới thì phải thêm mapping trong `contact-page.tsx`.
 

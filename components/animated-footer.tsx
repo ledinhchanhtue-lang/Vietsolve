@@ -195,6 +195,38 @@ export default function AnimatedFooter() {
           </div>
         </div>
 
+        {/* Capability rail — Brand → Growth → Media → Website → AI → Data.
+            Each stop links to its anchor on /services; the connecting segment
+            lights up with its label on hover. */}
+        <nav
+          aria-label="Năng lực VietSolve"
+          className="mb-10 flex flex-wrap items-center justify-center gap-y-3"
+        >
+          {(
+            [
+              ["Brand", "branding-strategy"],
+              ["Growth", "marketing-growth"],
+              ["Media", "media-creative"],
+              ["Website", "website-digital"],
+              ["AI", "ai-automation"],
+              ["Data", "data-seo-analytics"],
+            ] as const
+          ).map(([label, id], i) => (
+            <span key={id} className="flex items-center">
+              {i > 0 && (
+                <span aria-hidden="true" className="mx-2 h-px w-6 bg-gray-700 sm:w-9" />
+              )}
+              <Link
+                href={`/services#${id}`}
+                className="group inline-flex min-h-11 items-center gap-2 rounded-full px-2 text-sm font-semibold text-gray-400 transition-colors hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500"
+              >
+                <span className="h-1.5 w-1.5 rounded-full bg-gray-600 transition-all duration-200 group-hover:bg-red-500 group-hover:shadow-[0_0_6px_rgba(220,38,38,0.8)]" />
+                {label}
+              </Link>
+            </span>
+          ))}
+        </nav>
+
         {/* Bottom Bar */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}

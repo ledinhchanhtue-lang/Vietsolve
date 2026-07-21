@@ -125,60 +125,115 @@ export function HeroTech({ panels }: { panels?: string[] }) {
           </g>
         </svg>
 
-        {/* Layered panel stack — the hero's pseudo-3D moment, replacing the
-            earlier flat chip column. One capability per layer, stacked in a
-            shared perspective with counter-parallax so the stack drifts against
-            the grid and reads as genuinely deeper than the page. xl-only and
-            decorative: every label already appears as real content below. */}
+        {/* Agency Operating Table — four artifact modules (brand board, media
+            timeline, website browser, AI agent panel) stacked with depth, with
+            an LED rail lighting Brand → Media → Website → AI once on load.
+            Hovering a module brings it forward and dims the others. Each is an
+            interface demo, labelled as such — no client data, no numbers.
+            xl-only; the labels are real content elsewhere on the page. */}
         {panels && panels.length > 0 && (
           <div
-            className="absolute right-10 top-1/2 hidden w-[300px] xl:block"
+            className="absolute right-10 top-1/2 hidden w-[320px] xl:block"
             style={{
               perspective: "1100px",
               transform: "translate3d(calc(var(--vs-px) * -0.7), calc(-50% + var(--vs-py) * -0.7), 0)",
             }}
           >
+            {/* LED rail — one dot per module, lit in sequence, then steady */}
+            <div className="absolute -left-6 top-2 bottom-2 flex flex-col items-center" aria-hidden="true">
+              <span className="w-px flex-1 bg-gray-200" />
+            </div>
             <div
-              className="relative h-[290px]"
-              style={{ transformStyle: "preserve-3d", transform: "rotateY(-9deg) rotateX(4deg)" }}
+              className="group/stack pointer-events-auto relative"
+              style={{ transformStyle: "preserve-3d", transform: "rotateY(-8deg) rotateX(3deg)" }}
             >
               {panels.slice(0, 4).map((label, i) => {
-                /* Front card is fully opaque with the red accent; each layer
-                   behind steps up-right, fades and recedes on Z. Shadows do the
-                   depth work — no heavy blur layers. */
+                const KIND = ["brand", "media", "browser", "ai"][i]
                 const depth = panels.length - 1 - i
                 return (
                   <div
                     key={label}
-                    className="absolute left-0 right-0 rounded-xl border bg-white/90 p-4 backdrop-blur-sm"
+                    className="relative mb-2.5 rounded-xl border bg-white/95 p-3.5 backdrop-blur-sm transition-all duration-300 group-hover/stack:opacity-55 hover:!opacity-100 hover:-translate-y-1 hover:z-20"
                     style={{
-                      top: `${i * 58}px`,
-                      transform: `translateZ(${-depth * 34}px) translateX(${depth * 10}px)`,
-                      opacity: 1 - depth * 0.16,
+                      transform: `translateZ(${-depth * 26}px) translateX(${depth * 8}px)`,
                       borderColor: i === 0 ? "rgb(254 202 202)" : "rgb(229 231 235)",
                       boxShadow:
                         i === 0
-                          ? "0 18px 34px -18px rgb(220 38 38 / 0.35), 0 4px 10px -6px rgb(15 23 42 / 0.15)"
-                          : "0 14px 26px -18px rgb(15 23 42 / 0.35)",
+                          ? "0 16px 30px -18px rgb(220 38 38 / 0.35), 0 4px 10px -6px rgb(15 23 42 / 0.15)"
+                          : "0 12px 24px -18px rgb(15 23 42 / 0.3)",
                     }}
                   >
-                    <div className="flex items-center gap-2.5">
-                      <span
-                        className={
-                          i === 0
-                            ? "h-2 w-2 rounded-full bg-red-600 vs-node vs-anim"
-                            : "h-2 w-2 rounded-full bg-gray-300"
-                        }
-                      />
-                      <span className="text-xs font-semibold tracking-wide text-gray-800">
-                        {label}
+                    <div className="flex items-center justify-between gap-2">
+                      <div className="flex items-center gap-2">
+                        {/* Sequence LED — lights in load order, then stays on */}
+                        <span
+                          className="h-1.5 w-1.5 rounded-full bg-red-600 shadow-[0_0_5px_rgba(220,38,38,0.7)] vs-anim"
+                          style={{ animation: `vs-fill-in 0.4s ease-out ${0.5 + i * 0.45}s backwards` }}
+                        />
+                        <span className="text-[11px] font-semibold tracking-wide text-gray-800">{label}</span>
+                      </div>
+                      <span className="text-[9px] font-medium uppercase tracking-wider text-gray-300">
+                        Interface demo
                       </span>
                     </div>
-                    {/* Skeleton content rows — an interface being assembled */}
-                    <div className="mt-3 space-y-1.5">
-                      <span className={`block h-1.5 rounded-full ${i === 0 ? "w-3/4 bg-red-100" : "w-2/3 bg-gray-100"}`} />
-                      <span className="block h-1.5 w-1/2 rounded-full bg-gray-100" />
-                    </div>
+
+                    {/* Artifact content per module */}
+                    {KIND === "brand" && (
+                      <div className="mt-2.5 flex items-center gap-2">
+                        <span className="flex h-8 w-8 items-center justify-center rounded-md border border-gray-200 bg-gray-50 text-sm font-bold text-gray-800">Aa</span>
+                        <span className="h-8 w-8 rounded-md bg-red-600" />
+                        <span className="h-8 w-8 rounded-md bg-gray-900" />
+                        <span className="h-8 w-8 rounded-md border border-gray-200 bg-gray-100" />
+                        <span className="ml-1 space-y-1">
+                          <span className="block h-1.5 w-16 rounded-full bg-gray-200" />
+                          <span className="block h-1.5 w-10 rounded-full bg-red-100" />
+                        </span>
+                      </div>
+                    )}
+                    {KIND === "media" && (
+                      <div className="relative mt-2.5 space-y-1">
+                        <div className="flex gap-1">
+                          <span className="h-3.5 w-14 rounded-sm bg-gray-200" />
+                          <span className="h-3.5 w-8 rounded-sm bg-red-500/80" />
+                          <span className="h-3.5 w-16 rounded-sm bg-gray-200" />
+                          <span className="h-3.5 w-6 rounded-sm bg-gray-300" />
+                        </div>
+                        <div className="flex gap-1">
+                          <span className="h-3.5 w-8 rounded-sm bg-gray-100" />
+                          <span className="h-3.5 w-20 rounded-sm bg-gray-200" />
+                          <span className="h-3.5 w-10 rounded-sm bg-red-100" />
+                        </div>
+                        {/* Playhead */}
+                        <span className="absolute -top-1 bottom-0 left-[38%] w-px bg-red-600" />
+                      </div>
+                    )}
+                    {KIND === "browser" && (
+                      <div className="mt-2.5 overflow-hidden rounded-md border border-gray-200">
+                        <div className="flex h-4 items-center gap-1 border-b border-gray-200 bg-gray-50 px-1.5">
+                          <span className="h-1 w-1 rounded-full bg-gray-300" />
+                          <span className="h-1 w-1 rounded-full bg-gray-300" />
+                          <span className="ml-1 h-1 flex-1 rounded-full bg-gray-200" />
+                        </div>
+                        <div className="space-y-1 p-1.5">
+                          <span className="block h-2.5 w-3/5 rounded-sm bg-red-100" />
+                          <span className="block h-1.5 w-4/5 rounded-full bg-gray-100" />
+                          <span className="block h-1.5 w-2/3 rounded-full bg-gray-100" />
+                        </div>
+                      </div>
+                    )}
+                    {KIND === "ai" && (
+                      <div className="mt-2.5 space-y-1.5">
+                        <span className="block w-3/4 rounded-lg rounded-bl-sm bg-gray-100 px-2 py-1">
+                          <span className="block h-1.5 w-full rounded-full bg-gray-300" />
+                        </span>
+                        <span className="ml-auto block w-2/3 rounded-lg rounded-br-sm bg-red-50 px-2 py-1 ring-1 ring-red-100">
+                          <span className="block h-1.5 w-full rounded-full bg-red-200" />
+                        </span>
+                        <span className="inline-flex items-center gap-1 rounded-full border border-gray-200 bg-white px-1.5 py-0.5 text-[9px] font-semibold text-gray-500">
+                          <span className="h-1 w-1 rounded-full bg-red-600" /> → CRM
+                        </span>
+                      </div>
+                    )}
                   </div>
                 )
               })}

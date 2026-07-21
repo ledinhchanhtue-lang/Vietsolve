@@ -67,7 +67,11 @@ export default function BlogPage() {
               className="grid gap-10 lg:grid-cols-[1fr_1fr] lg:gap-16 items-start"
             >
               <div>
-                <h2 className="text-2xl lg:text-3xl font-bold text-gray-900">
+                <span className="inline-flex items-center gap-2 rounded-full border border-red-200 bg-red-50/60 px-3.5 py-1.5 text-xs font-semibold uppercase tracking-wider text-red-700">
+                  <span className="h-1.5 w-1.5 rounded-full bg-red-600 vs-node vs-anim" />
+                  Insights đang được biên tập
+                </span>
+                <h2 className="mt-5 text-2xl lg:text-3xl font-bold text-gray-900">
                   Bài viết đầu tiên đang được chuẩn bị
                 </h2>
                 <p className="mt-4 text-gray-600 leading-relaxed max-w-xl">

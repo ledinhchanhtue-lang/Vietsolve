@@ -40,7 +40,7 @@ export default function Hero() {
           layered panel stack is xl-only and pulls its labels from the same i18n
           keys the service section uses, so nothing here invents a capability. */}
       <HeroTech
-        panels={[t.footer.service1, t.footer.service4, t.footer.service3, t.footer.service5]}
+        panels={[t.footer.service1, t.footer.service3, t.footer.service4, t.footer.service5]}
       />
 
       {/* xl:pr reserves the right gutter for the layered panel stack — without

@@ -24,6 +24,7 @@ import { useLanguage } from "@/lib/i18n"
 import { siteConfig, readVerified } from "@/lib/site-config"
 import { projects } from "@/lib/content/projects"
 import { ProjectVisual } from "@/components/project-visual"
+import { ServiceVisual } from "@/components/service-visual"
 import { PrimaryButton, SecondaryButton } from "@/components/ui-kit/button"
 import { TechLayer } from "@/components/tech/tech-layer"
 import { TechDivider } from "@/components/tech/tech-divider"
@@ -73,13 +74,23 @@ export default function ContactPage() {
   /* Each tile carries its service group's glyph so the form speaks the same
      icon language as the services pages. */
   const projectTypes = [
-    { label: t.contact.typeBranding, icon: Compass },
-    { label: t.contact.typeMarketing, icon: TrendingUp },
-    { label: t.contact.typeMedia, icon: Clapperboard },
-    { label: t.contact.typeWebsite, icon: AppWindow },
-    { label: t.contact.typeAi, icon: Workflow },
-    { label: t.contact.typeUndecided, icon: MessagesSquare },
+    { label: t.contact.typeBranding, icon: Compass, groupId: "branding-strategy" },
+    { label: t.contact.typeMarketing, icon: TrendingUp, groupId: "marketing-growth" },
+    { label: t.contact.typeMedia, icon: Clapperboard, groupId: "media-creative" },
+    { label: t.contact.typeWebsite, icon: AppWindow, groupId: "website-digital" },
+    { label: t.contact.typeAi, icon: Workflow, groupId: "ai-automation" },
+    { label: t.contact.typeUndecided, icon: MessagesSquare, groupId: null },
+  ] as const
+
+  /* Live preview + brief summary state, derived straight from the form */
+  const activeGroup = projectTypes.find((p) => p.label === form.type)?.groupId ?? null
+  const briefParts = [
+    Boolean(form.name.trim() && form.email.trim() && form.phone.trim()),
+    Boolean(form.type),
+    Boolean(form.message.trim()),
+    form.consent,
   ]
+  const briefDone = briefParts.filter(Boolean).length
 
   const topics = [
     t.contact.topic1,
@@ -291,6 +302,40 @@ export default function ContactPage() {
           <div className="grid gap-10 lg:grid-cols-[42fr_58fr] lg:gap-14 items-start">
             {/* ---- Left: brief guide. On mobile it moves below the form. ---- */}
             <div className="order-2 lg:order-1 space-y-8">
+              {/* ---- Live project preview — follows the selected type ---- */}
+              <div className="relative overflow-hidden rounded-2xl border border-gray-200 bg-white p-5">
+                <span
+                  aria-hidden="true"
+                  className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-red-500/60 to-transparent"
+                />
+                <div className="flex items-baseline justify-between gap-3">
+                  <h2 className="text-sm font-bold uppercase tracking-wider text-gray-900">
+                    {lang === "vi" ? "Xem trước theo loại dự án" : "Preview by project type"}
+                  </h2>
+                  {activeGroup && (
+                    <span className="shrink-0 text-[10px] font-medium uppercase tracking-wider text-gray-400">
+                      Interface demo
+                    </span>
+                  )}
+                </div>
+                {activeGroup ? (
+                  /* key remounts on switch so the swap reads as a real change */
+                  <div key={activeGroup} className="animate-fade-in">
+                    <ServiceVisual id={activeGroup} className="mt-4 aspect-[278/150]" />
+                    <p className="mt-3 text-sm font-semibold text-red-700">{form.type}</p>
+                  </div>
+                ) : (
+                  /* Nothing (or "chưa xác định") selected → real selected work */
+                  <div className="animate-fade-in mt-4 grid grid-cols-2 gap-2.5">
+                    {projects.slice(0, 4).map((pr) => (
+                      <div key={pr.slug} className="group">
+                        <ProjectVisual project={pr} sizes="180px" />
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+
               {/* Verified channels only */}
               <div className="space-y-4">
                 {email && (
@@ -606,6 +651,55 @@ export default function ContactPage() {
                         {errors.consent}
                       </p>
                     )}
+                  </div>
+
+                  {/* ---- Live brief summary — pure UI state, nothing extra is
+                       sent. The rail lights a point per completed group. ---- */}
+                  <div className="mt-7 rounded-xl border border-gray-200 bg-gray-50/70 p-4">
+                    <div className="flex items-baseline justify-between">
+                      <h3 className="text-xs font-bold uppercase tracking-wider text-gray-900">
+                        {lang === "vi" ? "Tóm tắt brief" : "Brief summary"}
+                      </h3>
+                      <span className="text-xs font-semibold tabular-nums text-gray-500">
+                        {briefDone}/4
+                      </span>
+                    </div>
+                    <dl className="mt-3 space-y-1.5 text-sm">
+                      {[
+                        [t.contact.fType, form.type],
+                        [t.contact.fBudget, form.budget],
+                        [t.contact.fTimeline, form.timeline],
+                      ].map(([k, v]) => (
+                        <div key={k} className="flex justify-between gap-4">
+                          <dt className="text-gray-500">{k}</dt>
+                          <dd className={v ? "font-semibold text-gray-900 text-right" : "text-gray-300"}>
+                            {v || "—"}
+                          </dd>
+                        </div>
+                      ))}
+                    </dl>
+                    <div className="mt-4 flex items-center gap-1" aria-hidden="true">
+                      {briefParts.map((done, i) => (
+                        <span key={i} className="flex flex-1 items-center gap-1">
+                          <span
+                            className={
+                              done
+                                ? "h-2 w-2 shrink-0 rounded-full bg-red-600 shadow-[0_0_6px_rgba(220,38,38,0.6)] transition-all duration-300"
+                                : "h-2 w-2 shrink-0 rounded-full border border-gray-300 bg-white transition-all duration-300"
+                            }
+                          />
+                          {i < briefParts.length - 1 && (
+                            <span
+                              className={
+                                done
+                                  ? "h-px flex-1 bg-red-400 transition-colors duration-300"
+                                  : "h-px flex-1 bg-gray-200 transition-colors duration-300"
+                              }
+                            />
+                          )}
+                        </span>
+                      ))}
+                    </div>
                   </div>
 
                   {status === "error" && (

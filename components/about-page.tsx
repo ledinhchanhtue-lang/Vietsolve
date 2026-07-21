@@ -11,6 +11,8 @@ import { LacSignatureVisual } from "@/components/lac-signature"
 import { CapabilityConstellation } from "@/components/capability-constellation"
 import { TechLayer } from "@/components/tech/tech-layer"
 import { TechDivider } from "@/components/tech/tech-divider"
+import { projects } from "@/lib/content/projects"
+import { ProjectVisual } from "@/components/project-visual"
 
 /**
  * About — restructured to seven sections, down from ten-plus.
@@ -112,7 +114,7 @@ export default function AboutPage() {
       {/* ------------- 2 · VietSolve là ai ------------- */}
       <section className="py-16 lg:py-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid gap-12 lg:grid-cols-[1fr_1fr] lg:gap-20">
+          <div className="grid gap-12 lg:grid-cols-[42fr_58fr] lg:gap-16">
             <div>
               <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 text-balance">
                 Agency đồng hành cùng doanh nghiệp,{" "}
@@ -128,9 +130,31 @@ export default function AboutPage() {
               </p>
             </div>
 
-            {/* Three statements — typography and dividers, deliberately not
-                another row of look-alike cards */}
-            <div className="divide-y divide-gray-200 border-y border-gray-200">
+            {/* Project Wall — the introduction shown through the four real
+                projects instead of a second column of claims. Each tile links
+                to the case page. */}
+            <div className="grid grid-cols-2 gap-4">
+              {projects.slice(0, 4).map((pr) => (
+                <Link
+                  key={pr.slug}
+                  href="/case-studies"
+                  className="group rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-600 focus-visible:ring-offset-2"
+                >
+                  <ProjectVisual project={pr} sizes="(max-width: 1024px) 50vw, 28vw" />
+                  <span className="mt-2 block text-sm font-bold text-gray-900 transition-colors group-hover:text-red-600">
+                    {pr.name}
+                  </span>
+                  <span className="block text-xs text-gray-500">
+                    {pr.industry.vi} · {pr.deliverables.vi[0]}
+                  </span>
+                </Link>
+              ))}
+            </div>
+          </div>
+
+          {/* Three statements — typography and dividers, deliberately not
+              another row of look-alike cards. Full-width row under the wall. */}
+          <div className="mt-14 grid gap-0 divide-y divide-gray-200 border-y border-gray-200 md:grid-cols-3 md:divide-x md:divide-y-0">
               {statements.map((s, i) => (
                 <motion.div
                   key={s.en}
@@ -138,7 +162,7 @@ export default function AboutPage() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.45, delay: i * 0.1 }}
-                  className="group flex items-baseline gap-5 py-6"
+                  className="group flex items-baseline gap-5 py-6 md:px-6 md:first:pl-0 md:last:pr-0"
                 >
                   <span
                     aria-hidden="true"
@@ -154,7 +178,6 @@ export default function AboutPage() {
                   </div>
                 </motion.div>
               ))}
-            </div>
           </div>
         </div>
       </section>
