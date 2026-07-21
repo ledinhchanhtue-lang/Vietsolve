@@ -9,6 +9,7 @@ import { ProjectVisual } from "@/components/project-visual"
 import { PrimaryButton } from "@/components/ui-kit/button"
 import { TechLayer } from "@/components/tech/tech-layer"
 import { TechDivider } from "@/components/tech/tech-divider"
+import { Tag } from "@/components/ui-kit/chip"
 
 /**
  * Case studies — white theme, real projects only.
@@ -78,15 +79,34 @@ export default function CaseStudiesPage() {
       {/* Projects */}
       <section className="py-16 lg:py-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          {/* The first project runs full width in a two-column layout — a
+              featured slot. The rest keep the two-up grid. Previously all four
+              were the same size, so nothing led the page. */}
           <div className="grid gap-10 md:grid-cols-2">
             {projects.map((project, index) => {
+              const featured = index === 0
               const card = (
-                <>
+                <div
+                  className={
+                    featured
+                      ? "grid items-center gap-8 rounded-2xl border border-gray-200 bg-white p-6 shadow-sm transition-all duration-300 hover:border-red-200 hover:shadow-md lg:grid-cols-[1.15fr_1fr] lg:p-8"
+                      : ""
+                  }
+                >
                   {/* Shared visual system — each project renders differently */}
-                  <ProjectVisual project={project} priority={index === 0} />
+                  <ProjectVisual
+                    project={project}
+                    priority={featured}
+                    sizes={featured ? "(max-width: 1024px) 100vw, 55vw" : "(max-width: 768px) 100vw, 50vw"}
+                  />
 
-                  <div className="mt-6">
+                  <div className={featured ? "lg:mt-0" : "mt-6"}>
                     <div className="flex items-center gap-3 text-xs font-semibold uppercase tracking-wider">
+                      {featured && (
+                        <span className="rounded-full bg-red-50 px-2.5 py-1 text-red-700">
+                          Dự án nổi bật
+                        </span>
+                      )}
                       <span className="text-red-600">{project.industry.vi}</span>
                       <span className="text-gray-300" aria-hidden="true">
                         •
@@ -102,11 +122,8 @@ export default function CaseStudiesPage() {
 
                     <ul className="mt-5 flex flex-wrap gap-2">
                       {project.deliverables.vi.map((d) => (
-                        <li
-                          key={d}
-                          className="rounded-full border border-gray-200 bg-gray-50 px-3 py-1.5 text-sm text-gray-700"
-                        >
-                          {d}
+                        <li key={d}>
+                          <Tag>{d}</Tag>
                         </li>
                       ))}
                     </ul>
@@ -137,7 +154,7 @@ export default function CaseStudiesPage() {
                       />
                     </button>
                   </div>
-                </>
+                </div>
               )
 
               return (
@@ -147,7 +164,7 @@ export default function CaseStudiesPage() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, amount: 0.2 }}
                   transition={{ duration: 0.6, delay: (index % 2) * 0.1 }}
-                  className="group"
+                  className={featured ? "group md:col-span-2" : "group"}
                 >
                   {project.hasDetailPage ? (
                     <Link href={`/case-studies/${project.slug}`}>{card}</Link>

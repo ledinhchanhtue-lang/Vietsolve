@@ -66,8 +66,30 @@ Hero → 3 trụ cột (Intelligent/Creative/Innovation) → Hệ sinh thái d�
 Branding & Strategy · Marketing & Growth · Media & Creative · Website & Digital Products · AI Agents & Automation · Data, SEO & Analytics.
 Homepage: tên + 1 câu + 3 highlight + link. `/services`: danh sách đầy đủ + anchor `#id`.
 
+## ⚠️ Icon system — dùng `components/ui-kit/icon-tile.tsx`
+**Mọi icon trên site đi qua `<IconTile icon={X} size="sm|md|lg" tone="light|dark" />`.** Một size ramp (40/48/56px), stroke 1.5, khung hairline, corner accent, hover đỏ + bloom.
+- **Đừng** render `<Icon className="h-9 w-9" />` trần, **đừng** bọc icon trong ô gradient đỏ đặc.
+- Đặt IconTile trong `.group` → nó sáng theo card.
+
+**Ngôn ngữ icon (lucide) — đã bỏ hết cliché.** `Brain` `Cpu` `Rocket` `Lightbulb` `Sparkles` `Zap` `Users` đều đã gỡ khỏi codebase, đừng đưa lại:
+
+| Ngữ cảnh | Icon |
+|---|---|
+| 3 trụ cột | `Radar` · `Shapes` · `Waypoints` |
+| Quy trình 3 bước | `Search` · `PenTool` · `Route` |
+| 6 nhóm dịch vụ | `Compass` `TrendingUp` `Clapperboard` `AppWindow` `Workflow` `BarChart3` |
+| About | `Handshake` · `Layers` · `Sparkle` · `Boxes` · `Compass` |
+
+## ⚠️ Visual support — đừng để trang chỉ có chữ + box
+| Component | Dùng ở đâu |
+|---|---|
+| `service-visual.tsx` | 6 composition SVG riêng cho 6 nhóm dịch vụ (homepage + /services). Key theo `group.id` — **thêm nhóm mới phải thêm composition**, không sẽ render rỗng. |
+| `project-visual.tsx` | Thumbnail dự án: có ảnh thật → khung browser chrome; chưa có → visual sinh theo slug |
+| `lac-bird-mark.tsx` | Chim Lạc dạng line-art construction (About). **Không phải logo** — logo không bao giờ vẽ lại. |
+
 ## ⚠️ Button system — dùng `components/ui-kit/button.tsx`
-4 loại duy nhất: `PrimaryButton` (đỏ đặc, 48px) · `SecondaryButton` (trắng viền xám, 48px) · `TextLink` (đỏ + mũi tên, min 44px) · `IconButton` (44×44 + `aria-label`).
+4 loại: `PrimaryButton` (đỏ đặc, 48px, light sweep + glow) · `SecondaryButton` (viền, wipe đỏ nhạt) · `TextLink` (underline chạy trái→phải) · `IconButton` (44×44 + `aria-label`).
+Loại thứ 5 cho form: **`components/ui-kit/chip.tsx`** — `SelectableChip` (radio, selected có inner glow + badge check) và `Tag` (pill read-only cho deliverable/highlight).
 - **Đừng dùng lại `animated-button.tsx`** cho CTA mới — nó từng co lại thành hộp 20px và nhận `variant="slim"` không tồn tại.
 - Mọi tap target đứng riêng phải ≥ 44px (WCAG 2.5.8). Link nằm giữa câu văn được miễn.
 

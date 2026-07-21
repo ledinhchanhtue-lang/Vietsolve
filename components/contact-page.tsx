@@ -4,13 +4,15 @@ import type React from "react"
 import { useEffect, useState } from "react"
 import Link from "next/link"
 import { motion } from "framer-motion"
-import { Mail, Check, Loader2, AlertCircle, ArrowRight, Clock } from "lucide-react"
+import { Mail, Phone, MapPin, Check, Loader2, AlertCircle, ArrowRight, Clock } from "lucide-react"
 import { useLanguage } from "@/lib/i18n"
 import { siteConfig, readVerified } from "@/lib/site-config"
 import { projects } from "@/lib/content/projects"
 import { PrimaryButton, SecondaryButton } from "@/components/ui-kit/button"
 import { TechLayer } from "@/components/tech/tech-layer"
 import { TechDivider } from "@/components/tech/tech-divider"
+import { IconTile } from "@/components/ui-kit/icon-tile"
+import { SelectableChip } from "@/components/ui-kit/chip"
 import { cn } from "@/lib/utils"
 
 /**
@@ -247,9 +249,9 @@ export default function ContactPage() {
                 {email && (
                   <a
                     href={`mailto:${email}`}
-                    className="group flex items-start gap-3 rounded-xl border border-gray-200 bg-white p-5 transition-colors hover:border-gray-300 hover:bg-gray-50"
+                    className="group relative overflow-hidden vs-scan flex items-start gap-4 rounded-xl border border-gray-200 bg-white p-5 transition-all duration-300 hover:border-red-200 hover:shadow-sm"
                   >
-                    <Mail className="mt-0.5 h-5 w-5 shrink-0 text-gray-900" strokeWidth={1.5} aria-hidden="true" />
+                    <IconTile icon={Mail} size="sm" />
                     <span>
                       <span className="block text-xs uppercase tracking-wider text-gray-500">
                         {t.contact.emailLabel}
@@ -261,8 +263,8 @@ export default function ContactPage() {
                   </a>
                 )}
 
-                <div className="flex items-start gap-3 rounded-xl border border-gray-200 bg-white p-5">
-                  <Clock className="mt-0.5 h-5 w-5 shrink-0 text-gray-900" strokeWidth={1.5} aria-hidden="true" />
+                <div className="group flex items-start gap-4 rounded-xl border border-gray-200 bg-white p-5">
+                  <IconTile icon={Clock} size="sm" />
                   <span>
                     <span className="block text-xs uppercase tracking-wider text-gray-500">
                       {t.contact.responseLabel}
@@ -276,16 +278,20 @@ export default function ContactPage() {
                 {phone && (
                   <a
                     href={`tel:${phone.replace(/[^\d+]/g, "")}`}
-                    className="block rounded-xl border border-gray-200 bg-white p-5 font-semibold text-gray-900 transition-colors hover:border-gray-300 hover:bg-gray-50"
+                    className="group relative overflow-hidden vs-scan flex items-center gap-4 rounded-xl border border-gray-200 bg-white p-5 font-semibold text-gray-900 transition-all duration-300 hover:border-red-200 hover:shadow-sm"
                   >
+                    <IconTile icon={Phone} size="sm" />
                     {phone}
                   </a>
                 )}
                 {address && (
-                  <div className="rounded-xl border border-gray-200 bg-white p-5 text-gray-700">
-                    {address.line1}
-                    <br />
-                    {address.line2}
+                  <div className="group flex items-start gap-4 rounded-xl border border-gray-200 bg-white p-5 text-gray-700">
+                    <IconTile icon={MapPin} size="sm" />
+                    <span>
+                      {address.line1}
+                      <br />
+                      {address.line2}
+                    </span>
                   </div>
                 )}
               </div>
@@ -440,35 +446,18 @@ export default function ContactPage() {
                       aria-describedby={errors.type ? "err-type" : undefined}
                       className="mt-3 grid grid-cols-1 gap-2.5 sm:grid-cols-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-600 focus-visible:ring-offset-4 rounded-xl"
                     >
-                      {projectTypes.map((type) => {
-                        const selected = form.type === type
-                        return (
-                          <button
-                            key={type}
-                            type="button"
-                            role="radio"
-                            aria-checked={selected}
-                            onClick={() => set("type", type)}
-                            className={cn(
-                              "flex min-h-[48px] items-center justify-between gap-2 rounded-xl border px-4 py-3 text-left text-sm transition-all duration-200",
-                              "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-600 focus-visible:ring-offset-2",
-                              selected
-                                ? /* Selected chip earns an inner glow — this is
-                                     the one place on the page where the user's
-                                     own choice should visibly light up. */
-                                  "border-red-600 bg-red-50 font-semibold text-red-700 shadow-[inset_0_0_0_1px_rgba(220,38,38,0.25),0_0_14px_-4px_rgba(220,38,38,0.55)]"
-                                : "border-gray-200 bg-white text-gray-700 hover:border-red-200 hover:bg-red-50/40",
-                            )}
-                          >
-                            {type}
-                            {selected && (
-                              <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-red-600">
-                                <Check className="h-3 w-3 text-white" strokeWidth={3} aria-hidden="true" />
-                              </span>
-                            )}
-                          </button>
-                        )
-                      })}
+                      {/* Shared chip component — the selected state (red hairline,
+                          tinted fill, inner glow, filled check) now lives in one
+                          place instead of an inline class string. */}
+                      {projectTypes.map((type) => (
+                        <SelectableChip
+                          key={type}
+                          selected={form.type === type}
+                          onSelect={() => set("type", type)}
+                        >
+                          {type}
+                        </SelectableChip>
+                      ))}
                     </div>
                     {errors.type && (
                       <p role="alert" id="err-type" className="mt-2 flex items-center gap-1.5 text-sm text-red-600">

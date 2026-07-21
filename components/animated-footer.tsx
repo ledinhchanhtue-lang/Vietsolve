@@ -3,6 +3,7 @@
 import { LedLogo } from "@/components/tech/led-logo"
 import { TechDivider } from "@/components/tech/tech-divider"
 import { TechLayer } from "@/components/tech/tech-layer"
+import { IconTile } from "@/components/ui-kit/icon-tile"
 import Link from "next/link"
 import { motion } from "framer-motion"
 import { Instagram, Twitter, Linkedin, Youtube, Mail, Phone, MapPin } from "lucide-react"
@@ -92,9 +93,9 @@ export default function AnimatedFooter() {
                       className="group relative"
                       aria-label={label}
                     >
-                      <div className="w-12 h-12 bg-gray-800 border border-gray-700 rounded-lg flex items-center justify-center group-hover:bg-gray-700 group-hover:border-gray-600 transition-colors">
-                        <Icon className="h-5 w-5 text-gray-300 group-hover:text-white transition-colors" />
-                      </div>
+                      {/* Same tile geometry as every other icon on the site,
+                          in its charcoal-surface variant. */}
+                      <IconTile icon={Icon} size="md" tone="dark" />
                     </a>
                   </motion.div>
                 ))}
@@ -134,8 +135,10 @@ export default function AnimatedFooter() {
                       href="/services"
                       className="flex min-h-[44px] items-center justify-center sm:justify-start text-gray-300 hover:text-white transition-colors duration-200 group"
                     >
-                      <span className="w-0 group-hover:w-2 h-0.5 bg-red-500 transition-all duration-200 mr-0 group-hover:mr-2" />
-                      {link}
+                      {/* Rule grows from zero on hover — reserving the 8px keeps
+                          the label from shifting sideways as it animates. */}
+                      <span className="w-0 group-hover:w-2 h-0.5 bg-red-500 transition-all duration-200 mr-0 group-hover:mr-2 rounded-full" />
+                      <span className="transition-transform duration-200">{link}</span>
                     </Link>
                   </motion.li>
                 ))}

@@ -1,8 +1,9 @@
 "use client"
 
 import { motion } from "framer-motion"
-import { Brain, Palette, Cpu } from "lucide-react"
+import { Radar, Shapes, Waypoints } from "lucide-react"
 import { useLanguage } from "@/lib/i18n"
+import { IconTile } from "@/components/ui-kit/icon-tile"
 
 /**
  * Three pillars — Intelligent · Creative · Innovation.
@@ -14,9 +15,9 @@ export default function ThreePillars() {
   const { t } = useLanguage()
 
   const pillars = [
-    { icon: Brain, title: t.pillars.p1Title, en: t.pillars.p1En, desc: t.pillars.p1Desc },
-    { icon: Palette, title: t.pillars.p2Title, en: t.pillars.p2En, desc: t.pillars.p2Desc },
-    { icon: Cpu, title: t.pillars.p3Title, en: t.pillars.p3En, desc: t.pillars.p3Desc },
+    { icon: Radar, title: t.pillars.p1Title, en: t.pillars.p1En, desc: t.pillars.p1Desc },
+    { icon: Shapes, title: t.pillars.p2Title, en: t.pillars.p2En, desc: t.pillars.p2Desc },
+    { icon: Waypoints, title: t.pillars.p3Title, en: t.pillars.p3En, desc: t.pillars.p3Desc },
   ]
 
   return (
@@ -43,10 +44,12 @@ export default function ThreePillars() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
-              className="bg-gray-50 border border-gray-200 rounded-2xl p-8 hover:border-red-300 hover:shadow-md transition-all duration-300"
+              className="group relative overflow-hidden vs-scan bg-gray-50 border border-gray-200 rounded-2xl p-8 hover:border-red-200 hover:bg-white hover:shadow-md transition-all duration-300"
             >
-              <div className="w-14 h-14 bg-red-100 rounded-xl flex items-center justify-center mb-6">
-                <p.icon className="w-7 h-7 text-red-600" />
+              {/* Was a solid red-100 square with a red glyph — the only place on
+                  the site that filled an icon container with brand colour. */}
+              <div className="mb-6">
+                <IconTile icon={p.icon} size="lg" />
               </div>
               <div className="flex items-baseline gap-2">
                 <h3 className="text-xl font-bold text-gray-900">{p.title}</h3>

@@ -1,8 +1,9 @@
 "use client"
 
 import { motion } from "framer-motion"
-import { Lightbulb, Users, Rocket } from "lucide-react"
+import { Search, PenTool, Route } from "lucide-react"
 import { useLanguage } from "@/lib/i18n"
+import { IconTile } from "@/components/ui-kit/icon-tile"
 
 export default function HowWeWork() {
   const { t } = useLanguage()
@@ -12,19 +13,19 @@ export default function HowWeWork() {
       number: "01",
       title: t.howWeWork.step1Title,
       description: t.howWeWork.step1Desc,
-      icon: <Lightbulb className="w-8 h-8" strokeWidth={1.5} />,
+      icon: Search,
     },
     {
       number: "02",
       title: t.howWeWork.step2Title,
       description: t.howWeWork.step2Desc,
-      icon: <Users className="w-8 h-8" strokeWidth={1.5} />,
+      icon: PenTool,
     },
     {
       number: "03",
       title: t.howWeWork.step3Title,
       description: t.howWeWork.step3Desc,
-      icon: <Rocket className="w-8 h-8" strokeWidth={1.5} />,
+      icon: Route,
     },
   ]
 
@@ -68,8 +69,8 @@ export default function HowWeWork() {
                   </span>
                 </div>
 
-                <div className="mt-6 flex justify-center text-gray-900 md:justify-start" aria-hidden="true">
-                  {step.icon}
+                <div className="mt-6 flex justify-center md:justify-start">
+                  <IconTile icon={step.icon} size="md" />
                 </div>
 
                 <h3 className="mt-5 text-xl font-bold text-gray-900">{step.title}</h3>

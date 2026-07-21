@@ -1,26 +1,42 @@
 "use client"
 
 import { motion } from "framer-motion"
-import { Sparkles, Lightbulb, Zap, Users, Rocket, ArrowRight } from "lucide-react"
+import {
+  Radar,
+  Shapes,
+  Waypoints,
+  Compass,
+  Handshake,
+  Layers,
+  Sparkle,
+  Boxes,
+  ArrowRight,
+  type LucideIcon,
+} from "lucide-react"
 import Link from "next/link"
+import { IconTile } from "@/components/ui-kit/icon-tile"
+import { LacBirdMark } from "@/components/lac-bird-mark"
+import { TechLayer } from "@/components/tech/tech-layer"
+import { TechDivider } from "@/components/tech/tech-divider"
+import { PrimaryButton } from "@/components/ui-kit/button"
 
 export default function AboutPage() {
   const coreValues = [
     {
-      icon: <Sparkles className="w-8 h-8" />,
+      icon: Shapes as LucideIcon,
       title: "Sáng tạo",
       titleEn: "Creative",
       description: "Không ngừng đổi mới và sáng tạo trong mọi giải pháp, mang đến những ý tưởng độc đáo và khác biệt.",
     },
     {
-      icon: <Lightbulb className="w-8 h-8" />,
+      icon: Radar as LucideIcon,
       title: "Trí tuệ",
       titleEn: "Intelligence",
       description:
         "Ứng dụng công nghệ và AI vào quy trình, tạo ra giải pháp tối ưu, hiệu quả và phù hợp với đặc thù từng doanh nghiệp.",
     },
     {
-      icon: <Zap className="w-8 h-8" />,
+      icon: Waypoints as LucideIcon,
       title: "Đổi mới",
       titleEn: "Innovation",
       description: "Luôn tiên phong trong việc áp dụng công nghệ mới và xu hướng hiện đại để dẫn đầu thị trường.",
@@ -41,6 +57,11 @@ export default function AboutPage() {
     <main id="main" className="bg-white">
         {/* Hero Section */}
         <section className="relative pt-32 pb-20 lg:pt-40 lg:pb-32 bg-gradient-to-br from-white via-red-50/30 to-gray-50/30 overflow-hidden">
+          <TechLayer>
+            <div className="absolute inset-0 vs-grid-2 vs-mask-center opacity-80" />
+            <div className="absolute inset-0 bg-[radial-gradient(30rem_22rem_at_84%_8%,rgb(220_38_38/0.08),transparent_72%)]" />
+          </TechLayer>
+
           <div className="absolute left-0 top-32 w-64 h-[500px] opacity-40">
             <svg
               viewBox="0 0 200 500"
@@ -100,15 +121,9 @@ export default function AboutPage() {
                 transition={{ duration: 0.6, delay: 0.4 }}
                 className="flex items-center justify-center gap-4 mb-12"
               >
-                <Link href="/contact">
-                  <motion.button
-                    whileHover={{ scale: 1.05 }}
-                    className="px-8 py-4 bg-[#F2682A] text-white rounded-full font-medium hover:bg-[#e05a1f] transition-colors shadow-lg inline-flex items-center gap-2"
-                  >
-                    Liên hệ ngay
-                    <ArrowRight className="w-4 h-4" />
-                  </motion.button>
-                </Link>
+                {/* This button was hard-coded #F2682A — an orange CTA on a
+                    red-brand site, and the only one of its kind. */}
+                <PrimaryButton href="/contact">Liên hệ ngay</PrimaryButton>
               </motion.div>
             </motion.div>
           </div>
@@ -145,11 +160,9 @@ export default function AboutPage() {
                 viewport={{ once: true }}
                 className="lg:col-span-2 space-y-6"
               >
-                <div className="bg-white p-8 rounded-3xl shadow-lg border border-gray-100">
+                <div className="group relative overflow-hidden vs-scan bg-white p-8 rounded-3xl shadow-lg border border-gray-100 transition-all duration-300 hover:border-red-200 hover:shadow-xl">
                   <div className="flex items-start gap-4 mb-6">
-                    <div className="w-12 h-12 bg-gradient-to-br from-red-600 to-gray-900 rounded-xl flex items-center justify-center flex-shrink-0">
-                      <Rocket className="w-6 h-6 text-white" />
-                    </div>
+                    <IconTile icon={Handshake} size="md" />
                     <div>
                       <h3 className="text-2xl font-bold text-gray-900 mb-3">Agency đồng hành cùng doanh nghiệp</h3>
                       <p className="text-lg text-gray-700 leading-relaxed">
@@ -162,11 +175,9 @@ export default function AboutPage() {
                   </div>
                 </div>
 
-                <div className="bg-white p-8 rounded-3xl shadow-lg border border-gray-100">
+                <div className="group relative overflow-hidden vs-scan bg-white p-8 rounded-3xl shadow-lg border border-gray-100 transition-all duration-300 hover:border-red-200 hover:shadow-xl">
                   <div className="flex items-start gap-4 mb-6">
-                    <div className="w-12 h-12 bg-gradient-to-br from-red-700 to-gray-800 rounded-xl flex items-center justify-center flex-shrink-0">
-                      <Sparkles className="w-6 h-6 text-white" />
-                    </div>
+                    <IconTile icon={Layers} size="md" />
                     <div>
                       <h3 className="text-2xl font-bold text-gray-900 mb-3">Hệ sinh thái giải pháp toàn diện</h3>
                       <p className="text-lg text-gray-700 leading-relaxed">
@@ -181,11 +192,9 @@ export default function AboutPage() {
                   </div>
                 </div>
 
-                <div className="bg-white p-8 rounded-3xl shadow-lg border border-gray-100">
+                <div className="group relative overflow-hidden vs-scan bg-white p-8 rounded-3xl shadow-lg border border-gray-100 transition-all duration-300 hover:border-red-200 hover:shadow-xl">
                   <div className="flex items-start gap-4 mb-6">
-                    <div className="w-12 h-12 bg-gradient-to-br from-red-600 to-gray-700 rounded-xl flex items-center justify-center flex-shrink-0">
-                      <Lightbulb className="w-6 h-6 text-white" />
-                    </div>
+                    <IconTile icon={Sparkle} size="md" />
                     <div>
                       <h3 className="text-2xl font-bold text-gray-900 mb-3">Công nghệ & AI tiên tiến</h3>
                       <p className="text-lg text-gray-700 leading-relaxed">
@@ -207,12 +216,11 @@ export default function AboutPage() {
                 className="space-y-6"
               >
                 {/* Logo symbolism card */}
-                <div className="bg-gradient-to-br from-red-600 to-gray-900 p-8 rounded-3xl shadow-xl text-white">
-                  <div className="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center mb-6">
-                    <svg className="w-10 h-10 text-white" viewBox="0 0 24 24" fill="currentColor">
-                      <path d="M12 2L2 7v10c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-10-5z" />
-                    </svg>
-                  </div>
+                <div className="relative overflow-hidden bg-gradient-to-br from-red-600 to-gray-900 p-8 rounded-3xl shadow-xl text-white">
+                  {/* The mark was illustrated with Lucide's shield glyph — a
+                      shield standing in for the bird on the Đông Sơn drum.
+                      Replaced with the motif drawn as construction line-art. */}
+                  <LacBirdMark className="mb-6" />
                   <h3 className="text-xl font-bold mb-4">Biểu tượng chim Lạc</h3>
                   <p className="text-white/90 leading-relaxed">
                     Thể hiện tinh thần dân tộc, khát vọng bay cao vươn xa, nhưng vẫn giữ gìn bản sắc văn hóa Việt Nam –
@@ -222,8 +230,8 @@ export default function AboutPage() {
 
                 {/* Positioning card */}
                 <div className="bg-gradient-to-br from-red-700 to-gray-800 p-8 rounded-3xl shadow-xl text-white">
-                  <div className="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center mb-6">
-                    <Zap className="w-10 h-10 text-white" />
+                  <div className="mb-6">
+                    <IconTile icon={Compass} size="lg" tone="dark" />
                   </div>
                   <h3 className="text-xl font-bold mb-4">Định vị</h3>
                   <p className="text-2xl font-bold leading-relaxed">
@@ -254,6 +262,8 @@ export default function AboutPage() {
           </div>
         </section>
 
+        <TechDivider className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8" />
+
         <section className="py-20 lg:py-32 bg-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <motion.div
@@ -278,10 +288,12 @@ export default function AboutPage() {
                   transition={{ duration: 0.6, delay: index * 0.1 }}
                   viewport={{ once: true }}
                   whileHover={{ y: -8 }}
-                  className="bg-white p-8 rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-300 border border-gray-100"
+                  className="group relative overflow-hidden vs-scan bg-white p-8 rounded-3xl shadow-lg hover:shadow-2xl hover:border-red-200 transition-all duration-300 border border-gray-100"
                 >
-                  <div className="w-16 h-16 bg-gradient-to-br from-red-600 to-gray-900 rounded-2xl flex items-center justify-center text-white mb-6 shadow-lg">
-                    {value.icon}
+                  {/* Was a solid red-to-charcoal gradient tile with a white
+                      glyph — a fourth icon treatment on a site that now has one. */}
+                  <div className="mb-6">
+                    <IconTile icon={value.icon} size="lg" />
                   </div>
                   <h3 className="text-2xl font-bold text-gray-900 mb-2">{value.title}</h3>
                   <p className="text-sm font-semibold text-red-600 mb-4 uppercase tracking-wide">{value.titleEn}</p>
@@ -315,11 +327,18 @@ export default function AboutPage() {
                   whileInView={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 0.5, delay: index * 0.05 }}
                   viewport={{ once: true }}
-                  whileHover={{ scale: 1.05 }}
-                  className="bg-gradient-to-br from-red-50 to-gray-50 p-6 rounded-2xl border-2 border-red-100 hover:border-red-300 transition-all duration-300 cursor-pointer"
+                  className="group relative overflow-hidden vs-scan rounded-2xl border border-gray-200 bg-white p-6 transition-all duration-300 hover:border-red-200 hover:shadow-md hover:-translate-y-1"
                 >
-                  <div className="flex items-center gap-3">
-                    <div className="w-2 h-2 bg-red-600 rounded-full" />
+                  {/* cursor-pointer removed: these were never clickable. */}
+                  <span
+                    aria-hidden="true"
+                    className="pointer-events-none absolute inset-0 vs-grid-3 vs-mask-corner opacity-0 transition-opacity duration-300 group-hover:opacity-50"
+                  />
+                  <div className="relative flex items-center gap-4">
+                    <span className="font-mono text-xs font-semibold text-red-600/70 tabular-nums">
+                      {String(index + 1).padStart(2, "0")}
+                    </span>
+                    <span className="h-8 w-px bg-gradient-to-b from-red-300 to-transparent" aria-hidden="true" />
                     <p className="text-lg font-semibold text-gray-900">{solution}</p>
                   </div>
                 </motion.div>
@@ -351,26 +370,26 @@ export default function AboutPage() {
               className="bg-white p-10 lg:p-12 rounded-3xl shadow-xl border border-gray-100"
             >
               <div className="text-center max-w-2xl mx-auto">
-                <Users className="w-16 h-16 text-red-600 mx-auto mb-6" />
+                <div className="mb-6 flex justify-center">
+                  <IconTile icon={Boxes} size="lg" />
+                </div>
                 <p className="text-lg text-gray-600 leading-relaxed mb-8">
                   Mỗi dự án được dẫn dắt bởi đội ngũ core của VietSolve và kết hợp cùng các chuyên gia
                   phù hợp — từ chiến lược, sáng tạo, công nghệ đến vận hành — để đảm bảo giải pháp đúng
                   với bài toán của doanh nghiệp.
                 </p>
-                <Link
-                  href="/contact"
-                  className="px-8 py-4 bg-red-600 text-white rounded-full font-medium hover:bg-red-700 transition-colors shadow-lg inline-flex items-center gap-2"
-                >
-                  Trao đổi dự án
-                  <ArrowRight className="w-4 h-4" />
-                </Link>
+                <PrimaryButton href="/contact">Trao đổi dự án</PrimaryButton>
               </div>
             </motion.div>
           </div>
         </section>
 
-        <section className="py-20 lg:py-32 bg-gradient-to-br from-red-600 via-red-800 to-gray-900">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <section className="relative overflow-hidden py-20 lg:py-32 bg-gradient-to-br from-red-600 via-red-800 to-gray-900">
+          <TechDivider variant="plain" className="absolute inset-x-0 top-0" />
+          <TechLayer>
+            <div className="absolute inset-0 bg-[repeating-linear-gradient(-45deg,rgb(255_255_255/0.07)_0_1px,transparent_1px_11px)] vs-mask-down" />
+          </TechLayer>
+          <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -386,14 +405,12 @@ export default function AboutPage() {
               <p className="text-xl mb-12 opacity-90 max-w-2xl mx-auto">
                 Hãy để chúng tôi giúp bạn kiến tạo giá trị bền vững cho doanh nghiệp
               </p>
-              <Link href="/contact">
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  className="px-12 py-5 bg-white text-red-600 rounded-full font-bold text-lg hover:bg-gray-100 transition-colors shadow-2xl inline-flex items-center gap-3"
-                >
-                  Liên hệ ngay
-                  <ArrowRight className="w-5 h-5" />
-                </motion.button>
+              <Link
+                href="/contact"
+                className="group inline-flex min-h-[52px] items-center justify-center gap-3 rounded-full bg-white px-12 text-lg font-bold text-red-600 shadow-2xl transition-colors hover:bg-gray-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-red-700"
+              >
+                Liên hệ ngay
+                <ArrowRight className="h-5 w-5 transition-transform duration-200 group-hover:translate-x-1" />
               </Link>
             </motion.div>
           </div>

@@ -14,6 +14,9 @@ import { useLanguage } from "@/lib/i18n"
 import { serviceGroups } from "@/lib/content/services"
 import { TextLink, SecondaryButton } from "@/components/ui-kit/button"
 import { TechLayer } from "@/components/tech/tech-layer"
+import { IconTile } from "@/components/ui-kit/icon-tile"
+import { Tag } from "@/components/ui-kit/chip"
+import { ServiceVisual } from "@/components/service-visual"
 
 /**
  * Service ecosystem — the six service groups.
@@ -93,24 +96,21 @@ export default function InnovativeServices() {
                   className="pointer-events-none absolute right-0 top-0 h-6 w-6 rounded-tr-2xl border-r-2 border-t-2 border-red-500/0 translate-x-1 -translate-y-1 transition-all duration-300 group-hover:border-red-500/50 group-hover:translate-x-0 group-hover:translate-y-0"
                 />
 
-                {/* Charcoal icon, no red circle — red is reserved as an accent.
-                    On hover it takes the brand colour and a soft bloom. */}
-                <Icon
-                  className="h-9 w-9 text-gray-900 transition-all duration-300 group-hover:text-red-600 group-hover:drop-shadow-[0_0_8px_rgba(220,38,38,0.35)]"
-                  strokeWidth={1.5}
-                  aria-hidden="true"
-                />
+                {/* Every icon on the site now goes through IconTile — one size
+                    ramp, one stroke weight, one hover state. */}
+                <IconTile icon={Icon} size="md" />
 
                 <h3 className="mt-6 text-xl font-bold text-gray-900">{group.name[lang]}</h3>
                 <p className="mt-3 text-gray-600 leading-relaxed">{group.tagline[lang]}</p>
 
+                {/* The card was heading + text + pills, six times over. This is
+                    what makes each group look like different work. */}
+                <ServiceVisual id={group.id} className="mt-6 aspect-[278/162]" />
+
                 <ul className="mt-5 flex flex-wrap gap-2">
                   {group.highlights[lang].map((h) => (
-                    <li
-                      key={h}
-                      className="rounded-full border border-gray-200 bg-gray-50 px-3 py-1.5 text-sm text-gray-700"
-                    >
-                      {h}
+                    <li key={h}>
+                      <Tag>{h}</Tag>
                     </li>
                   ))}
                 </ul>

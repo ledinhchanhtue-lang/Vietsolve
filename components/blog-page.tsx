@@ -4,6 +4,9 @@ import Link from "next/link"
 import { motion } from "framer-motion"
 import { publishedInsights } from "@/lib/content/insights"
 import { PrimaryButton, SecondaryButton } from "@/components/ui-kit/button"
+import { IconTile } from "@/components/ui-kit/icon-tile"
+import { TechLayer } from "@/components/tech/tech-layer"
+import { Compass, Workflow, Shapes } from "lucide-react"
 
 /**
  * Blog / Insights — white theme.
@@ -22,8 +25,11 @@ export default function BlogPage() {
   return (
     <main id="main" className="bg-white">
       {/* Hero */}
-      <section className="relative pt-32 pb-16 lg:pt-40 lg:pb-20 bg-gradient-to-br from-white via-red-50/30 to-gray-50/40">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="relative overflow-hidden pt-32 pb-16 lg:pt-40 lg:pb-20 bg-gradient-to-br from-white via-red-50/30 to-gray-50/40">
+        <TechLayer>
+          <div className="absolute inset-0 vs-grid-2 vs-mask-corner opacity-70" />
+        </TechLayer>
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -75,15 +81,14 @@ export default function BlogPage() {
                   </p>
                   <ul className="mt-4 divide-y divide-gray-200 border-y border-gray-200">
                     {[
-                      ["Branding & Growth", "Định vị, nhận diện và tăng trưởng thương hiệu."],
-                      ["AI & Automation", "Ứng dụng AI vào bán hàng, vận hành và báo cáo."],
-                      ["Creative Technology", "Nơi sáng tạo gặp công nghệ và sản phẩm số."],
-                    ].map(([name, desc]) => (
-                      <li key={name} className="flex items-start gap-4 py-4">
-                        <span
-                          className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-red-600"
-                          aria-hidden="true"
-                        />
+                      { icon: Compass, name: "Branding & Growth", desc: "Định vị, nhận diện và tăng trưởng thương hiệu." },
+                      { icon: Workflow, name: "AI & Automation", desc: "Ứng dụng AI vào bán hàng, vận hành và báo cáo." },
+                      { icon: Shapes, name: "Creative Technology", desc: "Nơi sáng tạo gặp công nghệ và sản phẩm số." },
+                    ].map(({ icon, name, desc }) => (
+                      /* Was a 6px red dot per row. The upcoming topics map onto
+                         real service groups, so they get those groups' icons. */
+                      <li key={name} className="group flex items-start gap-4 py-4">
+                        <IconTile icon={icon} size="sm" />
                         <span>
                           <span className="block font-semibold text-gray-900">{name}</span>
                           <span className="mt-0.5 block text-sm text-gray-600">{desc}</span>

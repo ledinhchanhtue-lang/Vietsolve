@@ -69,16 +69,26 @@ export function ProjectVisual({
   /* Real asset — framed, cover-cropped, explicit ratio, lazy unless priority */
   if (project.image) {
     return (
-      <div className={cn(FRAME, className)}>
-        <Image
-          src={project.image}
-          alt={`${project.name} — ${project.summary.vi}`}
-          fill
-          priority={priority}
-          loading={priority ? undefined : "lazy"}
-          sizes={sizes}
-          className="object-cover transition-transform duration-500 ease-out group-hover:scale-[1.03]"
-        />
+      <div className={cn(FRAME, "bg-white", className)}>
+        {/* Presentation layer: a light browser chrome so a screenshot reads as
+            shipped work rather than a bare rectangle pasted onto white. */}
+        <div className="absolute inset-x-0 top-0 z-10 flex h-7 items-center gap-1.5 border-b border-gray-200 bg-gray-50 px-3">
+          <span className="h-2 w-2 rounded-full bg-gray-300" />
+          <span className="h-2 w-2 rounded-full bg-gray-300" />
+          <span className="h-2 w-2 rounded-full bg-gray-300" />
+          <span className="ml-2 h-2.5 flex-1 rounded-full bg-gray-200" />
+        </div>
+        <div className="absolute inset-x-0 bottom-0 top-7 overflow-hidden">
+          <Image
+            src={project.image}
+            alt={`${project.name} — ${project.summary.vi}`}
+            fill
+            priority={priority}
+            loading={priority ? undefined : "lazy"}
+            sizes={sizes}
+            className="object-cover object-top transition-transform duration-500 ease-out group-hover:scale-[1.03]"
+          />
+        </div>
         <FrameAccents />
       </div>
     )
