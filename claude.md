@@ -88,8 +88,7 @@ Homepage: tên + 1 câu + 3 highlight + link. `/services`: danh sách đầy đ�
 |---|---|
 | `service-visual.tsx` | 6 composition SVG riêng cho 6 nhóm dịch vụ (homepage + /services). Key theo `group.id` — **thêm nhóm mới phải thêm composition**, không sẽ render rỗng. |
 | `project-visual.tsx` | Thumbnail dự án: có ảnh thật → khung browser chrome; chưa có → visual sinh theo slug |
-| `lac-signature.tsx` | Chim Lạc signature section (About) — construction light-theme, tự vẽ nét khi vào viewport, motif trống đồng trừu tượng. **Không phải logo** — logo không bao giờ vẽ lại. |
-| `about-hero-visual.tsx` | Hero About: contour Lạc + grid + keyword panels |
+| `lac-signature.tsx` + `about-hero-visual.tsx` | Chim Lạc = **hình học THẬT trace từ logo** (`lib/lac-path.ts`, potrace từ `logo-vietsolve-official.png` vùng 370×357@645,265). Viền tự vẽ theo contour thật rồi fill đỏ hiện dần. **Đừng vẽ tay đường cong thay thế** — logo đổi thì trace lại, không sửa path bằng tay. |
 | `capability-constellation.tsx` | Hệ sinh thái 7 năng lực dạng hub + node (desktop) / pills (mobile). Mô tả lấy từ tagline services.ts — không viết copy mới. |
 | `pillar-visual.tsx` | 3 micro-drawing giá trị cốt lõi (dùng chung homepage + About) |
 

@@ -1,21 +1,20 @@
 "use client"
 
 import { TechLayer } from "@/components/tech/tech-layer"
+import { LAC_PATH, LAC_VIEWBOX } from "@/lib/lac-path"
 
 /**
  * Chim Lạc — the signature visual moment of the About page.
  *
- * A large light-theme construction drawing of the mark: base silhouette wash,
- * contour that draws itself in, construction geometry, a ring of Đông Sơn-drum
- * concentric motifs at low opacity, anchor points and coordinate markers, and
- * one segmented red signal line retracing the flight path.
+ * The bird is the REAL mark from the logo (traced to vectors in lib/lac-path),
+ * presented as a large construction drawing: Đông Sơn-inspired concentric
+ * rings, radial ticks and axes behind it, the outline drawing itself along the
+ * true contour when the section scrolls into view, then the brand-red fill
+ * breathing in underneath. Anchor pulses on the ring intersections finish the
+ * composition, and everything then stands still.
  *
- * "Vietnamese identity interpreted through modern technology" — so the drum
- * reference stays abstract (concentric rings + radial ticks), never a museum
- * illustration.
- *
- * All animation is one-shot draw work gated by the TechLayer observer and
- * flattened by prefers-reduced-motion. Decorative: aria-hidden.
+ * Gated by the TechLayer observer; flattened under prefers-reduced-motion.
+ * Decorative: aria-hidden.
  */
 export function LacSignatureVisual() {
   return (
@@ -35,7 +34,12 @@ export function LacSignatureVisual() {
                 const y1 = 240 + Math.sin(a) * 196
                 const x2 = 240 + Math.cos(a) * 210
                 const y2 = 240 + Math.sin(a) * 210
-                return <path key={i} d={`M${x1.toFixed(1)} ${y1.toFixed(1)} L ${x2.toFixed(1)} ${y2.toFixed(1)}`} />
+                return (
+                  <path
+                    key={i}
+                    d={`M${x1.toFixed(1)} ${y1.toFixed(1)} L ${x2.toFixed(1)} ${y2.toFixed(1)}`}
+                  />
+                )
               })}
             </g>
             <g stroke="rgb(15 23 42 / 0.12)" strokeWidth="1">
@@ -43,98 +47,45 @@ export function LacSignatureVisual() {
               <path d="M78 402 L 402 78" strokeDasharray="4 8" />
             </g>
 
-            {/* Base silhouette — a warm wash under the line work */}
-            <path
-              d="M96 300 C 140 236, 210 196, 300 188 C 322 178 344 172 372 172 L 396 162 L 374 180 C 350 184 330 190 306 198 C 276 222 240 240 198 252 C 224 254 244 250 262 244 C 230 270 192 284 150 288 C 128 300 108 318 92 344 C 92 328 93 313 96 300 Z"
-              fill="rgb(220 38 38 / 0.05)"
-            />
+            {/* Anchor pulses where the axes meet the outer ring */}
+            <g fill="rgb(220 38 38 / 0.5)">
+              <circle cx="240" cy="44" r="3.5" className="vs-node vs-anim" />
+              <circle cx="436" cy="240" r="3.5" className="vs-node vs-anim" style={{ animationDelay: "-1.3s" }} />
+              <circle cx="240" cy="436" r="3.5" className="vs-node vs-anim" style={{ animationDelay: "-2.4s" }} />
+              <circle cx="44" cy="240" r="3.5" className="vs-node vs-anim" style={{ animationDelay: "-3.2s" }} />
+            </g>
 
-            {/* Contour — draws in when the section arrives */}
-            <g
-              stroke="rgb(15 23 42 / 0.8)"
-              strokeWidth="2.5"
+            {/* Coordinate markers — identity-manual annotation */}
+            <g fill="rgb(15 23 42 / 0.35)" fontSize="10" fontFamily="monospace">
+              <text x="252" y="40">240 · 44</text>
+              <text x="330" y="454">370 × 357</text>
+            </g>
+          </svg>
+
+          {/* The bird — real logo geometry, large, centred on the drum */}
+          <svg
+            viewBox={LAC_VIEWBOX}
+            className="absolute left-1/2 top-1/2 h-[62%] w-[62%] -translate-x-1/2 -translate-y-1/2"
+            fill="none"
+          >
+            <path
+              d={LAC_PATH}
+              fill="#dc2626"
+              fillRule="evenodd"
+              stroke="none"
+              className="vs-anim"
+              style={{ animation: "vs-fill-in 1s ease-out 2s backwards" }}
+            />
+            <path
+              d={LAC_PATH}
+              pathLength={1}
+              stroke="rgb(153 27 27 / 0.9)"
+              strokeWidth="2"
               strokeLinecap="round"
               strokeLinejoin="round"
-            >
-              <path d="M96 300 C 140 236, 210 196, 300 188" pathLength={1} className="vs-draw vs-anim" />
-              <path
-                d="M300 188 C 272 216, 236 236, 198 252"
-                pathLength={1}
-                className="vs-draw vs-anim"
-                style={{ animationDelay: "0.4s" }}
-              />
-              <path
-                d="M96 300 C 124 296, 162 284, 198 252"
-                pathLength={1}
-                className="vs-draw vs-anim"
-                style={{ animationDelay: "0.65s" }}
-              />
-              <path
-                d="M96 300 C 76 314, 60 332, 48 356"
-                pathLength={1}
-                className="vs-draw vs-anim"
-                style={{ animationDelay: "0.9s" }}
-              />
-              <path
-                d="M110 310 C 94 328, 82 346, 76 368"
-                pathLength={1}
-                className="vs-draw vs-anim"
-                style={{ animationDelay: "1.05s" }}
-              />
-              <path
-                d="M126 318 C 116 338, 110 356, 108 376"
-                pathLength={1}
-                className="vs-draw vs-anim"
-                style={{ animationDelay: "1.2s" }}
-              />
-            </g>
-
-            {/* Head + beak in red */}
-            <g stroke="#dc2626" strokeWidth="2.5" strokeLinecap="round">
-              <path
-                d="M300 188 C 322 178, 344 172, 372 172"
-                pathLength={1}
-                className="vs-draw vs-anim"
-                style={{ animationDelay: "1.4s" }}
-              />
-              <path
-                d="M372 172 L 396 162"
-                pathLength={1}
-                className="vs-draw vs-anim"
-                style={{ animationDelay: "1.6s" }}
-              />
-            </g>
-
-            {/* Segmented signal line retracing the flight path */}
-            <path
-              d="M48 356 C 120 300, 210 240, 300 188 C 330 172, 360 166, 396 162"
-              pathLength={1}
-              stroke="rgb(251 113 133 / 0.65)"
-              strokeWidth="1.75"
-              strokeDasharray="0.04 0.03"
-              fill="none"
               className="vs-draw vs-anim"
-              style={{ animationDelay: "1.8s", animationDuration: "2.2s" }}
+              style={{ animationDuration: "2.4s" }}
             />
-
-            {/* Anchor points */}
-            <g fill="rgb(220 38 38 / 0.65)">
-              <circle cx="96" cy="300" r="4" className="vs-node vs-anim" />
-              <circle cx="198" cy="252" r="4" className="vs-node vs-anim" style={{ animationDelay: "-1.2s" }} />
-              <circle cx="300" cy="188" r="4" className="vs-node vs-anim" style={{ animationDelay: "-2.4s" }} />
-              <circle cx="396" cy="162" r="4" className="vs-node vs-anim" style={{ animationDelay: "-3.1s" }} />
-            </g>
-            <g fill="rgb(15 23 42 / 0.3)">
-              <circle cx="48" cy="356" r="3" />
-              <circle cx="108" cy="376" r="3" />
-            </g>
-
-            {/* Coordinate markers */}
-            <g fill="rgb(15 23 42 / 0.35)" fontSize="10" fontFamily="monospace">
-              <text x="30" y="378">48 · 356</text>
-              <text x="352" y="150">396 · 162</text>
-              <text x="206" y="272">198 · 252</text>
-            </g>
           </svg>
         </TechLayer>
       </div>
