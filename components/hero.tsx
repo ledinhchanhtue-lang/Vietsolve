@@ -1,8 +1,7 @@
 "use client"
 
-import { ArrowRight } from "lucide-react"
 import { Pacifico } from "next/font/google"
-import AnimatedButton from "./animated-button"
+import { PrimaryButton } from "@/components/ui-kit/button"
 import Link from "next/link"
 import { cn } from "@/lib/utils"
 import { useLanguage } from "@/lib/i18n"
@@ -72,14 +71,10 @@ export default function Hero() {
           </div>
 
           <div className="flex flex-col sm:flex-row gap-3 items-center justify-center lg:justify-start">
-            <Link href="/contact">
-              <AnimatedButton variant="slim" className="bg-red-600 text-white hover:bg-red-700">
-                <span className="flex items-center">
-                  {t.hero.ctaStart}
-                  <ArrowRight className="ml-2 h-4 w-4" />
-                </span>
-              </AnimatedButton>
-            </Link>
+            {/* Was <AnimatedButton variant="slim"> — "slim" is not a valid
+                variant, so the styling silently fell back and the button was
+                also an <a> nested inside a <Link>. */}
+            <PrimaryButton href="/contact">{t.hero.ctaStart}</PrimaryButton>
             <Link
               href="/case-studies"
               className="inline-flex items-center justify-center min-h-[44px] px-6 rounded-full border border-gray-300 bg-white/70 text-gray-900 font-medium hover:bg-white hover:border-gray-400 transition-colors backdrop-blur-sm"

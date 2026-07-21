@@ -364,11 +364,15 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     }
   }, [lang])
 
+  /* `translations` is `as const`, so translations[lang] is a union of the VI and
+     EN literal shapes. They are structurally identical, but the literal string
+     types differ, so the union is not assignable to Translations (which is keyed
+     off VI). The cast below is what keeps per-key autocomplete working. */
   const setLang = (l: Language) => setLangState(l)
   const toggle = () => setLangState((prev) => (prev === "vi" ? "en" : "vi"))
 
   return (
-    <LanguageContext.Provider value={{ lang, setLang, toggle, t: translations[lang] }}>
+    <LanguageContext.Provider value={{ lang, setLang, toggle, t: translations[lang] as Translations }}>
       {children}
     </LanguageContext.Provider>
   )

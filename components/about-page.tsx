@@ -85,7 +85,9 @@ export default function AboutPage() {
               </motion.div>
 
               <h1 className="text-5xl lg:text-7xl font-bold text-gray-900 mb-8 leading-tight">
-                Tổng quan về
+                {/* The space before the break matters: without it the h1 reads
+                    "Tổng quan vềVietSolve" to screen readers and crawlers. */}
+                Tổng quan về{" "}
                 <br />
                 <span className="bg-gradient-to-r from-red-600 via-red-800 to-gray-900 bg-clip-text text-transparent">
                   VietSolve
@@ -137,8 +139,8 @@ export default function AboutPage() {
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
               {/* Main content - spans 2 columns */}
               <motion.div
-                initial={{ opacity: 0, x: -30 }}
-                whileInView={{ opacity: 1, x: 0 }}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8 }}
                 viewport={{ once: true }}
                 className="lg:col-span-2 space-y-6"
@@ -198,8 +200,8 @@ export default function AboutPage() {
 
               {/* Sidebar - spans 1 column */}
               <motion.div
-                initial={{ opacity: 0, x: 30 }}
-                whileInView={{ opacity: 1, x: 0 }}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8 }}
                 viewport={{ once: true }}
                 className="space-y-6"

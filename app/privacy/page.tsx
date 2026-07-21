@@ -4,7 +4,8 @@ import LegalPage from "@/components/legal-page"
 
 export const metadata = {
   title: "Chính sách bảo mật",
-  description: "Cách VietSolve thu thập, sử dụng và bảo vệ thông tin bạn gửi qua website.",
+  description:
+    "Cách VietSolve thu thập, sử dụng và bảo vệ thông tin bạn gửi qua website: dữ liệu từ biểu mẫu liên hệ, lưu trữ ngôn ngữ trong trình duyệt và quyền của bạn.",
   alternates: { canonical: "/privacy" },
 }
 

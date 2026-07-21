@@ -36,6 +36,15 @@
     /* Changed from bg-black text-foreground to light theme */
     @apply bg-white text-gray-900;
   }
+  /* Safety net for mobile: framer-motion entrance states that translate on X
+     (and the wide decorative SVG paths) pushed the document ~24px past a 375px
+     viewport, so the whole page could be dragged sideways. `clip` is used
+     instead of `hidden` because it does not create a scroll container — nothing
+     here is position:sticky today, but this keeps that option open. */
+  html,
+  body {
+    overflow-x: clip;
+  }
 }
 
 @layer utilities {
