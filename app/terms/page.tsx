@@ -3,7 +3,7 @@ import AnimatedFooter from "@/components/animated-footer"
 import LegalPage from "@/components/legal-page"
 
 export const metadata = {
-  title: "Điều khoản sử dụng - VietSolve",
+  title: "Điều khoản sử dụng",
   description: "Điều khoản sử dụng website VietSolve.",
   alternates: { canonical: "/terms" },
 }

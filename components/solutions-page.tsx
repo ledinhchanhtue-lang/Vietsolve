@@ -6,11 +6,11 @@ import {
   Brain,
   Palette,
   Cpu,
-  Sparkles,
+  Compass,
   TrendingUp,
   Clapperboard,
-  MonitorSmartphone,
-  Bot,
+  AppWindow,
+  Workflow,
   BarChart3,
   Check,
   ArrowRight,
@@ -31,12 +31,13 @@ import { serviceGroups } from "@/lib/content/services"
  * No pricing is shown — there is no verified price list.
  */
 
+/* Must stay in sync with the `icon` names in lib/content/services.ts */
 const GROUP_ICONS: Record<string, LucideIcon> = {
-  Sparkles,
+  Compass,
   TrendingUp,
   Clapperboard,
-  MonitorSmartphone,
-  Bot,
+  AppWindow,
+  Workflow,
   BarChart3,
 }
 
@@ -56,7 +57,7 @@ export default function SolutionsPage() {
   ]
 
   return (
-    <div className="min-h-screen bg-white">
+    <main id="main" className="min-h-screen bg-white">
       {/* Hero */}
       <section className="pt-32 pb-14 md:pt-40 md:pb-20 px-4 bg-gradient-to-br from-white via-red-50/30 to-gray-50/40">
         <div className="max-w-[1200px] mx-auto text-center">
@@ -93,18 +94,23 @@ export default function SolutionsPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.25 }}
           >
-            <Link
-              href="/contact"
-              className="inline-flex items-center gap-2 px-8 py-4 bg-red-700 text-white rounded-lg font-semibold hover:bg-red-800 transition-colors"
+            {/* Both CTAs have a real destination: one scrolls to the ecosystem
+                section, the other pre-fills the contact form's context. */}
+            <a
+              href="#service-ecosystem"
+              className="group inline-flex min-h-[48px] items-center justify-center gap-2 rounded-full bg-red-700 px-8 font-semibold text-white transition-all duration-200 hover:bg-red-800 hover:-translate-y-px focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-600 focus-visible:ring-offset-2"
             >
-              Trao đổi dự án
-              <ArrowRight className="h-4 w-4" />
-            </Link>
+              Khám phá giải pháp
+              <ArrowRight
+                className="h-4 w-4 transition-transform duration-200 group-hover:translate-y-0.5 rotate-90"
+                aria-hidden="true"
+              />
+            </a>
             <Link
-              href="/case-studies"
-              className="px-8 py-4 border-2 border-red-700 text-red-700 rounded-lg font-semibold hover:bg-red-50 transition-colors"
+              href="/contact?service=consulting"
+              className="inline-flex min-h-[48px] items-center justify-center rounded-full border border-gray-300 bg-white px-8 font-semibold text-gray-900 transition-colors hover:bg-gray-50 hover:border-gray-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-600 focus-visible:ring-offset-2"
             >
-              Xem dự án
+              Nhận tư vấn
             </Link>
           </motion.div>
         </div>
@@ -135,10 +141,8 @@ export default function SolutionsPage() {
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
               >
-                <div className="w-14 h-14 bg-red-100 rounded-xl flex items-center justify-center mb-6">
-                  <p.icon className="w-7 h-7 text-red-700" />
-                </div>
-                <div className="flex items-baseline gap-2">
+                <p.icon className="h-9 w-9 text-gray-900" strokeWidth={1.5} aria-hidden="true" />
+                <div className="mt-6 flex items-baseline gap-2">
                   <h3 className="text-xl font-bold text-gray-900">{p.title}</h3>
                   <span className="text-xs font-medium text-gray-400 uppercase tracking-wider">
                     {p.en}
@@ -152,7 +156,7 @@ export default function SolutionsPage() {
       </section>
 
       {/* Six service groups — full lists */}
-      <section className="py-16 md:py-24 px-4 bg-gray-50">
+      <section id="service-ecosystem" className="scroll-mt-24 py-16 md:py-24 px-4 bg-gray-50">
         <div className="max-w-[1200px] mx-auto">
           <motion.h2
             className="text-3xl md:text-4xl font-bold text-center mb-4"
@@ -168,7 +172,7 @@ export default function SolutionsPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {serviceGroups.map((group, index) => {
-              const Icon = GROUP_ICONS[group.icon] ?? Sparkles
+              const Icon = GROUP_ICONS[group.icon] ?? Compass
               return (
                 <motion.div
                   key={group.id}
@@ -179,10 +183,8 @@ export default function SolutionsPage() {
                   viewport={{ once: true }}
                   transition={{ duration: 0.5, delay: (index % 3) * 0.1 }}
                 >
-                  <div className="w-14 h-14 bg-red-100 rounded-xl flex items-center justify-center mb-6">
-                    <Icon className="w-7 h-7 text-red-700" />
-                  </div>
-                  <h3 className="text-xl font-bold text-gray-900">{group.name[lang]}</h3>
+                  <Icon className="h-9 w-9 text-gray-900" strokeWidth={1.5} aria-hidden="true" />
+                  <h3 className="mt-6 text-xl font-bold text-gray-900">{group.name[lang]}</h3>
                   <p className="mt-3 text-gray-600 leading-relaxed">{group.tagline[lang]}</p>
                   <ul className="mt-6 space-y-3 flex-1">
                     {group.services[lang].map((s) => (
@@ -195,6 +197,7 @@ export default function SolutionsPage() {
                   <Link
                     href="/contact"
                     className="mt-7 inline-flex items-center gap-1.5 text-sm font-semibold text-red-600 hover:text-red-700 transition-colors"
+                    aria-label={`Trao đổi về ${group.name[lang]}`}
                   >
                     Trao đổi về nhóm này
                     <ArrowRight className="h-4 w-4" />
@@ -255,6 +258,6 @@ export default function SolutionsPage() {
           </div>
         </div>
       </section>
-    </div>
+    </main>
   )
 }

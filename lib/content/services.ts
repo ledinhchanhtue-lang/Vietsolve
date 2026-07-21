@@ -24,7 +24,7 @@ export type ServiceGroup = {
 export const serviceGroups: ServiceGroup[] = [
   {
     id: "branding-strategy",
-    icon: "Sparkles",
+    icon: "Compass",
     name: { vi: "Branding & Strategy", en: "Branding & Strategy" },
     tagline: {
       vi: "Xây dựng chiến lược và nhận diện thương hiệu khác biệt, nhất quán.",
@@ -75,7 +75,7 @@ export const serviceGroups: ServiceGroup[] = [
   },
   {
     id: "website-digital",
-    icon: "MonitorSmartphone",
+    icon: "AppWindow",
     name: { vi: "Website & Digital Products", en: "Website & Digital Products" },
     tagline: {
       vi: "Website và sản phẩm số biết bán hàng và tham gia vào vận hành.",
@@ -92,7 +92,7 @@ export const serviceGroups: ServiceGroup[] = [
   },
   {
     id: "ai-automation",
-    icon: "Bot",
+    icon: "Workflow",
     name: { vi: "AI Agents & Automation", en: "AI Agents & Automation" },
     tagline: {
       vi: "AI Agent và automation xử lý khách hàng, dữ liệu và tác vụ lặp lại.",

@@ -12,19 +12,19 @@ export default function HowWeWork() {
       number: "01",
       title: t.howWeWork.step1Title,
       description: t.howWeWork.step1Desc,
-      icon: <Lightbulb className="w-8 h-8" />,
+      icon: <Lightbulb className="w-8 h-8" strokeWidth={1.5} />,
     },
     {
       number: "02",
       title: t.howWeWork.step2Title,
       description: t.howWeWork.step2Desc,
-      icon: <Users className="w-8 h-8" />,
+      icon: <Users className="w-8 h-8" strokeWidth={1.5} />,
     },
     {
       number: "03",
       title: t.howWeWork.step3Title,
       description: t.howWeWork.step3Desc,
-      icon: <Rocket className="w-8 h-8" />,
+      icon: <Rocket className="w-8 h-8" strokeWidth={1.5} />,
     },
   ]
 
@@ -44,34 +44,41 @@ export default function HowWeWork() {
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">{t.howWeWork.subtitle}</p>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {steps.map((step, index) => (
-            <motion.div
-              key={step.number}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: index * 0.2 }}
-              className="relative group bg-red-50 rounded-2xl p-8 border-2 border-red-200 hover:border-red-600 transition-all duration-300 hover:shadow-xl hover:shadow-red-100"
-            >
-              {/* Number Badge */}
-              <div className="absolute -top-6 left-8">
-                <div className="w-12 h-12 bg-red-700 text-white rounded-full flex items-center justify-center text-xl font-bold shadow-lg">
-                  {step.number}
+        {/* One connecting line runs through all three steps on desktop */}
+        <div className="relative">
+          <div
+            className="absolute left-0 right-0 top-6 hidden h-px bg-gradient-to-r from-transparent via-red-200 to-transparent md:block"
+            aria-hidden="true"
+          />
+
+          <div className="relative grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-10">
+            {steps.map((step, index) => (
+              <motion.div
+                key={step.number}
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: index * 0.12 }}
+                className="group text-center md:text-left"
+              >
+                {/* Number sits on the connecting line */}
+                <div className="flex justify-center md:justify-start">
+                  <span className="relative z-10 flex h-12 w-12 items-center justify-center rounded-full border-2 border-red-200 bg-white text-lg font-bold text-red-700 transition-colors duration-300 group-hover:border-red-600">
+                    {step.number}
+                  </span>
                 </div>
-              </div>
 
-              {/* Icon */}
-              <div className="mt-8 mb-6 text-red-700">{step.icon}</div>
+                <div className="mt-6 flex justify-center text-gray-900 md:justify-start" aria-hidden="true">
+                  {step.icon}
+                </div>
 
-              {/* Content */}
-              <h3 className="text-2xl font-bold text-red-800 mb-4">{step.title}</h3>
-              <p className="text-gray-600 leading-relaxed">{step.description}</p>
-
-              {/* Decorative Element */}
-              <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-red-600 to-red-800 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 rounded-b-2xl" />
-            </motion.div>
-          ))}
+                <h3 className="mt-5 text-xl font-bold text-gray-900">{step.title}</h3>
+                <p className="mt-3 leading-relaxed text-gray-600 max-w-[38ch] mx-auto md:mx-0">
+                  {step.description}
+                </p>
+              </motion.div>
+            ))}
+          </div>
         </div>
       </div>
     </section>

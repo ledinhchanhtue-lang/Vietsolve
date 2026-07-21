@@ -1,9 +1,12 @@
 "use client"
 
+import { useEffect, useState } from "react"
 import Link from "next/link"
 import { motion } from "framer-motion"
-import { ArrowRight } from "lucide-react"
+import { ArrowRight, X } from "lucide-react"
 import { projects } from "@/lib/content/projects"
+import { ProjectVisual } from "@/components/project-visual"
+import { PrimaryButton } from "@/components/ui-kit/button"
 
 /**
  * Case studies — white theme, real projects only.
@@ -19,8 +22,26 @@ import { projects } from "@/lib/content/projects"
  * figure with a source has been added.
  */
 export default function CaseStudiesPage() {
+  const [open, setOpen] = useState<string | null>(null)
+  const active = projects.find((p) => p.slug === open) ?? null
+
+  // Escape closes the modal; body scroll is restored on unmount.
+  useEffect(() => {
+    if (!open) return
+    const prev = document.body.style.overflow
+    document.body.style.overflow = "hidden"
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setOpen(null)
+    }
+    document.addEventListener("keydown", onKey)
+    return () => {
+      document.body.style.overflow = prev
+      document.removeEventListener("keydown", onKey)
+    }
+  }, [open])
+
   return (
-    <main className="bg-white">
+    <main id="main" className="bg-white">
       {/* Hero */}
       <section className="relative pt-32 pb-16 lg:pt-40 lg:pb-20 bg-gradient-to-br from-white via-red-50/30 to-gray-50/40">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -54,22 +75,8 @@ export default function CaseStudiesPage() {
             {projects.map((project, index) => {
               const card = (
                 <>
-                  {/* Brand visual, generated per project — no broken images and
-                      no stock photography stand-ins. */}
-                  <div className="relative aspect-[16/10] rounded-2xl overflow-hidden bg-gradient-to-br from-gray-900 via-gray-800 to-red-950 flex items-end p-7">
-                    <div
-                      className="absolute inset-0 opacity-40"
-                      style={{
-                        backgroundImage:
-                          "linear-gradient(rgba(255,255,255,0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.06) 1px, transparent 1px)",
-                        backgroundSize: "40px 40px",
-                      }}
-                      aria-hidden="true"
-                    />
-                    <span className="relative text-2xl font-bold text-white/90">
-                      {project.name}
-                    </span>
-                  </div>
+                  {/* Shared visual system — each project renders differently */}
+                  <ProjectVisual project={project} priority={index === 0} />
 
                   <div className="mt-6">
                     <div className="flex items-center gap-3 text-xs font-semibold uppercase tracking-wider">
@@ -109,6 +116,19 @@ export default function CaseStudiesPage() {
                         ))}
                       </dl>
                     )}
+                    {/* No detail page exists yet, so instead of a CTA that would
+                        404 we open a modal built from this project's real data. */}
+                    <button
+                      type="button"
+                      onClick={() => setOpen(project.slug)}
+                      className="group/cta mt-6 inline-flex min-h-[44px] items-center gap-1.5 text-sm font-semibold text-red-600 transition-colors hover:text-red-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-600 focus-visible:ring-offset-2 rounded-sm"
+                    >
+                      Xem phạm vi dự án
+                      <ArrowRight
+                        className="h-4 w-4 transition-transform duration-200 group-hover/cta:translate-x-1"
+                        aria-hidden="true"
+                      />
+                    </button>
                   </div>
                 </>
               )
@@ -142,15 +162,82 @@ export default function CaseStudiesPage() {
             Chia sẻ với VietSolve về mục tiêu của doanh nghiệp, chúng tôi sẽ cùng bạn xác định hướng
             triển khai phù hợp.
           </p>
-          <Link
-            href="/contact"
-            className="mt-9 inline-flex items-center justify-center gap-2 min-h-[48px] px-8 rounded-full bg-red-600 text-white font-medium hover:bg-red-700 transition-colors"
-          >
-            Liên hệ ngay
-            <ArrowRight className="h-4 w-4" />
-          </Link>
+          {/* Label states the destination — not a generic "Liên hệ ngay" */}
+          <div className="mt-9">
+            <PrimaryButton href="/contact">Trao đổi dự án</PrimaryButton>
+          </div>
         </div>
       </section>
+
+      {/* Scope modal — content comes entirely from lib/content/projects.ts.
+          Deliberately NOT wrapped in AnimatePresence: an exit animation keeps
+          the overlay mounted until rAF completes, and if that never runs the
+          invisible overlay would swallow every click on the page. Enter-only
+          animation is safe because unmount is immediate. */}
+      {active && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.2 }}
+            className="fixed inset-0 z-[60] flex items-end justify-center bg-gray-900/50 p-0 backdrop-blur-sm sm:items-center sm:p-6"
+            onClick={() => setOpen(null)}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="scope-title"
+          >
+            <motion.div
+              initial={{ opacity: 0, y: 24 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+              onClick={(e) => e.stopPropagation()}
+              className="max-h-[88vh] w-full max-w-2xl overflow-y-auto rounded-t-3xl bg-white p-7 shadow-xl sm:rounded-3xl sm:p-10"
+            >
+              <div className="flex items-start justify-between gap-4">
+                <div>
+                  <div className="flex items-center gap-3 text-xs font-semibold uppercase tracking-wider">
+                    <span className="text-red-600">{active.industry.vi}</span>
+                    <span className="text-gray-300" aria-hidden="true">•</span>
+                    <span className="text-gray-500">{active.year}</span>
+                  </div>
+                  <h2 id="scope-title" className="mt-2 text-2xl font-bold text-gray-900 sm:text-3xl">
+                    {active.name}
+                  </h2>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setOpen(null)}
+                  aria-label="Đóng"
+                  className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-600"
+                >
+                  <X className="h-5 w-5" aria-hidden="true" />
+                </button>
+              </div>
+
+              <p className="mt-5 text-gray-600 leading-relaxed">{active.summary.vi}</p>
+
+              <div className="mt-7">
+                <h3 className="text-sm font-bold uppercase tracking-wider text-gray-900">
+                  Phạm vi VietSolve đã triển khai
+                </h3>
+                <ul className="mt-4 space-y-2.5">
+                  {active.deliverables.vi.map((d) => (
+                    <li key={d} className="flex items-start gap-3 text-gray-700">
+                      <span
+                        className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-red-600"
+                        aria-hidden="true"
+                      />
+                      {d}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <div className="mt-8 border-t border-gray-200 pt-6">
+                <PrimaryButton href="/contact">Trao đổi dự án tương tự</PrimaryButton>
+              </div>
+            </motion.div>
+          </motion.div>
+      )}
     </main>
   )
 }

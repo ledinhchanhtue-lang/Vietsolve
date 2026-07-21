@@ -7,7 +7,7 @@ import ContactPage from "@/components/contact-page"
 import BackgroundPaths from "@/components/background-paths"
 
 export const metadata: Metadata = {
-  title: "Liên hệ VietSolve — Trao đổi dự án",
+  title: { absolute: "Liên hệ VietSolve — Trao đổi dự án" },
   description:
     "Chia sẻ bài toán của doanh nghiệp — VietSolve sẽ liên hệ để cùng xác định hướng triển khai phù hợp về branding, marketing, website, AI và automation.",
   alternates: { canonical: "/contact" },

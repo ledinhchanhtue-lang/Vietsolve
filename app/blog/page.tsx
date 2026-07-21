@@ -10,7 +10,7 @@ import { hasInsights } from "@/lib/content/insights"
  * automatically once an article is published in lib/content/insights.ts.
  */
 export const metadata: Metadata = {
-  title: "Blog & Insights — VietSolve",
+  title: "Blog & Insights",
   description:
     "Góc nhìn của VietSolve về thương hiệu, marketing, website và công nghệ dành cho doanh nghiệp Việt.",
   alternates: { canonical: "/blog" },

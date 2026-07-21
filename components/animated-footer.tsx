@@ -4,7 +4,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { motion } from "framer-motion"
 import { Instagram, Twitter, Linkedin, Youtube, Mail, Phone, MapPin } from "lucide-react"
-import AnimatedButton from "./animated-button"
+import { PrimaryButton } from "@/components/ui-kit/button"
 import { useLanguage } from "@/lib/i18n"
 import { siteConfig, readVerified } from "@/lib/site-config"
 
@@ -113,7 +113,7 @@ export default function AnimatedFooter() {
                         resolve to the services page. */}
                     <Link
                       href="/services"
-                      className="text-gray-300 hover:text-white transition-colors duration-200 flex items-center justify-center sm:justify-start group"
+                      className="flex min-h-[44px] items-center justify-center sm:justify-start text-gray-300 hover:text-white transition-colors duration-200 group"
                     >
                       <span className="w-0 group-hover:w-2 h-0.5 bg-red-500 transition-all duration-200 mr-0 group-hover:mr-2" />
                       {link}
@@ -135,7 +135,7 @@ export default function AnimatedFooter() {
                 {contactEmail && (
                   <a
                     href={`mailto:${contactEmail}`}
-                    className="flex items-center space-x-3 text-gray-300 justify-center sm:justify-start hover:text-white transition-colors"
+                    className="flex min-h-11 items-center space-x-3 text-gray-300 justify-center sm:justify-start hover:text-white transition-colors"
                   >
                     <Mail className="h-5 w-5 text-red-500" />
                     <span>{contactEmail}</span>
@@ -144,7 +144,7 @@ export default function AnimatedFooter() {
                 {contactPhone && (
                   <a
                     href={`tel:${contactPhone.replace(/[^\d+]/g, "")}`}
-                    className="flex items-center space-x-3 text-gray-300 justify-center sm:justify-start hover:text-white transition-colors"
+                    className="flex min-h-11 items-center space-x-3 text-gray-300 justify-center sm:justify-start hover:text-white transition-colors"
                   >
                     <Phone className="h-5 w-5 text-red-500" />
                     <span>{contactPhone}</span>
@@ -163,14 +163,11 @@ export default function AnimatedFooter() {
               </div>
 
               <div className="mt-8">
-                <Link href="/contact">
-                  <AnimatedButton
-                    className="w-full bg-red-600 text-white hover:bg-red-700"
-                    gradient="radial-gradient(circle, rgba(220,38,38,0.2) 0%, rgba(185,28,28,0.1) 50%, rgba(153,27,27,0) 100%)"
-                  >
-                    {t.footer.startProject}
-                  </AnimatedButton>
-                </Link>
+                {/* ui-kit PrimaryButton guarantees the 48px target — the old
+                    AnimatedButton collapsed to a 20px inline box. */}
+                <PrimaryButton href="/contact" className="w-full">
+                  {t.footer.startProject}
+                </PrimaryButton>
               </div>
             </motion.div>
           </div>
@@ -191,10 +188,10 @@ export default function AnimatedFooter() {
             {/* These three pointed at href="#"; /privacy and /terms now exist.
                 The separate cookie policy is folded into the privacy page. */}
             <div className="flex space-x-6 text-sm">
-              <Link href="/privacy" className="text-gray-400 hover:text-white transition-colors">
+              <Link href="/privacy" className="inline-flex min-h-[44px] items-center text-gray-400 hover:text-white transition-colors">
                 {t.footer.privacy}
               </Link>
-              <Link href="/terms" className="text-gray-400 hover:text-white transition-colors">
+              <Link href="/terms" className="inline-flex min-h-[44px] items-center text-gray-400 hover:text-white transition-colors">
                 {t.footer.terms}
               </Link>
             </div>

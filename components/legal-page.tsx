@@ -79,7 +79,7 @@ export default function LegalPage({ kind }: { kind: "privacy" | "terms" }) {
           heading: "Tính chính xác của thông tin",
           body: [
             "Chúng tôi cố gắng giữ thông tin trên website chính xác và cập nhật. Các mô tả về năng lực và quy trình mang tính giới thiệu; phạm vi công việc, thời gian và chi phí cụ thể của từng dự án được xác định trong hợp đồng riêng.",
-            "Công cụ ước tính ROI trên website là minh họa tham khảo, không phải cam kết về kết quả.",
+            "Hình ảnh minh họa và giao diện demo trên website nhằm mục đích trình bày, không phải kết quả của một khách hàng cụ thể.",
           ],
         },
         {
@@ -97,7 +97,7 @@ export default function LegalPage({ kind }: { kind: "privacy" | "terms" }) {
   }[kind]
 
   return (
-    <main className="bg-white">
+    <main id="main" className="bg-white">
       <section className="pt-32 pb-12 lg:pt-40 lg:pb-16 bg-gradient-to-br from-white via-red-50/30 to-gray-50/40">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
           <h1 className="text-4xl lg:text-5xl font-bold text-gray-900">{content.title}</h1>

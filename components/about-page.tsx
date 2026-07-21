@@ -38,7 +38,7 @@ export default function AboutPage() {
   ]
 
   return (
-    <main className="bg-white">
+    <main id="main" className="bg-white">
         {/* Hero Section */}
         <section className="relative pt-32 pb-20 lg:pt-40 lg:pb-32 bg-gradient-to-br from-white via-red-50/30 to-gray-50/30 overflow-hidden">
           <div className="absolute left-0 top-32 w-64 h-[500px] opacity-40">

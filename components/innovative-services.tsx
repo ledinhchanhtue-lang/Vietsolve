@@ -1,19 +1,18 @@
 "use client"
 
 import { motion } from "framer-motion"
-import Link from "next/link"
 import {
-  Sparkles,
+  Compass,
   TrendingUp,
   Clapperboard,
-  MonitorSmartphone,
-  Bot,
+  AppWindow,
+  Workflow,
   BarChart3,
-  ArrowRight,
   type LucideIcon,
 } from "lucide-react"
 import { useLanguage } from "@/lib/i18n"
 import { serviceGroups } from "@/lib/content/services"
+import { TextLink, SecondaryButton } from "@/components/ui-kit/button"
 
 /**
  * Service ecosystem — the six service groups.
@@ -27,12 +26,14 @@ import { serviceGroups } from "@/lib/content/services"
  * /services can't drift apart. Homepage shows name + one line + three highlights.
  */
 
+/* Icon language per group — compass/growth-line/frame/window/workflow/chart.
+   Deliberately no robot or lightbulb clichés. */
 const ICONS: Record<string, LucideIcon> = {
-  Sparkles,
+  Compass,
   TrendingUp,
   Clapperboard,
-  MonitorSmartphone,
-  Bot,
+  AppWindow,
+  Workflow,
   BarChart3,
 }
 
@@ -60,7 +61,7 @@ export default function InnovativeServices() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
           {serviceGroups.map((group, index) => {
-            const Icon = ICONS[group.icon] ?? Sparkles
+            const Icon = ICONS[group.icon] ?? Compass
             return (
               <motion.div
                 key={group.id}
@@ -68,13 +69,12 @@ export default function InnovativeServices() {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: (index % 3) * 0.1 }}
                 viewport={{ once: true }}
-                className="group flex flex-col bg-white border border-gray-200 rounded-2xl p-8 hover:border-red-300 hover:shadow-md transition-all duration-300 shadow-sm"
+                className="group flex flex-col bg-white border border-gray-200 rounded-2xl p-8 shadow-sm transition-all duration-300 ease-out hover:border-gray-300 hover:shadow-md hover:-translate-y-1"
               >
-                <div className="w-14 h-14 bg-red-50 rounded-xl flex items-center justify-center mb-6 group-hover:bg-red-100 transition-colors">
-                  <Icon className="w-7 h-7 text-red-600" />
-                </div>
+                {/* Charcoal icon, no red circle — red is reserved as an accent */}
+                <Icon className="h-9 w-9 text-gray-900" strokeWidth={1.5} aria-hidden="true" />
 
-                <h3 className="text-xl font-bold text-gray-900">{group.name[lang]}</h3>
+                <h3 className="mt-6 text-xl font-bold text-gray-900">{group.name[lang]}</h3>
                 <p className="mt-3 text-gray-600 leading-relaxed">{group.tagline[lang]}</p>
 
                 <ul className="mt-5 flex flex-wrap gap-2">
@@ -88,26 +88,23 @@ export default function InnovativeServices() {
                   ))}
                 </ul>
 
-                <Link
-                  href={`/services#${group.id}`}
-                  className="mt-6 inline-flex items-center gap-1.5 text-sm font-semibold text-red-600 hover:text-red-700 transition-colors"
-                >
-                  {t.ecosystem.explore}
-                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
-                </Link>
+                <div className="mt-6 pt-1">
+                  <TextLink
+                    href={`/services#${group.id}`}
+                    ariaLabel={`${t.ecosystem.explore}: ${group.name[lang]}`}
+                  >
+                    {t.ecosystem.explore}
+                  </TextLink>
+                </div>
               </motion.div>
             )
           })}
         </div>
 
         <div className="mt-12 text-center">
-          <Link
-            href="/services"
-            className="inline-flex items-center justify-center gap-2 min-h-[44px] px-7 rounded-full border border-gray-300 text-gray-900 font-medium hover:bg-white hover:border-gray-400 transition-colors"
-          >
+          <SecondaryButton href="/services" withArrow>
             {t.ecosystem.viewAll}
-            <ArrowRight className="h-4 w-4" />
-          </Link>
+          </SecondaryButton>
         </div>
       </div>
     </section>

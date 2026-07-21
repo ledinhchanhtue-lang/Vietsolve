@@ -2,8 +2,8 @@
 
 import Link from "next/link"
 import { motion } from "framer-motion"
-import { ArrowRight } from "lucide-react"
 import { publishedInsights } from "@/lib/content/insights"
+import { PrimaryButton, SecondaryButton } from "@/components/ui-kit/button"
 
 /**
  * Blog / Insights — white theme.
@@ -20,7 +20,7 @@ export default function BlogPage() {
   const posts = publishedInsights
 
   return (
-    <main className="bg-white">
+    <main id="main" className="bg-white">
       {/* Hero */}
       <section className="relative pt-32 pb-16 lg:pt-40 lg:pb-20 bg-gradient-to-br from-white via-red-50/30 to-gray-50/40">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -51,34 +51,82 @@ export default function BlogPage() {
       <section className="py-16 lg:py-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {posts.length === 0 ? (
+            /* Editorial empty state — a designed page, not a heading floating
+               in whitespace. Categories preview what's coming; no fake posts. */
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
-              className="max-w-2xl rounded-3xl border border-gray-200 bg-gray-50/60 p-10 lg:p-14"
+              className="grid gap-10 lg:grid-cols-[1fr_1fr] lg:gap-16 items-start"
             >
-              <h2 className="text-2xl font-bold text-gray-900">
-                Bài viết đầu tiên đang được chuẩn bị
-              </h2>
-              <p className="mt-4 text-gray-600 leading-relaxed">
-                Trong lúc chờ, bạn có thể xem các dự án VietSolve đã thực hiện hoặc trao đổi trực
-                tiếp về bài toán của doanh nghiệp.
-              </p>
-              <div className="mt-8 flex flex-col sm:flex-row gap-3">
-                <Link
-                  href="/case-studies"
-                  className="inline-flex items-center justify-center gap-2 min-h-[44px] px-6 rounded-full bg-red-600 text-white font-medium hover:bg-red-700 transition-colors"
+              <div>
+                <h2 className="text-2xl lg:text-3xl font-bold text-gray-900">
+                  Bài viết đầu tiên đang được chuẩn bị
+                </h2>
+                <p className="mt-4 text-gray-600 leading-relaxed max-w-xl">
+                  Chúng tôi đang biên tập những góc nhìn đầu tiên. Trong lúc chờ, bạn có thể xem các
+                  dự án VietSolve đã thực hiện hoặc trao đổi trực tiếp về bài toán của doanh nghiệp.
+                </p>
+
+                <div className="mt-8">
+                  <p className="text-sm font-bold uppercase tracking-wider text-gray-900">
+                    Chủ đề sắp có
+                  </p>
+                  <ul className="mt-4 divide-y divide-gray-200 border-y border-gray-200">
+                    {[
+                      ["Branding & Growth", "Định vị, nhận diện và tăng trưởng thương hiệu."],
+                      ["AI & Automation", "Ứng dụng AI vào bán hàng, vận hành và báo cáo."],
+                      ["Creative Technology", "Nơi sáng tạo gặp công nghệ và sản phẩm số."],
+                    ].map(([name, desc]) => (
+                      <li key={name} className="flex items-start gap-4 py-4">
+                        <span
+                          className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-red-600"
+                          aria-hidden="true"
+                        />
+                        <span>
+                          <span className="block font-semibold text-gray-900">{name}</span>
+                          <span className="mt-0.5 block text-sm text-gray-600">{desc}</span>
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div className="mt-8 flex flex-col sm:flex-row gap-3">
+                  <PrimaryButton href="/case-studies">Xem dự án</PrimaryButton>
+                  <SecondaryButton href="/contact">Trao đổi với VietSolve</SecondaryButton>
+                </div>
+              </div>
+
+              {/* Editorial visual — brand grid, no stock imagery */}
+              <div className="relative hidden aspect-[4/3] overflow-hidden rounded-2xl border border-gray-200 bg-gradient-to-br from-gray-900 via-gray-800 to-red-950 lg:block">
+                <svg
+                  viewBox="0 0 400 300"
+                  className="absolute inset-0 h-full w-full"
+                  preserveAspectRatio="xMidYMid slice"
+                  aria-hidden="true"
                 >
-                  Xem dự án
-                  <ArrowRight className="h-4 w-4" />
-                </Link>
-                <Link
-                  href="/contact"
-                  className="inline-flex items-center justify-center min-h-[44px] px-6 rounded-full border border-gray-300 text-gray-900 font-medium hover:bg-gray-100 transition-colors"
-                >
-                  Liên hệ VietSolve
-                </Link>
+                  <g stroke="rgba(255,255,255,0.09)" strokeWidth="1">
+                    {Array.from({ length: 10 }).map((_, i) => (
+                      <line key={`v${i}`} x1={i * 44} y1="0" x2={i * 44} y2="300" />
+                    ))}
+                    {Array.from({ length: 8 }).map((_, i) => (
+                      <line key={`h${i}`} x1="0" y1={i * 44} x2="400" y2={i * 44} />
+                    ))}
+                  </g>
+                  {/* Three stacked "article" blocks — an editorial metaphor */}
+                  <g>
+                    {[0, 1, 2].map((i) => (
+                      <g key={i} transform={`translate(60 ${58 + i * 70})`}>
+                        <rect width="280" height="46" rx="8" fill="rgba(255,255,255,0.06)" />
+                        <rect x="16" y="13" width="120" height="7" rx="3.5" fill="rgba(255,255,255,0.28)" />
+                        <rect x="16" y="27" width="196" height="6" rx="3" fill="rgba(255,255,255,0.13)" />
+                        <circle cx="256" cy="23" r="6" fill={i === 0 ? "#dc2626" : "rgba(255,255,255,0.18)"} />
+                      </g>
+                    ))}
+                  </g>
+                </svg>
               </div>
             </motion.div>
           ) : (

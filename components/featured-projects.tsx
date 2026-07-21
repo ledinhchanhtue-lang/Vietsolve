@@ -5,6 +5,8 @@ import Link from "next/link"
 import { ArrowRight } from "lucide-react"
 import { useLanguage } from "@/lib/i18n"
 import { projects } from "@/lib/content/projects"
+import { ProjectVisual } from "@/components/project-visual"
+import { TextLink } from "@/components/ui-kit/button"
 
 /**
  * Featured projects on the homepage — replaces the old ROI calculator (which
@@ -39,32 +41,17 @@ export default function FeaturedProjects() {
             </h2>
             <p className="mt-4 text-lg text-gray-600 max-w-2xl">{t.featured.subtitle}</p>
           </div>
-          <Link
-            href="/case-studies"
-            className="inline-flex items-center gap-1.5 text-sm font-semibold text-red-600 hover:text-red-700 transition-colors shrink-0"
-          >
-            {t.featured.viewAll}
-            <ArrowRight className="h-4 w-4" />
-          </Link>
+          <div className="shrink-0">
+            <TextLink href="/case-studies">{t.featured.viewAll}</TextLink>
+          </div>
         </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
           {shown.map((project, index) => {
             const card = (
               <>
-                {/* Brand visual generated per project — no broken images, no stock */}
-                <div className="relative aspect-[16/9] rounded-xl overflow-hidden bg-gradient-to-br from-gray-900 via-gray-800 to-red-950 flex items-end p-6">
-                  <div
-                    className="absolute inset-0 opacity-40"
-                    style={{
-                      backgroundImage:
-                        "linear-gradient(rgba(255,255,255,0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.06) 1px, transparent 1px)",
-                      backgroundSize: "36px 36px",
-                    }}
-                    aria-hidden="true"
-                  />
-                  <span className="relative text-xl font-bold text-white/90">{project.name}</span>
-                </div>
+                {/* Distinct brand visual per project — same system, different look */}
+                <ProjectVisual project={project} priority={index === 0} />
 
                 <div className="mt-5">
                   <div className="flex items-center gap-3 text-xs font-semibold uppercase tracking-wider">

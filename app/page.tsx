@@ -34,12 +34,14 @@ export default function Home() {
 
       <div className="relative z-40">
         <Navbar />
-        <Hero />
-        <ThreePillars />
-        <InnovativeServices />
-        <FeaturedProjects />
-        <HowWeWork />
-        <HomeCta />
+        <main id="main">
+          <Hero />
+          <ThreePillars />
+          <InnovativeServices />
+          <FeaturedProjects />
+          <HowWeWork />
+          <HomeCta />
+        </main>
         <AnimatedFooter />
       </div>
     </div>

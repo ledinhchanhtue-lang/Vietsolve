@@ -25,12 +25,22 @@ export const metadata: Metadata = {
     title: "VietSolve — Agency Sáng tạo & Công nghệ",
     description:
       "Branding, marketing, media, website, AI và automation cho doanh nghiệp Việt.",
+    /* Without this, `summary_large_image` renders an empty card on every share. */
+    images: [
+      {
+        url: "/og.png",
+        width: 1200,
+        height: 630,
+        alt: "VietSolve — Agency Sáng tạo & Công nghệ",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "VietSolve — Agency Sáng tạo & Công nghệ",
     description:
       "Branding, marketing, media, website, AI và automation cho doanh nghiệp Việt.",
+    images: ["/og.png"],
   },
   robots: {
     index: true,

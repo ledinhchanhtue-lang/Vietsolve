@@ -3,7 +3,6 @@
 import Link from "next/link"
 import Image from "next/image"
 import { usePathname } from "next/navigation"
-import { Button } from "@/components/ui/button"
 import { Menu, X } from "lucide-react"
 import { useState } from "react"
 import AnimatedButton from "./animated-button"
@@ -29,6 +28,15 @@ export default function Navbar() {
   const isActive = (href: string) => (href === "/" ? pathname === "/" : pathname.startsWith(href))
 
   return (
+    <>
+      {/* Skip link — first focusable element on every page */}
+      <a
+        href="#main"
+        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-full focus:bg-red-600 focus:px-5 focus:py-3 focus:text-sm focus:font-semibold focus:text-white"
+      >
+        Chuyển tới nội dung chính
+      </a>
+
     <header className="fixed top-4 left-4 right-4 z-50 mx-auto max-w-7xl">
       <nav
         className="relative bg-white/80 backdrop-blur-md border rounded-2xl shadow-lg overflow-hidden"
@@ -57,7 +65,9 @@ export default function Navbar() {
                     href={link.href}
                     aria-current={isActive(link.href) ? "page" : undefined}
                     className={cn(
-                      "text-sm font-medium transition-colors",
+                      // 44px tap target — the link text alone was only 20px tall
+                      "inline-flex min-h-[44px] items-center text-sm font-medium transition-colors",
+                      "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-600 focus-visible:ring-offset-2 rounded",
                       isActive(link.href) ? "text-red-700" : "text-gray-900 hover:text-red-700",
                     )}
                   >
@@ -70,7 +80,7 @@ export default function Navbar() {
             <div className="hidden md:flex items-center space-x-4">
               <LanguageToggle lang={lang} toggle={toggle} />
               <Link href="/contact">
-                <AnimatedButton size="sm" className="bg-red-700 text-white hover:bg-red-900">
+                <AnimatedButton size="sm" className="bg-red-700 text-white hover:bg-red-900 min-h-11">
                   {t.nav.contactNow}
                 </AnimatedButton>
               </Link>
@@ -78,15 +88,19 @@ export default function Navbar() {
 
             <div className="md:hidden flex items-center space-x-2">
               <LanguageToggle lang={lang} toggle={toggle} />
-              <Button
-                variant="ghost"
-                size="icon"
+              <button
+                type="button"
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
                 aria-label={isMenuOpen ? "Đóng menu" : "Mở menu"}
                 aria-expanded={isMenuOpen}
+                className="flex h-11 w-11 items-center justify-center rounded-full text-gray-900 transition-colors hover:bg-gray-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-600"
               >
-                {isMenuOpen ? <X className="h-5 w-5 text-gray-900" /> : <Menu className="h-5 w-5 text-gray-900" />}
-              </Button>
+                {isMenuOpen ? (
+                  <X className="h-5 w-5" aria-hidden="true" />
+                ) : (
+                  <Menu className="h-5 w-5" aria-hidden="true" />
+                )}
+              </button>
             </div>
           </div>
         </div>
@@ -101,7 +115,8 @@ export default function Navbar() {
                   href={link.href}
                   onClick={() => setIsMenuOpen(false)}
                   className={cn(
-                    "block font-medium",
+                    // Full-width 48px rows — the drawer has the space for them
+                    "flex min-h-[48px] items-center font-medium",
                     isActive(link.href) ? "text-red-700" : "text-gray-900 hover:text-red-700",
                   )}
                 >
@@ -120,22 +135,37 @@ export default function Navbar() {
         )}
       </nav>
     </header>
+    </>
   )
 }
 
 function LanguageToggle({ lang, toggle }: { lang: "vi" | "en"; toggle: () => void }) {
+  /* aria-pressed exposes which language is active — a single unlabelled
+     button gave assistive tech no way to read the current state. */
   return (
-    <button
-      onClick={toggle}
-      aria-label="Switch language"
+    <div
+      role="group"
+      aria-label="Ngôn ngữ / Language"
       className="flex items-center rounded-full border border-red-200 overflow-hidden text-xs font-semibold"
     >
-      <span className={`px-2.5 py-1 transition-colors ${lang === "vi" ? "bg-red-700 text-white" : "text-gray-600"}`}>
-        VI
-      </span>
-      <span className={`px-2.5 py-1 transition-colors ${lang === "en" ? "bg-red-700 text-white" : "text-gray-600"}`}>
-        EN
-      </span>
-    </button>
+      {(["vi", "en"] as const).map((code) => (
+        <button
+          key={code}
+          type="button"
+          onClick={() => {
+            if (lang !== code) toggle()
+          }}
+          aria-pressed={lang === code}
+          aria-label={code === "vi" ? "Tiếng Việt" : "English"}
+          className={cn(
+            "flex min-h-11 items-center px-3 transition-colors",
+            "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-600 focus-visible:ring-inset",
+            lang === code ? "bg-red-700 text-white" : "text-gray-600 hover:text-gray-900",
+          )}
+        >
+          {code.toUpperCase()}
+        </button>
+      ))}
+    </div>
   )
 }

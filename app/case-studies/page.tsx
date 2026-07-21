@@ -4,7 +4,7 @@ import AnimatedFooter from "@/components/animated-footer"
 import CaseStudiesPage from "@/components/case-studies-page"
 
 export const metadata: Metadata = {
-  title: "Dự án Branding, Marketing, Website & AI — VietSolve",
+  title: "Dự án Branding, Marketing, Website & AI",
   description:
     "Những dự án VietSolve đã thực hiện — từ xây dựng thương hiệu, phát triển nền tảng số đến triển khai công nghệ phục vụ tăng trưởng.",
   alternates: { canonical: "/case-studies" },

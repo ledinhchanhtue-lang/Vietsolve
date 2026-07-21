@@ -4,7 +4,7 @@ import AnimatedFooter from "@/components/animated-footer"
 import SolutionsPage from "@/components/solutions-page"
 
 export const metadata: Metadata = {
-  title: "Dịch vụ Branding, Marketing, Website, AI & Automation — VietSolve",
+  title: "Dịch vụ Branding, Marketing, Website, AI & Automation",
   description:
     "Hệ sinh thái dịch vụ VietSolve: Branding, Marketing & Growth, Media & Creative, Website & Digital Products, AI Agents & Automation, Data & SEO.",
   alternates: { canonical: "/services" },
