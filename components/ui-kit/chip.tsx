@@ -1,6 +1,6 @@
 "use client"
 
-import { Check } from "lucide-react"
+import { Check, type LucideIcon } from "lucide-react"
 import { cn } from "@/lib/utils"
 import type { ReactNode } from "react"
 
@@ -25,11 +25,14 @@ export function SelectableChip({
   selected,
   onSelect,
   className,
+  /** Small leading glyph — ties each tile to its service group's icon. */
+  icon: Icon,
 }: {
   children: ReactNode
   selected: boolean
   onSelect: () => void
   className?: string
+  icon?: LucideIcon
 }) {
   return (
     <button
@@ -47,7 +50,19 @@ export function SelectableChip({
         className,
       )}
     >
-      <span>{children}</span>
+      <span className="flex items-center gap-2.5">
+        {Icon && (
+          <Icon
+            strokeWidth={1.5}
+            aria-hidden="true"
+            className={cn(
+              "h-[18px] w-[18px] shrink-0 transition-colors duration-200",
+              selected ? "text-red-600" : "text-gray-400",
+            )}
+          />
+        )}
+        {children}
+      </span>
       {/* The indicator always occupies its slot, so selecting a chip does not
           reflow the label. */}
       <span

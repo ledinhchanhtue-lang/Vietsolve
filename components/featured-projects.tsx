@@ -55,6 +55,7 @@ export default function FeaturedProjects() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
           {shown.map((project, index) => {
+            const featured = index === 0
             const card = (
               <>
                 {/* Distinct brand visual per project — same system, different look */}
@@ -76,16 +77,11 @@ export default function FeaturedProjects() {
                   <p className="mt-2 text-gray-600 leading-relaxed max-w-[55ch]">
                     {project.summary[lang]}
                   </p>
-                  <ul className="mt-4 flex flex-wrap gap-2">
-                    {project.deliverables[lang].slice(0, 3).map((d) => (
-                      <li
-                        key={d}
-                        className="rounded-full border border-gray-200 bg-gray-50 px-3 py-1.5 text-sm text-gray-700"
-                      >
-                        {d}
-                      </li>
-                    ))}
-                  </ul>
+                  {/* Dot-separated, not a third row of pills — the highlight
+                      pills already carry that shape elsewhere on the page. */}
+                  <p className="mt-4 text-sm text-gray-500">
+                    {project.deliverables[lang].slice(0, 3).join(" · ")}
+                  </p>
                 </div>
               </>
             )
@@ -97,8 +93,16 @@ export default function FeaturedProjects() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: (index % 2) * 0.1 }}
-                className="group"
+                /* First project leads the section at full width; the offset
+                   plate matches the case-studies featured slot. */
+                className={featured ? "group relative md:col-span-2" : "group"}
               >
+                {featured && (
+                  <span
+                    aria-hidden="true"
+                    className="absolute -inset-4 -z-10 translate-x-3 translate-y-3 rounded-2xl border border-red-100/80 bg-gradient-to-br from-red-50/60 to-gray-50 sm:-inset-5"
+                  />
+                )}
                 {project.hasDetailPage ? (
                   <Link href={`/case-studies/${project.slug}`}>{card}</Link>
                 ) : (

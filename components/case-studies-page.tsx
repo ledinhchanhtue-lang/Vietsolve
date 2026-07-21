@@ -9,7 +9,6 @@ import { ProjectVisual } from "@/components/project-visual"
 import { PrimaryButton } from "@/components/ui-kit/button"
 import { TechLayer } from "@/components/tech/tech-layer"
 import { TechDivider } from "@/components/tech/tech-divider"
-import { Tag } from "@/components/ui-kit/chip"
 
 /**
  * Case studies — white theme, real projects only.
@@ -52,12 +51,51 @@ export default function CaseStudiesPage() {
           <div className="absolute inset-0 vs-grid-2 vs-mask-corner opacity-70" />
         </TechLayer>
 
+        {/* Layered project frames — abstract filmstrip, no fake screenshots.
+            xl-only so it never sits under the headline. */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute right-14 top-1/2 hidden w-[280px] -translate-y-1/2 xl:block"
+          style={{ perspective: "1000px" }}
+        >
+          <div style={{ transformStyle: "preserve-3d", transform: "rotateY(-10deg) rotateX(3deg)" }}>
+            {[2, 1, 0].map((depth) => (
+              <div
+                key={depth}
+                className="overflow-hidden rounded-xl border bg-white/90 backdrop-blur-sm"
+                style={{
+                  marginTop: depth === 2 ? 0 : "-58px",
+                  marginLeft: depth * 14,
+                  transform: `translateZ(${-depth * 30}px)`,
+                  opacity: 1 - depth * 0.18,
+                  borderColor: depth === 0 ? "rgb(254 202 202)" : "rgb(229 231 235)",
+                  boxShadow:
+                    depth === 0
+                      ? "0 18px 34px -18px rgb(220 38 38 / 0.35)"
+                      : "0 14px 26px -18px rgb(15 23 42 / 0.3)",
+                }}
+              >
+                <div className="flex h-6 items-center gap-1 border-b border-gray-200 bg-gray-50 px-2.5">
+                  <span className="h-1.5 w-1.5 rounded-full bg-gray-300" />
+                  <span className="h-1.5 w-1.5 rounded-full bg-gray-300" />
+                  <span className="ml-1.5 h-1.5 flex-1 rounded-full bg-gray-200" />
+                </div>
+                <div className="space-y-1.5 p-3.5">
+                  <span className={`block h-2 rounded-full ${depth === 0 ? "w-3/5 bg-red-200" : "w-1/2 bg-gray-100"}`} />
+                  <span className="block h-1.5 w-4/5 rounded-full bg-gray-100" />
+                  <span className="block h-1.5 w-2/3 rounded-full bg-gray-100" />
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7 }}
-            className="max-w-3xl"
+            className="max-w-3xl xl:pr-[300px]"
           >
             <span className="text-sm font-semibold text-red-600 uppercase tracking-wider">
               Case Study
@@ -128,13 +166,11 @@ export default function CaseStudiesPage() {
 
                     <p className="mt-3 text-gray-600 leading-relaxed">{project.summary.vi}</p>
 
-                    <ul className="mt-5 flex flex-wrap gap-2">
-                      {project.deliverables.vi.map((d) => (
-                        <li key={d}>
-                          <Tag>{d}</Tag>
-                        </li>
-                      ))}
-                    </ul>
+                    {/* Dot-separated deliverables — the pill treatment was
+                        repeating on every card and reading as UI chrome. */}
+                    <p className="mt-5 text-sm text-gray-500">
+                      {project.deliverables.vi.join(" · ")}
+                    </p>
 
                     {project.metrics.length > 0 && (
                       <dl className="mt-6 flex flex-wrap gap-x-10 gap-y-4">

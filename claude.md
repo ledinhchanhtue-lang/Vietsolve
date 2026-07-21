@@ -90,6 +90,12 @@ Homepage: tên + 1 câu + 3 highlight + link. `/services`: danh sách đầy đ�
 ## ⚠️ Language switcher VI/EN
 Segmented switch trong `navbar.tsx` (`LanguageToggle`): capsule trắng viền xám, **thumb đỏ trượt** bằng `translate-x` (compositor-only, tắt ở reduced-motion), 2 cell cố định `w-10` để thumb trượt đúng 1 slot, `aria-pressed` cho trạng thái. **Đừng đổi lại thành 2 ô đỏ đặc kiểu utility.**
 
+## ⚠️ Services showcase — `components/service-showcase.tsx`
+Desktop (lg+): rail 6 tab trái + stage phải, đúng semantics tablist/tab/tabpanel + phím mũi tên (roving tabindex). Mobile giữ card xếp chồng (vẫn mang `id` anchor). Deep-link `/services#<group.id>` tự chọn tab. **Đừng xóa card mobile** — anchor từ homepage phụ thuộc vào chúng.
+
+## ⚠️ Contact query param
+`?service=<id>` nhận mọi `group.id` thật (kể cả `data-seo-analytics` → map về Marketing & Growth vì form không có option Data riêng), auto-select tile + scroll tới `#contact-form`. Thêm nhóm dịch vụ mới thì phải thêm mapping trong `contact-page.tsx`.
+
 ## ⚠️ Pseudo-3D depth — dùng đúng 2 pattern này
 - **Panel stack** (hero): container `perspective` + `preserve-3d`, layer con `translateZ` âm dần + shadow làm depth. Chỉ hiện ≥ xl **và hero content phải giữ `xl:pr-[360px]`** — bỏ padding đó là headline chui xuống dưới stack (đã đo 96px chồng thật ở 1280).
 - **Offset plate**: `<span aria-hidden className="absolute inset-0 translate-x-2.5 translate-y-2.5 rounded-2xl border border-red-100/80 bg-gradient-to-br from-red-50/70 to-gray-50" />` đặt TRƯỚC card trong 1 wrapper `relative` (form Contact, featured project, visual Blog). Không nghiêng xoay liên tục, không 3D nặng.

@@ -9,7 +9,6 @@ import {
   Handshake,
   Layers,
   Sparkle,
-  Boxes,
   ArrowRight,
   type LucideIcon,
 } from "lucide-react"
@@ -370,9 +369,34 @@ export default function AboutPage() {
               className="bg-white p-10 lg:p-12 rounded-3xl shadow-xl border border-gray-100"
             >
               <div className="text-center max-w-2xl mx-auto">
-                <div className="mb-6 flex justify-center">
-                  <IconTile icon={Boxes} size="lg" />
-                </div>
+                {/* Core Team → Strategy / Creative / Technology → Specialist
+                    Network, as a diagram instead of an icon over a paragraph.
+                    Text lives in the SVG; the layer is decorative duplication
+                    of the paragraph below, so aria-hidden. */}
+                <svg
+                  viewBox="0 0 520 190"
+                  className="mx-auto mb-8 w-full max-w-lg"
+                  aria-hidden="true"
+                >
+                  <g stroke="rgb(15 23 42 / 0.16)" strokeWidth="1.25" fill="none">
+                    <path d="M260 44 V 62 M260 62 H 110 M260 62 H 410 M110 62 V 78 M260 62 V 78 M410 62 V 78" />
+                    <path d="M110 116 V 132 M260 116 V 132 M410 116 V 132 M110 132 H 410" />
+                    <path d="M260 132 V 148" />
+                  </g>
+                  <path d="M260 44 V 78" stroke="#dc2626" strokeWidth="1.75" fill="none" />
+                  <rect x="196" y="14" width="128" height="30" rx="15" fill="#dc2626" />
+                  <text x="260" y="34" textAnchor="middle" fill="#fff" fontSize="13" fontWeight="700">Core Team</text>
+                  <g>
+                    <rect x="50" y="78" width="120" height="38" rx="10" fill="#fff" stroke="rgb(15 23 42 / 0.18)" />
+                    <rect x="200" y="78" width="120" height="38" rx="10" fill="#fff" stroke="rgb(15 23 42 / 0.18)" />
+                    <rect x="350" y="78" width="120" height="38" rx="10" fill="#fff" stroke="rgb(15 23 42 / 0.18)" />
+                    <text x="110" y="102" textAnchor="middle" fill="rgb(15 23 42 / 0.8)" fontSize="13" fontWeight="600">Strategy</text>
+                    <text x="260" y="102" textAnchor="middle" fill="rgb(15 23 42 / 0.8)" fontSize="13" fontWeight="600">Creative</text>
+                    <text x="410" y="102" textAnchor="middle" fill="rgb(15 23 42 / 0.8)" fontSize="13" fontWeight="600">Technology</text>
+                  </g>
+                  <rect x="130" y="148" width="260" height="32" rx="16" fill="rgb(220 38 38 / 0.06)" stroke="rgb(220 38 38 / 0.35)" strokeDasharray="4 5" />
+                  <text x="260" y="169" textAnchor="middle" fill="rgb(185 28 28 / 0.9)" fontSize="12" fontWeight="600" letterSpacing="0.04em">Specialist Network</text>
+                </svg>
                 <p className="text-lg text-gray-600 leading-relaxed mb-8">
                   Mỗi dự án được dẫn dắt bởi đội ngũ core của VietSolve và kết hợp cùng các chuyên gia
                   phù hợp — từ chiến lược, sáng tạo, công nghệ đến vận hành — để đảm bảo giải pháp đúng

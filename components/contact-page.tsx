@@ -4,10 +4,26 @@ import type React from "react"
 import { useEffect, useState } from "react"
 import Link from "next/link"
 import { motion } from "framer-motion"
-import { Mail, Phone, MapPin, Check, Loader2, AlertCircle, ArrowRight, Clock } from "lucide-react"
+import {
+  Mail,
+  Phone,
+  MapPin,
+  Check,
+  Loader2,
+  AlertCircle,
+  ArrowRight,
+  Clock,
+  Compass,
+  TrendingUp,
+  Clapperboard,
+  AppWindow,
+  Workflow,
+  MessagesSquare,
+} from "lucide-react"
 import { useLanguage } from "@/lib/i18n"
 import { siteConfig, readVerified } from "@/lib/site-config"
 import { projects } from "@/lib/content/projects"
+import { ProjectVisual } from "@/components/project-visual"
 import { PrimaryButton, SecondaryButton } from "@/components/ui-kit/button"
 import { TechLayer } from "@/components/tech/tech-layer"
 import { TechDivider } from "@/components/tech/tech-divider"
@@ -54,13 +70,15 @@ export default function ContactPage() {
   const phone = readVerified(siteConfig.contact.phone)
   const address = readVerified(siteConfig.contact.address)
 
+  /* Each tile carries its service group's glyph so the form speaks the same
+     icon language as the services pages. */
   const projectTypes = [
-    t.contact.typeBranding,
-    t.contact.typeMarketing,
-    t.contact.typeMedia,
-    t.contact.typeWebsite,
-    t.contact.typeAi,
-    t.contact.typeUndecided,
+    { label: t.contact.typeBranding, icon: Compass },
+    { label: t.contact.typeMarketing, icon: TrendingUp },
+    { label: t.contact.typeMedia, icon: Clapperboard },
+    { label: t.contact.typeWebsite, icon: AppWindow },
+    { label: t.contact.typeAi, icon: Workflow },
+    { label: t.contact.typeUndecided, icon: MessagesSquare },
   ]
 
   const topics = [
@@ -90,10 +108,22 @@ export default function ContactPage() {
       "website-digital": t.contact.typeWebsite,
       ai: t.contact.typeAi,
       "ai-automation": t.contact.typeAi,
+      /* Data/SEO/Analytics has no dedicated project-type option — Growth is the
+         nearest owner of that work on the form. */
+      data: t.contact.typeMarketing,
+      "data-analytics": t.contact.typeMarketing,
+      "data-seo-analytics": t.contact.typeMarketing,
       consulting: t.contact.typeUndecided,
     }
     const matched = map[param.toLowerCase()]
-    if (matched) setForm((prev) => (prev.type ? prev : { ...prev, type: matched }))
+    if (matched) {
+      setForm((prev) => (prev.type ? prev : { ...prev, type: matched }))
+      /* Bring the pre-filled form into view so the visitor sees their choice
+         was carried over instead of landing on the hero. */
+      setTimeout(() => {
+        document.getElementById("contact-form")?.scrollIntoView({ behavior: "smooth", block: "start" })
+      }, 60)
+    }
     // Intentionally mount-only: re-running on language change would clobber a
     // choice the user has already made.
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -207,10 +237,27 @@ export default function ContactPage() {
               fill="none"
               className="vs-dash vs-anim"
             />
+            {/* Capability nodes strung along the energy path — the slow light
+                on the contour connects them. Labels are decorative (the layer
+                is aria-hidden); the same words are real content in the form. */}
             <g fill="rgb(220 38 38 / 0.5)">
+              <circle cx="960" cy="330" r="4" className="vs-node vs-anim" style={{ animationDelay: "-3.4s" }} />
+              <circle cx="1130" cy="272" r="4" className="vs-node vs-anim" style={{ animationDelay: "-4.6s" }} />
               <circle cx="1300" cy="268" r="4" className="vs-node vs-anim" />
               <circle cx="1340" cy="246" r="4" className="vs-node vs-anim" style={{ animationDelay: "-1.4s" }} />
               <circle cx="1380" cy="224" r="4" className="vs-node vs-anim" style={{ animationDelay: "-2.6s" }} />
+            </g>
+            <g
+              fill="rgb(15 23 42 / 0.4)"
+              fontSize="11"
+              fontWeight="600"
+              letterSpacing="0.08em"
+            >
+              <text x="960" y="352" textAnchor="middle">MEDIA</text>
+              <text x="1130" y="294" textAnchor="middle">GROWTH</text>
+              <text x="1300" y="290" textAnchor="middle">BRAND</text>
+              <text x="1348" y="232" textAnchor="start">WEBSITE</text>
+              <text x="1388" y="210" textAnchor="start">AI</text>
             </g>
           </svg>
         </TechLayer>
@@ -338,7 +385,12 @@ export default function ContactPage() {
                           aria-hidden="true"
                         />
                       )}
-                      <span className="relative z-10 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-red-50 text-xs font-bold text-red-600 ring-1 ring-red-100">
+                      {/* aria-hidden: the <ol> already conveys position — a
+                          screen reader would otherwise announce "1, 1 …" */}
+                      <span
+                        aria-hidden="true"
+                        className="relative z-10 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-red-50 text-xs font-bold text-red-600 ring-1 ring-red-100"
+                      >
                         {i + 1}
                       </span>
                       <span className="pt-0.5 leading-relaxed text-gray-600">{step}</span>
@@ -455,13 +507,14 @@ export default function ContactPage() {
                       {/* Shared chip component — the selected state (red hairline,
                           tinted fill, inner glow, filled check) now lives in one
                           place instead of an inline class string. */}
-                      {projectTypes.map((type) => (
+                      {projectTypes.map(({ label, icon }) => (
                         <SelectableChip
-                          key={type}
-                          selected={form.type === type}
-                          onSelect={() => set("type", type)}
+                          key={label}
+                          icon={icon}
+                          selected={form.type === label}
+                          onSelect={() => set("type", label)}
                         >
-                          {type}
+                          {label}
                         </SelectableChip>
                       ))}
                     </div>
@@ -629,11 +682,12 @@ export default function ContactPage() {
                 <ArrowRight className="h-4 w-4" aria-hidden="true" />
               </Link>
             </div>
-            <ul className="mt-6 grid grid-cols-2 gap-px overflow-hidden rounded-xl border border-gray-200 bg-gray-200 sm:grid-cols-4">
+            {/* Thumbnails, not a name list — the strip shows the work itself */}
+            <ul className="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-4">
               {projects.slice(0, 4).map((p) => (
-                <li key={p.slug} className="bg-white px-5 py-7 text-center">
-                  <span className="block font-bold text-gray-900">{p.name}</span>
-                  <span className="mt-1 block text-xs uppercase tracking-wider text-gray-500">
+                <li key={p.slug} className="group">
+                  <ProjectVisual project={p} sizes="(max-width: 640px) 50vw, 25vw" />
+                  <span className="mt-2 block text-center text-xs font-semibold uppercase tracking-wider text-gray-500 transition-colors group-hover:text-red-600">
                     {p.industry[lang]}
                   </span>
                 </li>
@@ -714,7 +768,13 @@ function Field({
       <label htmlFor={id} className="block text-sm font-semibold text-gray-900">
         {label}
         {required && <span className="ml-1 text-red-600">*</span>}
-        {optional && <span className="ml-1.5 font-normal text-gray-400">({optional})</span>}
+        {/* Badge, not a parenthetical glued to the label — "Tên doanh
+            nghiệp(không bắt buộc)" read as one broken word. */}
+        {optional && (
+          <span className="ml-2 inline-flex items-center rounded-full border border-gray-200 bg-gray-50 px-2 py-0.5 align-middle text-[11px] font-medium normal-case text-gray-500">
+            {optional}
+          </span>
+        )}
       </label>
       <input
         id={id}
@@ -763,7 +823,13 @@ function SelectField({
     <div>
       <label htmlFor={id} className="block text-sm font-semibold text-gray-900">
         {label}
-        {optional && <span className="ml-1.5 font-normal text-gray-400">({optional})</span>}
+        {/* Badge, not a parenthetical glued to the label — "Tên doanh
+            nghiệp(không bắt buộc)" read as one broken word. */}
+        {optional && (
+          <span className="ml-2 inline-flex items-center rounded-full border border-gray-200 bg-gray-50 px-2 py-0.5 align-middle text-[11px] font-medium normal-case text-gray-500">
+            {optional}
+          </span>
+        )}
       </label>
       <select
         id={id}

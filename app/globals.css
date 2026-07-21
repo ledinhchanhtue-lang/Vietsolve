@@ -407,6 +407,20 @@
   animation: vs-run 6s linear infinite;
 }
 
+/* ---------- Line draw-on-view ---------------------------------------------
+   For SVG paths with pathLength="1". Runs once, forwards; combined with the
+   TechLayer pause it effectively starts when the section scrolls into view. */
+@keyframes vs-drawline {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+.vs-draw {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: vs-drawline 1.7s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
 /* ---------- Signal primitives --------------------------------------------- */
 .vs-node {
   animation: vs-pulse 3.6s ease-in-out infinite;
@@ -462,6 +476,12 @@
 
 /* ---------- Reduced motion: keep the look, drop the movement -------------- */
 @media (prefers-reduced-motion: reduce) {
+  /* The drawn line must END drawn, not stay invisible at offset 1 */
+  .vs-draw {
+    animation: none !important;
+    stroke-dasharray: none;
+    stroke-dashoffset: 0;
+  }
   .vs-anim,
   .vs-anim::before,
   .vs-anim::after,

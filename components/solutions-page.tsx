@@ -23,6 +23,7 @@ import { serviceGroups } from "@/lib/content/services"
 import { PrimaryButton, SecondaryButton, TextLink } from "@/components/ui-kit/button"
 import { IconTile } from "@/components/ui-kit/icon-tile"
 import { ServiceVisual } from "@/components/service-visual"
+import { ServiceShowcase } from "@/components/service-showcase"
 import { TechLayer } from "@/components/tech/tech-layer"
 import { TechDivider } from "@/components/tech/tech-divider"
 
@@ -172,7 +173,11 @@ export default function SolutionsPage() {
             {t.ecosystem.subtitle}
           </p>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {/* Desktop: interactive rail + stage. The stacked cards below are
+              the mobile/tablet presentation and keep the #id anchors. */}
+          <ServiceShowcase />
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:hidden">
             {serviceGroups.map((group, index) => {
               const Icon = GROUP_ICONS[group.icon] ?? Compass
               return (

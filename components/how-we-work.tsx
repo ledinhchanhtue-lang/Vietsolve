@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion"
 import { Search, PenTool, Route } from "lucide-react"
+import { TechDivider } from "@/components/tech/tech-divider"
 import { useLanguage } from "@/lib/i18n"
 import { IconTile } from "@/components/ui-kit/icon-tile"
 
@@ -47,10 +48,11 @@ export default function HowWeWork() {
 
         {/* One connecting line runs through all three steps on desktop */}
         <div className="relative">
-          <div
-            className="absolute left-0 right-0 top-6 hidden h-px bg-gradient-to-r from-transparent via-red-200 to-transparent md:block"
-            aria-hidden="true"
-          />
+          {/* The connector is now a live signal line — a light travels through
+              01 → 02 → 03 while the section is on screen, paused otherwise. */}
+          <div className="absolute left-0 right-0 top-6 hidden md:block">
+            <TechDivider variant="plain" />
+          </div>
 
           <div className="relative grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-10">
             {steps.map((step, index) => (
