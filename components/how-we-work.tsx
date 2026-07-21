@@ -62,7 +62,7 @@ export default function HowWeWork() {
               </div>
 
               {/* Icon */}
-              <div className="mt-8 mb-6">{step.icon}</div>
+              <div className="mt-8 mb-6 text-red-700">{step.icon}</div>
 
               {/* Content */}
               <h3 className="text-2xl font-bold text-red-800 mb-4">{step.title}</h3>

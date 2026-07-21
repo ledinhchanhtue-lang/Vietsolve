@@ -2,15 +2,31 @@
 
 import Link from "next/link"
 import Image from "next/image"
+import { usePathname } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Menu, X } from "lucide-react"
 import { useState } from "react"
 import AnimatedButton from "./animated-button"
 import { useLanguage } from "@/lib/i18n"
+import { hasInsights } from "@/lib/content/insights"
+import { cn } from "@/lib/utils"
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const { lang, toggle, t } = useLanguage()
+  const pathname = usePathname()
+
+  /* Blog is hidden until there is a real article; the /blog route stays live. */
+  const links = [
+    { href: "/", label: t.nav.home },
+    { href: "/about", label: t.nav.about },
+    { href: "/services", label: t.nav.services },
+    { href: "/case-studies", label: t.nav.caseStudies },
+    ...(hasInsights ? [{ href: "/blog", label: t.nav.blog }] : []),
+    { href: "/contact", label: t.nav.contact },
+  ]
+
+  const isActive = (href: string) => (href === "/" ? pathname === "/" : pathname.startsWith(href))
 
   return (
     <header className="fixed top-4 left-4 right-4 z-50 mx-auto max-w-7xl">
@@ -21,46 +37,33 @@ export default function Navbar() {
         <div className="relative z-10 px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center">
-              <Link href="/" className="flex items-center space-x-3">
+              <Link href="/" className="flex items-center space-x-3" aria-label="VietSolve — trang chủ">
                 <Image
                   src="/images/logo-vietsolve-official.png"
                   alt="VietSolve"
                   width={140}
                   height={50}
                   className="w-auto h-12"
+                  priority
                 />
               </Link>
             </div>
 
             <div className="hidden md:block">
               <div className="flex items-center space-x-6">
-                <Link href="/" className="text-sm text-gray-900 hover:text-red-700 transition-colors font-medium">
-                  {t.nav.home}
-                </Link>
-                <Link href="/about" className="text-sm text-gray-900 hover:text-red-700 transition-colors font-medium">
-                  {t.nav.about}
-                </Link>
-                <Link
-                  href="/services"
-                  className="text-sm text-gray-900 hover:text-red-700 transition-colors font-medium"
-                >
-                  {t.nav.services}
-                </Link>
-                <Link
-                  href="/case-studies"
-                  className="text-sm text-gray-900 hover:text-red-700 transition-colors font-medium"
-                >
-                  {t.nav.caseStudies}
-                </Link>
-                <Link href="/blog" className="text-sm text-gray-900 hover:text-red-700 transition-colors font-medium">
-                  {t.nav.blog}
-                </Link>
-                <Link
-                  href="/contact"
-                  className="text-sm text-gray-900 hover:text-red-700 transition-colors font-medium"
-                >
-                  {t.nav.contact}
-                </Link>
+                {links.map((link) => (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    aria-current={isActive(link.href) ? "page" : undefined}
+                    className={cn(
+                      "text-sm font-medium transition-colors",
+                      isActive(link.href) ? "text-red-700" : "text-gray-900 hover:text-red-700",
+                    )}
+                  >
+                    {link.label}
+                  </Link>
+                ))}
               </div>
             </div>
 
@@ -75,7 +78,13 @@ export default function Navbar() {
 
             <div className="md:hidden flex items-center space-x-2">
               <LanguageToggle lang={lang} toggle={toggle} />
-              <Button variant="ghost" size="icon" onClick={() => setIsMenuOpen(!isMenuOpen)}>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => setIsMenuOpen(!isMenuOpen)}
+                aria-label={isMenuOpen ? "Đóng menu" : "Mở menu"}
+                aria-expanded={isMenuOpen}
+              >
                 {isMenuOpen ? <X className="h-5 w-5 text-gray-900" /> : <Menu className="h-5 w-5 text-gray-900" />}
               </Button>
             </div>
@@ -86,26 +95,21 @@ export default function Navbar() {
         {isMenuOpen && (
           <div className="md:hidden border-t border-gray-200 bg-white/90 backdrop-blur-md rounded-b-2xl">
             <div className="px-6 py-4 space-y-3">
-              <Link href="/" className="block text-gray-900 hover:text-red-700 font-medium">
-                {t.nav.home}
-              </Link>
-              <Link href="/about" className="block text-gray-900 hover:text-red-700 font-medium">
-                {t.nav.about}
-              </Link>
-              <Link href="/services" className="block text-gray-900 hover:text-red-700 font-medium">
-                {t.nav.services}
-              </Link>
-              <Link href="/case-studies" className="block text-gray-900 hover:text-red-700 font-medium">
-                {t.nav.caseStudies}
-              </Link>
-              <Link href="/blog" className="block text-gray-900 hover:text-red-700 font-medium">
-                {t.nav.blog}
-              </Link>
-              <Link href="/contact" className="block text-gray-900 hover:text-red-700 font-medium">
-                {t.nav.contact}
-              </Link>
+              {links.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  onClick={() => setIsMenuOpen(false)}
+                  className={cn(
+                    "block font-medium",
+                    isActive(link.href) ? "text-red-700" : "text-gray-900 hover:text-red-700",
+                  )}
+                >
+                  {link.label}
+                </Link>
+              ))}
               <div className="pt-3 border-t border-gray-200">
-                <Link href="/contact" className="block">
+                <Link href="/contact" className="block" onClick={() => setIsMenuOpen(false)}>
                   <AnimatedButton className="w-full bg-red-700 text-white hover:bg-red-900">
                     {t.nav.contactNow}
                   </AnimatedButton>

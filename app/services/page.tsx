@@ -1,11 +1,13 @@
+import type { Metadata } from "next"
 import Navbar from "@/components/navbar"
 import AnimatedFooter from "@/components/animated-footer"
 import SolutionsPage from "@/components/solutions-page"
 
-export const metadata = {
-  title: "Dịch vụ VietSolve – Intelligent • Creative • Innovation",
+export const metadata: Metadata = {
+  title: "Dịch vụ Branding, Marketing, Website, AI & Automation — VietSolve",
   description:
-    "VietSolve cung cấp dịch vụ toàn diện giúp doanh nghiệp Việt tăng trưởng bằng trí tuệ, sáng tạo và công nghệ AI.",
+    "Hệ sinh thái dịch vụ VietSolve: Branding, Marketing & Growth, Media & Creative, Website & Digital Products, AI Agents & Automation, Data & SEO.",
+  alternates: { canonical: "/services" },
 }
 
 export default function Services() {

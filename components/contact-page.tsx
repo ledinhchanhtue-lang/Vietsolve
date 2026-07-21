@@ -24,6 +24,8 @@ export default function ContactPage() {
     phone: "",
     company: "",
     interest: "",
+    budget: "",
+    timeline: "",
     message: "",
     agreeToPrivacy: false,
   })
@@ -89,7 +91,9 @@ export default function ContactPage() {
           `Email: ${formData.email}`,
           formData.phone && `Số điện thoại: ${formData.phone}`,
           formData.company && `Doanh nghiệp: ${formData.company}`,
-          formData.interest && `Quan tâm: ${formData.interest}`,
+          formData.interest && `Lĩnh vực quan tâm: ${formData.interest}`,
+          formData.budget && `Ngân sách dự kiến: ${formData.budget}`,
+          formData.timeline && `Thời gian triển khai: ${formData.timeline}`,
           "",
           formData.message,
         ]
@@ -114,6 +118,8 @@ export default function ContactPage() {
         phone: "",
         company: "",
         interest: "",
+        budget: "",
+        timeline: "",
         message: "",
         agreeToPrivacy: false,
       })
@@ -187,7 +193,7 @@ export default function ContactPage() {
                 <div className="w-16 h-16 bg-red-50 rounded-full flex items-center justify-center mb-6">
                   <Mail className="h-8 w-8 text-red-600" />
                 </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-2">Email</h3>
+                <p className="text-xl font-bold text-gray-900 mb-2">Email</p>
                 <p className="text-xl font-semibold text-red-600 mb-2 break-all">{contactEmail}</p>
                 <p className="text-gray-600 text-sm">Gửi yêu cầu trực tiếp cho đội ngũ VietSolve.</p>
               </motion.a>
@@ -205,7 +211,7 @@ export default function ContactPage() {
                 <div className="w-16 h-16 bg-red-50 rounded-full flex items-center justify-center mb-6">
                   <Phone className="h-8 w-8 text-red-600" />
                 </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-2">Hotline</h3>
+                <p className="text-xl font-bold text-gray-900 mb-2">Hotline</p>
                 <p className="text-2xl font-semibold text-red-600 mb-2">{contactPhone}</p>
               </motion.a>
             )}
@@ -221,7 +227,7 @@ export default function ContactPage() {
                 <div className="w-16 h-16 bg-red-50 rounded-full flex items-center justify-center mb-6">
                   <MapPin className="h-8 w-8 text-red-600" />
                 </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-2">Địa chỉ</h3>
+                <p className="text-xl font-bold text-gray-900 mb-2">Địa chỉ</p>
                 <p className="text-lg font-semibold text-gray-900 mb-2">{contactAddress.line1}</p>
                 <p className="text-gray-600 text-sm">{contactAddress.line2}</p>
               </motion.div>
@@ -342,12 +348,58 @@ export default function ContactPage() {
                 } rounded-lg text-gray-900 focus:outline-none focus:border-red-600 focus:ring-2 focus:ring-red-500/20 transition-all`}
               >
                 <option value="">Chọn lĩnh vực</option>
-                <option value="marketing">Truyền thông</option>
-                <option value="ai">AI & Automation</option>
-                <option value="strategy">Chiến lược</option>
-                <option value="other">Khác</option>
+                <option value="Branding & Strategy">Branding & Strategy</option>
+                <option value="Marketing & Growth">Marketing & Growth</option>
+                <option value="Media & Creative">Media & Creative</option>
+                <option value="Website & Digital Product">Website & Digital Product</option>
+                <option value="AI & Automation">AI & Automation</option>
+                <option value="Chưa xác định">Chưa xác định</option>
               </select>
               {errors.interest && <p className="text-red-500 text-sm mt-1">{errors.interest}</p>}
+            </div>
+
+            {/* Budget + Timeline */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+              <div>
+                <label htmlFor="budget" className="block text-sm font-semibold text-gray-900 mb-2">
+                  Ngân sách dự kiến{" "}
+                  <span className="font-normal text-gray-400">(không bắt buộc)</span>
+                </label>
+                <select
+                  id="budget"
+                  name="budget"
+                  value={formData.budget}
+                  onChange={handleChange}
+                  className="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:border-red-600 focus:ring-2 focus:ring-red-500/20 transition-all"
+                >
+                  <option value="">Chọn mức ngân sách</option>
+                  <option value="Dưới 50 triệu">Dưới 50 triệu</option>
+                  <option value="50 – 100 triệu">50 – 100 triệu</option>
+                  <option value="100 – 300 triệu">100 – 300 triệu</option>
+                  <option value="Trên 300 triệu">Trên 300 triệu</option>
+                  <option value="Cần VietSolve đề xuất">Cần VietSolve đề xuất</option>
+                </select>
+              </div>
+
+              <div>
+                <label htmlFor="timeline" className="block text-sm font-semibold text-gray-900 mb-2">
+                  Thời gian triển khai{" "}
+                  <span className="font-normal text-gray-400">(không bắt buộc)</span>
+                </label>
+                <select
+                  id="timeline"
+                  name="timeline"
+                  value={formData.timeline}
+                  onChange={handleChange}
+                  className="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:border-red-600 focus:ring-2 focus:ring-red-500/20 transition-all"
+                >
+                  <option value="">Chọn thời gian</option>
+                  <option value="Càng sớm càng tốt">Càng sớm càng tốt</option>
+                  <option value="Trong 1–3 tháng">Trong 1–3 tháng</option>
+                  <option value="Trong 3–6 tháng">Trong 3–6 tháng</option>
+                  <option value="Đang lên kế hoạch">Đang lên kế hoạch</option>
+                </select>
+              </div>
             </div>
 
             {/* Message */}
@@ -415,30 +467,6 @@ export default function ContactPage() {
               )}
             </button>
           </motion.form>
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="py-16 md:py-24 bg-gradient-to-br from-red-600 via-red-700 to-gray-900">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-          >
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-6">
-              Bạn sẵn sàng cùng VietSolve tạo khác biệt?
-            </h2>
-            <p className="text-xl text-white/90 mb-8">Tư vấn miễn phí – Hợp tác dài hạn – Hiệu quả đo lường được.</p>
-            <Link
-              href="/services"
-              className="inline-flex items-center px-8 py-4 bg-white text-red-600 hover:bg-gray-100 font-semibold rounded-full transition-all duration-300 shadow-lg hover:shadow-xl"
-            >
-              <CheckCircle2 className="mr-2 h-5 w-5" />
-              Bắt đầu ngay hôm nay
-            </Link>
-          </motion.div>
         </div>
       </section>
     </div>
