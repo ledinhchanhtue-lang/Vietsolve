@@ -104,8 +104,14 @@ export default function BlogPage() {
                 </div>
               </div>
 
-              {/* Editorial visual — brand grid, no stock imagery */}
-              <div className="relative hidden aspect-[4/3] overflow-hidden rounded-2xl border border-gray-200 bg-gradient-to-br from-gray-900 via-gray-800 to-red-950 lg:block">
+              {/* Editorial visual — brand grid, no stock imagery. The tilt +
+                  offset plate lift it off the page; both settle on hover. */}
+              <div className="relative hidden lg:block group">
+                <span
+                  aria-hidden="true"
+                  className="absolute inset-0 translate-x-3 translate-y-3 rounded-2xl border border-red-100/80 bg-gradient-to-br from-red-50/70 to-gray-50"
+                />
+                <div className="relative aspect-[4/3] overflow-hidden rounded-2xl border border-gray-200 bg-gradient-to-br from-gray-900 via-gray-800 to-red-950 rotate-1 transition-transform duration-500 ease-out group-hover:rotate-0 motion-reduce:rotate-0">
                 <svg
                   viewBox="0 0 400 300"
                   className="absolute inset-0 h-full w-full"
@@ -132,6 +138,7 @@ export default function BlogPage() {
                     ))}
                   </g>
                 </svg>
+                </div>
               </div>
             </motion.div>
           ) : (

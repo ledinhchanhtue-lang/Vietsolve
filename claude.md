@@ -87,6 +87,13 @@ Homepage: tên + 1 câu + 3 highlight + link. `/services`: danh sách đầy đ�
 | `project-visual.tsx` | Thumbnail dự án: có ảnh thật → khung browser chrome; chưa có → visual sinh theo slug |
 | `lac-bird-mark.tsx` | Chim Lạc dạng line-art construction (About). **Không phải logo** — logo không bao giờ vẽ lại. |
 
+## ⚠️ Language switcher VI/EN
+Segmented switch trong `navbar.tsx` (`LanguageToggle`): capsule trắng viền xám, **thumb đỏ trượt** bằng `translate-x` (compositor-only, tắt ở reduced-motion), 2 cell cố định `w-10` để thumb trượt đúng 1 slot, `aria-pressed` cho trạng thái. **Đừng đổi lại thành 2 ô đỏ đặc kiểu utility.**
+
+## ⚠️ Pseudo-3D depth — dùng đúng 2 pattern này
+- **Panel stack** (hero): container `perspective` + `preserve-3d`, layer con `translateZ` âm dần + shadow làm depth. Chỉ hiện ≥ xl **và hero content phải giữ `xl:pr-[360px]`** — bỏ padding đó là headline chui xuống dưới stack (đã đo 96px chồng thật ở 1280).
+- **Offset plate**: `<span aria-hidden className="absolute inset-0 translate-x-2.5 translate-y-2.5 rounded-2xl border border-red-100/80 bg-gradient-to-br from-red-50/70 to-gray-50" />` đặt TRƯỚC card trong 1 wrapper `relative` (form Contact, featured project, visual Blog). Không nghiêng xoay liên tục, không 3D nặng.
+
 ## ⚠️ Button system — dùng `components/ui-kit/button.tsx`
 4 loại: `PrimaryButton` (đỏ đặc, 48px, light sweep + glow) · `SecondaryButton` (viền, wipe đỏ nhạt) · `TextLink` (underline chạy trái→phải) · `IconButton` (44×44 + `aria-label`).
 Loại thứ 5 cho form: **`components/ui-kit/chip.tsx`** — `SelectableChip` (radio, selected có inner glow + badge check) và `Tag` (pill read-only cho deliverable/highlight).

@@ -1,9 +1,8 @@
 "use client"
 
 import { Pacifico } from "next/font/google"
-import { PrimaryButton } from "@/components/ui-kit/button"
+import { PrimaryButton, SecondaryButton } from "@/components/ui-kit/button"
 import { HeroTech } from "@/components/tech/hero-tech"
-import Link from "next/link"
 import { cn } from "@/lib/utils"
 import { useLanguage } from "@/lib/i18n"
 
@@ -37,14 +36,18 @@ export default function Hero() {
         <div className="absolute inset-0 bg-white/75" />
       </div>
 
-      {/* Tech layer sits above the video's white wash, below the copy. Chips are
-          xl-only and pull their labels from the same i18n keys the service
-          section uses, so nothing here invents a capability. */}
+      {/* Tech layer sits above the video's white wash, below the copy. The
+          layered panel stack is xl-only and pulls its labels from the same i18n
+          keys the service section uses, so nothing here invents a capability. */}
       <HeroTech
-        chips={[t.footer.service1, t.footer.service5, t.footer.service3]}
+        panels={[t.footer.service1, t.footer.service4, t.footer.service3, t.footer.service5]}
       />
 
-      <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      {/* xl:pr reserves the right gutter for the layered panel stack — without
+          it the headline runs underneath the panels at 1280px (measured 96px of
+          real glyph overlap). Below xl the stack is hidden and the padding
+          resets, so nothing changes on smaller screens. */}
+      <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 xl:pr-[360px]">
         <div className="max-w-5xl mx-auto text-center lg:text-left space-y-6">
           <div className="space-y-5">
             <div className="inline-flex items-center px-5 py-2.5 bg-white/80 border border-red-200 rounded-full text-xs sm:text-sm text-gray-900 font-semibold tracking-wide backdrop-blur-sm">
@@ -93,12 +96,14 @@ export default function Hero() {
                 variant, so the styling silently fell back and the button was
                 also an <a> nested inside a <Link>. */}
             <PrimaryButton href="/contact">{t.hero.ctaStart}</PrimaryButton>
-            <Link
+            {/* Last inline-styled CTA on the site — now the kit Secondary with
+                the translucent surface it needs over the video. */}
+            <SecondaryButton
               href="/case-studies"
-              className="inline-flex items-center justify-center min-h-[44px] px-6 rounded-full border border-gray-300 bg-white/70 text-gray-900 font-medium hover:bg-white hover:border-gray-400 transition-colors backdrop-blur-sm"
+              className="border-gray-300 bg-white/70 backdrop-blur-sm"
             >
               {t.hero.ctaSecondary}
-            </Link>
+            </SecondaryButton>
           </div>
         </div>
       </div>

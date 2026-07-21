@@ -142,14 +142,27 @@ export default function Navbar() {
 }
 
 function LanguageToggle({ lang, toggle }: { lang: "vi" | "en"; toggle: () => void }) {
-  /* aria-pressed exposes which language is active — a single unlabelled
-     button gave assistive tech no way to read the current state. */
+  /* Segmented switch. The previous version was two hard-edged cells whose
+     active half flipped to a solid red block — it read as a dev utility, not a
+     designed control. Now one capsule with a sliding red thumb: both cells are
+     fixed-width so the thumb travels exactly one slot, the transition is
+     transform-only (compositor-friendly) and is removed under reduced motion.
+     aria-pressed still exposes the active language to assistive tech. */
   return (
     <div
       role="group"
       aria-label="Ngôn ngữ / Language"
-      className="flex items-center rounded-full border border-red-200 overflow-hidden text-xs font-semibold"
+      className="relative flex items-center rounded-full border border-gray-200 bg-white/85 p-0.5 text-xs font-semibold shadow-sm backdrop-blur-sm"
     >
+      <span
+        aria-hidden="true"
+        className={cn(
+          "absolute bottom-0.5 left-0.5 top-0.5 w-10 rounded-full bg-red-600",
+          "shadow-[0_1px_5px_rgba(220,38,38,0.45),inset_0_1px_0_rgba(255,255,255,0.25)]",
+          "transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none",
+          lang === "vi" ? "translate-x-0" : "translate-x-full",
+        )}
+      />
       {(["vi", "en"] as const).map((code) => (
         <button
           key={code}
@@ -160,9 +173,9 @@ function LanguageToggle({ lang, toggle }: { lang: "vi" | "en"; toggle: () => voi
           aria-pressed={lang === code}
           aria-label={code === "vi" ? "Tiếng Việt" : "English"}
           className={cn(
-            "flex min-h-11 items-center px-3 transition-colors",
+            "relative z-10 flex min-h-11 w-10 items-center justify-center rounded-full transition-colors duration-300",
             "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-600 focus-visible:ring-inset",
-            lang === code ? "bg-red-700 text-white" : "text-gray-600 hover:text-gray-900",
+            lang === code ? "text-white" : "text-gray-500 hover:text-gray-900",
           )}
         >
           {code.toUpperCase()}

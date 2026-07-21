@@ -349,7 +349,13 @@ export default function ContactPage() {
             </div>
 
             {/* ---- Right: form card ---- */}
-            <div className="order-1 lg:order-2">
+            {/* The offset plate behind the card is what gives it depth — the
+                card reads as lifted off the page instead of printed on it. */}
+            <div className="relative order-1 lg:order-2">
+              <span
+                aria-hidden="true"
+                className="absolute inset-0 translate-x-2.5 translate-y-2.5 rounded-2xl border border-red-100/80 bg-gradient-to-br from-red-50/70 to-gray-50"
+              />
               {status === "sent" ? (
                 <SuccessCard
                   title={t.contact.successTitle}

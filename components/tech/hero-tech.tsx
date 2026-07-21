@@ -36,7 +36,7 @@ const NODES = [
   { cx: 1116, cy: 192, delay: "-0.6s" },
 ]
 
-export function HeroTech({ chips }: { chips?: string[] }) {
+export function HeroTech({ panels }: { panels?: string[] }) {
   const ref = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -125,30 +125,64 @@ export function HeroTech({ chips }: { chips?: string[] }) {
           </g>
         </svg>
 
-        {/* Capability chips — only where there is genuinely spare canvas (xl and
-            up, bottom-right gutter). Decorative: the layer is aria-hidden, and
-            every one of these words already appears as real content further
-            down the page. */}
-        {chips && chips.length > 0 && (
+        {/* Layered panel stack — the hero's pseudo-3D moment, replacing the
+            earlier flat chip column. One capability per layer, stacked in a
+            shared perspective with counter-parallax so the stack drifts against
+            the grid and reads as genuinely deeper than the page. xl-only and
+            decorative: every label already appears as real content below. */}
+        {panels && panels.length > 0 && (
           <div
-            className="absolute bottom-10 right-8 hidden xl:flex flex-col items-end gap-2"
+            className="absolute right-10 top-1/2 hidden w-[300px] xl:block"
             style={{
-              transform: "translate3d(calc(var(--vs-px) * -0.6), calc(var(--vs-py) * -0.6), 0)",
+              perspective: "1100px",
+              transform: "translate3d(calc(var(--vs-px) * -0.7), calc(-50% + var(--vs-py) * -0.7), 0)",
             }}
           >
-            {chips.map((chip, i) => (
-              <span
-                key={chip}
-                className="flex items-center gap-2 rounded-full border border-gray-200/80 bg-white/70 px-3 py-1.5 text-[11px] font-medium tracking-wide text-gray-500 backdrop-blur-sm"
-                style={{ opacity: 0.9 - i * 0.12 }}
-              >
-                <span
-                  className="h-1 w-1 rounded-full bg-red-600 vs-node vs-anim"
-                  style={{ animationDelay: `${-i * 0.9}s` }}
-                />
-                {chip}
-              </span>
-            ))}
+            <div
+              className="relative h-[290px]"
+              style={{ transformStyle: "preserve-3d", transform: "rotateY(-9deg) rotateX(4deg)" }}
+            >
+              {panels.slice(0, 4).map((label, i) => {
+                /* Front card is fully opaque with the red accent; each layer
+                   behind steps up-right, fades and recedes on Z. Shadows do the
+                   depth work — no heavy blur layers. */
+                const depth = panels.length - 1 - i
+                return (
+                  <div
+                    key={label}
+                    className="absolute left-0 right-0 rounded-xl border bg-white/90 p-4 backdrop-blur-sm"
+                    style={{
+                      top: `${i * 58}px`,
+                      transform: `translateZ(${-depth * 34}px) translateX(${depth * 10}px)`,
+                      opacity: 1 - depth * 0.16,
+                      borderColor: i === 0 ? "rgb(254 202 202)" : "rgb(229 231 235)",
+                      boxShadow:
+                        i === 0
+                          ? "0 18px 34px -18px rgb(220 38 38 / 0.35), 0 4px 10px -6px rgb(15 23 42 / 0.15)"
+                          : "0 14px 26px -18px rgb(15 23 42 / 0.35)",
+                    }}
+                  >
+                    <div className="flex items-center gap-2.5">
+                      <span
+                        className={
+                          i === 0
+                            ? "h-2 w-2 rounded-full bg-red-600 vs-node vs-anim"
+                            : "h-2 w-2 rounded-full bg-gray-300"
+                        }
+                      />
+                      <span className="text-xs font-semibold tracking-wide text-gray-800">
+                        {label}
+                      </span>
+                    </div>
+                    {/* Skeleton content rows — an interface being assembled */}
+                    <div className="mt-3 space-y-1.5">
+                      <span className={`block h-1.5 rounded-full ${i === 0 ? "w-3/4 bg-red-100" : "w-2/3 bg-gray-100"}`} />
+                      <span className="block h-1.5 w-1/2 rounded-full bg-gray-100" />
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
           </div>
         )}
       </div>

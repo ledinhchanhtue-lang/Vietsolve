@@ -89,10 +89,18 @@ export default function CaseStudiesPage() {
                 <div
                   className={
                     featured
-                      ? "grid items-center gap-8 rounded-2xl border border-gray-200 bg-white p-6 shadow-sm transition-all duration-300 hover:border-red-200 hover:shadow-md lg:grid-cols-[1.15fr_1fr] lg:p-8"
+                      ? "relative grid items-center gap-8 rounded-2xl border border-gray-200 bg-white p-6 shadow-sm transition-all duration-300 hover:border-red-200 hover:shadow-md lg:grid-cols-[1.15fr_1fr] lg:p-8"
                       : ""
                   }
                 >
+                  {featured && (
+                    /* Offset plate — the featured card floats above the grid
+                       instead of sitting flush with the other three. */
+                    <span
+                      aria-hidden="true"
+                      className="absolute inset-0 -z-10 translate-x-3 translate-y-3 rounded-2xl border border-red-100/80 bg-gradient-to-br from-red-50/60 to-gray-50"
+                    />
+                  )}
                   {/* Shared visual system — each project renders differently */}
                   <ProjectVisual
                     project={project}
