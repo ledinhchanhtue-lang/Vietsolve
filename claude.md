@@ -64,6 +64,25 @@ Hero → 3 trụ cột (Intelligent/Creative/Innovation) → Hệ sinh thái d�
 Branding & Strategy · Marketing & Growth · Media & Creative · Website & Digital Products · AI Agents & Automation · Data, SEO & Analytics.
 Homepage: tên + 1 câu + 3 highlight + link. `/services`: danh sách đầy đủ + anchor `#id`.
 
+## ⚠️ Button system — dùng `components/ui-kit/button.tsx`
+4 loại duy nhất: `PrimaryButton` (đỏ đặc, 48px) · `SecondaryButton` (trắng viền xám, 48px) · `TextLink` (đỏ + mũi tên, min 44px) · `IconButton` (44×44 + `aria-label`).
+- **Đừng dùng lại `animated-button.tsx`** cho CTA mới — nó từng co lại thành hộp 20px và nhận `variant="slim"` không tồn tại.
+- Mọi tap target đứng riêng phải ≥ 44px (WCAG 2.5.8). Link nằm giữa câu văn được miễn.
+
+## ⚠️ Mobile: đừng animate `x` trên element full-width
+`initial={{ x: 20 }}` của framer-motion đẩy document rộng thêm 20px trước khi `whileInView` chạy → cả trang kéo ngang được ở 375px. Dùng `y` thay cho `x`. `globals.css` có `overflow-x: clip` làm lưới an toàn.
+
+## Kiểm tra trước khi deploy
+```bash
+npx tsc --noEmit     # phải 0 lỗi — next.config có ignoreBuildErrors: true nên build KHÔNG bắt lỗi type
+npm run build
+```
+
+## Asset
+- `public/videos/hero-bg.mp4` — drone footage thật của VietSolve (720p/30fps/no-audio/faststart, ~9.6MB).
+- `app/icon.png` + `app/apple-icon.png` — chim Lạc đỏ cắt từ logo chính thức (file convention của Next, **đừng** thêm block `icons` vào `layout.tsx`).
+- `public/og.png` — og:image + twitter:image.
+
 ## Form liên hệ — GỬI THẬT
 `components/contact-page.tsx`: có `NEXT_PUBLIC_CONTACT_ENDPOINT` → POST; không có → mở mailto soạn sẵn tới email verified. Field: name, email, phone, company, interest (6 nhóm), budget, timeline, message, consent. Validate + không reset khi lỗi.
 → **Nên làm:** tạo Cloudflare Pages Function / Formspree rồi set `NEXT_PUBLIC_CONTACT_ENDPOINT`.
