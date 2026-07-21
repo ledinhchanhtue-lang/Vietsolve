@@ -1,20 +1,18 @@
 "use client"
 
 import { TechLayer } from "@/components/tech/tech-layer"
-import { LAC_PATH, LAC_VIEWBOX } from "@/lib/lac-path"
+import { LOGO_BIRD_PATH, LOGO_TEXT_PATH, LOGO_VIEWBOX } from "@/lib/lac-path"
 
 /**
- * About hero, right column — the actual Lạc bird from the logo, presented as a
- * working drawing.
+ * About hero, right column — the full VietSolve logo as a wireframe drawing.
  *
- * The geometry is the real mark (traced from the logo file — see lib/lac-path),
- * not an interpretation. On first view the outline draws itself along the
- * bird's true contour, then the brand-red fill fades in underneath; a
- * construction grid and keyword panels frame it like an identity-manual page.
+ * The geometry is the real logo (traced from the PNG — see lib/lac-path), and
+ * it stays OUTLINE ONLY: the bird's contour draws itself in red, then the
+ * wordmark draws in charcoal. No fill — the wireframe read is the point.
  *
  * One-shot: the draw is gated by the TechLayer observer and never loops.
- * Reduced-motion shows the finished mark immediately. Decorative — the logo
- * itself (with alt text) lives in the header; this layer is aria-hidden.
+ * Reduced-motion shows the finished outline immediately. Decorative — the
+ * real logo (with alt text) lives in the header; this layer is aria-hidden.
  */
 
 const KEYWORDS = ["Creative", "Intelligence", "Innovation", "Technology", "Growth"]
@@ -31,36 +29,36 @@ export function AboutHeroVisual() {
           <svg viewBox="0 0 400 320" className="absolute inset-0 h-full w-full" fill="none">
             <g stroke="rgb(15 23 42 / 0.10)" strokeWidth="1">
               <circle cx="200" cy="160" r="118" />
-              <circle cx="200" cy="160" r="74" />
               <path d="M200 28 V 292 M68 160 H 332" strokeDasharray="4 7" />
             </g>
           </svg>
 
-          {/* The bird itself — real logo geometry, centred on the surface */}
+          {/* The logo — real geometry, outline only. Bird draws first in red,
+              the wordmark follows in charcoal. */}
           <svg
-            viewBox={LAC_VIEWBOX}
-            className="absolute left-1/2 top-1/2 h-[72%] w-[72%] -translate-x-1/2 -translate-y-1/2"
+            viewBox={LOGO_VIEWBOX}
+            className="absolute left-1/2 top-1/2 h-[80%] w-[84%] -translate-x-1/2 -translate-y-1/2"
             fill="none"
           >
-            {/* Fill fades in once the outline is mostly drawn */}
             <path
-              d={LAC_PATH}
-              fill="#dc2626"
-              fillRule="evenodd"
-              stroke="none"
-              className="vs-anim"
-              style={{ animation: "vs-fill-in 0.9s ease-out 1.6s backwards" }}
-            />
-            {/* Outline draw — traces the true contour of the mark */}
-            <path
-              d={LAC_PATH}
+              d={LOGO_BIRD_PATH}
               pathLength={1}
-              stroke="rgb(153 27 27 / 0.9)"
+              stroke="#dc2626"
+              strokeWidth="3"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="vs-draw vs-anim"
+              style={{ animationDuration: "1.8s" }}
+            />
+            <path
+              d={LOGO_TEXT_PATH}
+              pathLength={1}
+              stroke="rgb(15 23 42 / 0.75)"
               strokeWidth="2.5"
               strokeLinecap="round"
               strokeLinejoin="round"
               className="vs-draw vs-anim"
-              style={{ animationDuration: "2s" }}
+              style={{ animationDuration: "2.2s", animationDelay: "0.9s" }}
             />
           </svg>
 

@@ -1,17 +1,16 @@
 "use client"
 
 import { TechLayer } from "@/components/tech/tech-layer"
-import { LAC_PATH, LAC_VIEWBOX } from "@/lib/lac-path"
+import { LOGO_BIRD_PATH, LOGO_TEXT_PATH, LOGO_VIEWBOX } from "@/lib/lac-path"
 
 /**
- * Chim Lạc — the signature visual moment of the About page.
+ * Signature visual moment of the About page — the full logo as a large
+ * wireframe construction drawing.
  *
- * The bird is the REAL mark from the logo (traced to vectors in lib/lac-path),
- * presented as a large construction drawing: Đông Sơn-inspired concentric
- * rings, radial ticks and axes behind it, the outline drawing itself along the
- * true contour when the section scrolls into view, then the brand-red fill
- * breathing in underneath. Anchor pulses on the ring intersections finish the
- * composition, and everything then stands still.
+ * Real geometry (traced from the logo PNG, lib/lac-path), OUTLINE ONLY — no
+ * fill, that is what keeps the technology read. The bird contour draws itself
+ * in red when the section scrolls into view, the wordmark follows in charcoal,
+ * all over a faint Đông Sơn ring motif. Then everything stands still.
  *
  * Gated by the TechLayer observer; flattened under prefers-reduced-motion.
  * Decorative: aria-hidden.
@@ -44,7 +43,6 @@ export function LacSignatureVisual() {
             </g>
             <g stroke="rgb(15 23 42 / 0.12)" strokeWidth="1">
               <path d="M240 12 V 468 M12 240 H 468" strokeDasharray="4 8" />
-              <path d="M78 402 L 402 78" strokeDasharray="4 8" />
             </g>
 
             {/* Anchor pulses where the axes meet the outer ring */}
@@ -58,33 +56,36 @@ export function LacSignatureVisual() {
             {/* Coordinate markers — identity-manual annotation */}
             <g fill="rgb(15 23 42 / 0.35)" fontSize="10" fontFamily="monospace">
               <text x="252" y="40">240 · 44</text>
-              <text x="330" y="454">370 × 357</text>
+              <text x="330" y="454">1080 × 1080</text>
             </g>
           </svg>
 
-          {/* The bird — real logo geometry, large, centred on the drum */}
+          {/* The full logo — wireframe only, bird in red then wordmark in
+              charcoal. Wide mark on a square drum: centred, ~86% width. */}
           <svg
-            viewBox={LAC_VIEWBOX}
-            className="absolute left-1/2 top-1/2 h-[62%] w-[62%] -translate-x-1/2 -translate-y-1/2"
+            viewBox={LOGO_VIEWBOX}
+            className="absolute left-1/2 top-1/2 h-auto w-[86%] -translate-x-1/2 -translate-y-1/2"
             fill="none"
           >
             <path
-              d={LAC_PATH}
-              fill="#dc2626"
-              fillRule="evenodd"
-              stroke="none"
-              className="vs-anim"
-              style={{ animation: "vs-fill-in 1s ease-out 2s backwards" }}
-            />
-            <path
-              d={LAC_PATH}
+              d={LOGO_BIRD_PATH}
               pathLength={1}
-              stroke="rgb(153 27 27 / 0.9)"
-              strokeWidth="2"
+              stroke="#dc2626"
+              strokeWidth="3"
               strokeLinecap="round"
               strokeLinejoin="round"
               className="vs-draw vs-anim"
-              style={{ animationDuration: "2.4s" }}
+              style={{ animationDuration: "2s" }}
+            />
+            <path
+              d={LOGO_TEXT_PATH}
+              pathLength={1}
+              stroke="rgb(15 23 42 / 0.75)"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="vs-draw vs-anim"
+              style={{ animationDuration: "2.4s", animationDelay: "1s" }}
             />
           </svg>
         </TechLayer>
