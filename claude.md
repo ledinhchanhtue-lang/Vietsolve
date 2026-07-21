@@ -48,6 +48,7 @@ lib/
     insights.ts      # rỗng (Blog empty state)
 components/
   ui-kit/button.tsx  # ⭐ 4 loại button duy nhất của cả site
+  tech/              # ⭐ lớp hiệu ứng công nghệ (backdrop, layer, hero, logo LED, divider)
   project-visual.tsx # visual sinh theo slug khi dự án chưa có ảnh thật
   navbar.tsx animated-footer.tsx hero.tsx
   three-pillars.tsx innovative-services.tsx featured-projects.tsx
@@ -70,6 +71,31 @@ Homepage: tên + 1 câu + 3 highlight + link. `/services`: danh sách đầy đ�
 4 loại duy nhất: `PrimaryButton` (đỏ đặc, 48px) · `SecondaryButton` (trắng viền xám, 48px) · `TextLink` (đỏ + mũi tên, min 44px) · `IconButton` (44×44 + `aria-label`).
 - **Đừng dùng lại `animated-button.tsx`** cho CTA mới — nó từng co lại thành hộp 20px và nhận `variant="slim"` không tồn tại.
 - Mọi tap target đứng riêng phải ≥ 44px (WCAG 2.5.8). Link nằm giữa câu văn được miễn.
+
+## ⚠️ Tech effect system — `components/tech/`
+Lớp hiệu ứng công nghệ dùng chung cho cả site. **Đừng tự chế pattern riêng cho từng section.**
+
+| File | Vai trò |
+|---|---|
+| `tech-backdrop.tsx` | Nền tĩnh toàn site (grid + aura + circuit). **Thay cho** `animated-background/background-paths/background-stripes` đã xóa |
+| `tech-layer.tsx` | Bọc mọi lớp trang trí có animation; IntersectionObserver bật/tắt `data-tech-active` → CSS pause khi ngoài viewport |
+| `hero-tech.tsx` | Nền hero: grid L2 + 3 trace + node + parallax chuột |
+| `led-logo.tsx` | Logo + dải sáng LED (mask bằng chính file PNG → sáng chạy theo contour chim Lạc) |
+| `tech-divider.tsx` | Divider có đèn chạy + node pulse |
+
+**Pattern 3 cấp** (class trong `globals.css`, tiền tố `vs-`):
+- `.vs-grid-1` subtle — section nhiều chữ
+- `.vs-grid-2` medium — hero, services, contact, case hero
+- `.vs-grid-3` accent — CTA, hover card, footer
+
+**Luôn kèm mask** (`.vs-mask-center` / `-corner` / `-up` / `-down`) để pattern không chạy dưới chữ.
+
+**Quy tắc bắt buộc:**
+- Mọi animation lặp phải có class `.vs-anim` → mới pause được khi ngoài viewport và tắt được ở `prefers-reduced-motion`.
+- Layer chỉ desktop thì thêm `.vs-desktop`.
+- Neon chỉ ở hover / active / line / 1 từ trong heading. **Không** glow thường trực cả box.
+- Tỷ lệ màu: ~85% trắng/charcoal, ~12% đỏ brand, ≤3% cyan (chỉ 1 trace duy nhất ở hero).
+- `.vs-dash` (stroke-dashoffset) **tắt trên mobile** — nó repaint SVG mỗi frame, không chạy trên compositor.
 
 ## ⚠️ Mobile: đừng animate `x` trên element full-width
 `initial={{ x: 20 }}` của framer-motion đẩy document rộng thêm 20px trước khi `whileInView` chạy → cả trang kéo ngang được ở 375px. Dùng `y` thay cho `x`. `globals.css` có `overflow-x: clip` làm lưới an toàn.

@@ -27,6 +27,34 @@ function hash(s: string) {
 type Pattern = "grid" | "arcs" | "columns" | "diagonals"
 const PATTERNS: Pattern[] = ["grid", "arcs", "columns", "diagonals"]
 
+/* Shared frame so a real screenshot and a generated visual get identical
+   geometry, border treatment and hover behaviour. */
+const FRAME =
+  "relative aspect-[16/10] overflow-hidden rounded-xl border border-gray-200 bg-gray-100 " +
+  "transition-colors duration-300 group-hover:border-red-300"
+
+/**
+ * Hover accents on the thumbnail: a light bar that scans the top edge once, and
+ * a bracket that resolves in the top-left corner. Both are hover-only and both
+ * live above the image but below the card's text.
+ */
+function FrameAccents() {
+  return (
+    <>
+      <span
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 vs-scan rounded-xl"
+      />
+      <span
+        aria-hidden="true"
+        className="pointer-events-none absolute left-3 top-3 h-5 w-5 border-l-2 border-t-2 border-white/0 -translate-x-1 -translate-y-1 transition-all duration-300 group-hover:border-white/70 group-hover:translate-x-0 group-hover:translate-y-0"
+      />
+      {/* A touch more contrast on the image itself, so the title above it lifts */}
+      <span className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/15 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+    </>
+  )
+}
+
 export function ProjectVisual({
   project,
   className,
@@ -41,12 +69,7 @@ export function ProjectVisual({
   /* Real asset — framed, cover-cropped, explicit ratio, lazy unless priority */
   if (project.image) {
     return (
-      <div
-        className={cn(
-          "relative aspect-[16/10] overflow-hidden rounded-xl border border-gray-200 bg-gray-100",
-          className,
-        )}
-      >
+      <div className={cn(FRAME, className)}>
         <Image
           src={project.image}
           alt={`${project.name} — ${project.summary.vi}`}
@@ -56,6 +79,7 @@ export function ProjectVisual({
           sizes={sizes}
           className="object-cover transition-transform duration-500 ease-out group-hover:scale-[1.03]"
         />
+        <FrameAccents />
       </div>
     )
   }
@@ -72,12 +96,7 @@ export function ProjectVisual({
         : "from-gray-800 via-gray-900 to-black"
 
   return (
-    <div
-      className={cn(
-        "relative aspect-[16/10] overflow-hidden rounded-xl border border-gray-200",
-        className,
-      )}
-    >
+    <div className={cn(FRAME, className)}>
       <div className={cn("absolute inset-0 bg-gradient-to-br", bg)} />
 
       <svg
@@ -140,8 +159,12 @@ export function ProjectVisual({
       </svg>
 
       <div className="absolute inset-0 flex items-end p-5 sm:p-6">
-        <span className="text-lg font-bold text-white/90 sm:text-xl">{project.name}</span>
+        <span className="text-lg font-bold text-white/90 transition-colors duration-300 group-hover:text-white sm:text-xl">
+          {project.name}
+        </span>
       </div>
+
+      <FrameAccents />
     </div>
   )
 }

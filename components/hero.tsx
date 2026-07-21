@@ -2,6 +2,7 @@
 
 import { Pacifico } from "next/font/google"
 import { PrimaryButton } from "@/components/ui-kit/button"
+import { HeroTech } from "@/components/tech/hero-tech"
 import Link from "next/link"
 import { cn } from "@/lib/utils"
 import { useLanguage } from "@/lib/i18n"
@@ -36,6 +37,13 @@ export default function Hero() {
         <div className="absolute inset-0 bg-white/75" />
       </div>
 
+      {/* Tech layer sits above the video's white wash, below the copy. Chips are
+          xl-only and pull their labels from the same i18n keys the service
+          section uses, so nothing here invents a capability. */}
+      <HeroTech
+        chips={[t.footer.service1, t.footer.service5, t.footer.service3]}
+      />
+
       <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="max-w-5xl mx-auto text-center lg:text-left space-y-6">
           <div className="space-y-5">
@@ -48,13 +56,23 @@ export default function Hero() {
             <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-[1.1] text-balance">
               <span className="text-gray-900">{t.hero.title1} </span>
               <span className="text-gray-900">{t.hero.title2} </span>
-              <span
-                className={cn(
-                  "bg-gradient-to-r from-red-600 via-gray-900 to-red-700 bg-clip-text text-transparent",
-                  pacifico.className,
-                )}
-              >
-                {t.hero.titleAccent}
+              {/* One accent word, one accent treatment: gradient fill plus a
+                  red rule underneath with a soft bloom. The rest of the
+                  headline stays flat charcoal — a headline where every word
+                  glows reads as a shop sign, not a brand. */}
+              <span className="relative inline-block">
+                <span
+                  className={cn(
+                    "relative bg-gradient-to-r from-red-600 via-gray-900 to-red-700 bg-clip-text text-transparent",
+                    pacifico.className,
+                  )}
+                >
+                  {t.hero.titleAccent}
+                </span>
+                <span
+                  aria-hidden="true"
+                  className="absolute -bottom-0.5 left-0 right-0 h-[3px] rounded-full bg-gradient-to-r from-red-600 via-red-500 to-transparent shadow-[0_0_10px_rgba(220,38,38,0.55)]"
+                />
               </span>
               {t.hero.title3 && <span className="text-gray-700"> {t.hero.title3}</span>}
             </h1>

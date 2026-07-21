@@ -3,7 +3,7 @@
 import Link from "next/link"
 import { ArrowRight } from "lucide-react"
 import { cn } from "@/lib/utils"
-import type { ReactNode, ButtonHTMLAttributes } from "react"
+import type { ReactNode, ButtonHTMLAttributes, MouseEventHandler } from "react"
 
 /**
  * Button system — one source of truth for the whole site.
@@ -19,18 +19,25 @@ const base =
   "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-600 focus-visible:ring-offset-2 " +
   "disabled:opacity-60 disabled:pointer-events-none"
 
-/** Solid red. One primary action per view. */
+/** Solid red. One primary action per view.
+ *  vs-sweep sends a thin light band under the label on hover; vs-glow-soft adds
+ *  a low red bloom below the button. Both are hover-only — a button that glows
+ *  permanently stops reading as "this is the action". */
 const primaryCls = cn(
   base,
   "bg-red-600 text-white px-7 min-h-[48px] shadow-sm",
   "hover:bg-red-700 hover:-translate-y-px active:translate-y-0",
+  "vs-sweep vs-glow-soft",
 )
 
-/** White/transparent with a charcoal hairline. */
+/** White/transparent with a charcoal hairline.
+ *  vs-fill wipes a faint red tint in from the left instead of a flat colour
+ *  swap, so the two button kinds share one motion language. */
 const secondaryCls = cn(
   base,
   "bg-white text-gray-900 border border-gray-300 px-7 min-h-[48px]",
-  "hover:bg-gray-50 hover:border-gray-400",
+  "hover:border-red-300",
+  "vs-fill",
 )
 
 type Common = {
@@ -64,12 +71,28 @@ function renderAs(
   rest: ButtonHTMLAttributes<HTMLButtonElement>,
 ) {
   if (href) {
+    /* onClick has to survive the link branch: the mobile drawer's CTA relies on
+       it to close the menu, and it was previously dropped on the floor here
+       because only the <button> branch spread `rest`. */
+    const { onClick, "aria-label": ariaLabel } = rest
     return external ? (
-      <a href={href} target="_blank" rel="noopener noreferrer" className={classes}>
+      <a
+        href={href}
+        target="_blank"
+        rel="noopener noreferrer"
+        className={classes}
+        onClick={onClick as unknown as MouseEventHandler<HTMLAnchorElement>}
+        aria-label={ariaLabel}
+      >
         {content}
       </a>
     ) : (
-      <Link href={href} className={classes}>
+      <Link
+        href={href}
+        className={classes}
+        onClick={onClick as unknown as MouseEventHandler<HTMLAnchorElement>}
+        aria-label={ariaLabel}
+      >
         {content}
       </Link>
     )
@@ -128,8 +151,10 @@ export function TextLink({
   /* min-h-11 keeps these standalone CTAs at a 44px tap target. (Links sitting
      inside a sentence are exempt under WCAG 2.5.8's inline exception and are
      styled separately.) */
+  /* vs-underline draws a red→coral rule left-to-right on hover. `relative` is
+     required — the rule is a positioned pseudo-element. */
   const classes = cn(
-    "group inline-flex min-h-11 items-center gap-1.5 text-sm font-semibold text-red-600",
+    "group relative vs-underline inline-flex min-h-11 items-center gap-1.5 text-sm font-semibold text-red-600",
     "transition-colors duration-200 hover:text-red-700",
     "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-600 focus-visible:ring-offset-2 rounded-sm",
     className,

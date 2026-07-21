@@ -1,6 +1,8 @@
 "use client"
 
-import Image from "next/image"
+import { LedLogo } from "@/components/tech/led-logo"
+import { TechDivider } from "@/components/tech/tech-divider"
+import { TechLayer } from "@/components/tech/tech-layer"
 import Link from "next/link"
 import { motion } from "framer-motion"
 import { Instagram, Twitter, Linkedin, Youtube, Mail, Phone, MapPin } from "lucide-react"
@@ -31,7 +33,17 @@ export default function AnimatedFooter() {
   // Newsletter removed — it appeared on every page and did nothing (a setTimeout
   // that discarded the email). Reinstate only with a real subscription backend.
   return (
-    <footer className="relative bg-gray-900 border-t border-gray-700">
+    <footer className="relative overflow-hidden bg-gray-900 border-t border-gray-700">
+      {/* LED strip along the top edge — the hand-off from the last white
+          section into the footer, and the site's one full-width neon element. */}
+      <TechDivider variant="plain" className="absolute inset-x-0 top-0 z-20" />
+
+      {/* Level 3 accent pattern, faded upward so it never reaches the copy */}
+      <TechLayer>
+        <div className="absolute inset-0 vs-grid-3 vs-mask-up opacity-40" />
+        <div className="absolute inset-0 bg-[radial-gradient(28rem_20rem_at_88%_0%,rgb(220_38_38/0.12),transparent_72%)]" />
+      </TechLayer>
+
       {/* Main Footer Content */}
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-12">
@@ -43,14 +55,21 @@ export default function AnimatedFooter() {
             viewport={{ once: true }}
             className="space-y-8 text-center lg:text-left"
           >
-            <div className="group flex justify-center lg:justify-start">
-              <Image
+            {/* On charcoal the sweep runs white-cored rather than red, and the
+                intro is off — this logo is below the fold on load, so a one-shot
+                animation nobody sees is just wasted work. The underline pulse
+                is the footer's only looping element. */}
+            <div className="flex flex-col items-center gap-3 lg:items-start">
+              <LedLogo
                 src="/images/logo-vietsolve-official.png"
                 alt="VietSolve"
                 width={200}
                 height={80}
-                className="w-auto h-20 brightness-0 invert transition-transform duration-300 group-hover:scale-105"
+                className="w-auto h-20 brightness-0 invert transition-transform duration-300 hover:scale-105"
+                invert
+                intro={false}
               />
+              <TechDivider variant="plain" className="w-44" />
             </div>
             <p className="text-gray-300 text-lg leading-relaxed max-w-md mx-auto lg:mx-0">{t.footer.description}</p>
 

@@ -1,11 +1,11 @@
 "use client"
 
 import Link from "next/link"
-import Image from "next/image"
+import { LedLogo } from "@/components/tech/led-logo"
 import { usePathname } from "next/navigation"
 import { Menu, X } from "lucide-react"
 import { useState } from "react"
-import AnimatedButton from "./animated-button"
+import { PrimaryButton } from "@/components/ui-kit/button"
 import { useLanguage } from "@/lib/i18n"
 import { hasInsights } from "@/lib/content/insights"
 import { cn } from "@/lib/utils"
@@ -46,7 +46,7 @@ export default function Navbar() {
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center">
               <Link href="/" className="flex items-center space-x-3" aria-label="VietSolve — trang chủ">
-                <Image
+                <LedLogo
                   src="/images/logo-vietsolve-official.png"
                   alt="VietSolve"
                   width={140}
@@ -79,11 +79,11 @@ export default function Navbar() {
 
             <div className="hidden md:flex items-center space-x-4">
               <LanguageToggle lang={lang} toggle={toggle} />
-              <Link href="/contact">
-                <AnimatedButton size="sm" className="bg-red-700 text-white hover:bg-red-900 min-h-11">
-                  {t.nav.contactNow}
-                </AnimatedButton>
-              </Link>
+              {/* Last two AnimatedButton call sites, replaced so the header CTA
+                  shares the light-sweep and glow of every other primary. */}
+              <PrimaryButton href="/contact" withArrow={false} className="min-h-11 px-5 text-sm">
+                {t.nav.contactNow}
+              </PrimaryButton>
             </div>
 
             <div className="md:hidden flex items-center space-x-2">
@@ -124,11 +124,13 @@ export default function Navbar() {
                 </Link>
               ))}
               <div className="pt-3 border-t border-gray-200">
-                <Link href="/contact" className="block" onClick={() => setIsMenuOpen(false)}>
-                  <AnimatedButton className="w-full bg-red-700 text-white hover:bg-red-900">
-                    {t.nav.contactNow}
-                  </AnimatedButton>
-                </Link>
+                <PrimaryButton
+                  href="/contact"
+                  className="w-full"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  {t.nav.contactNow}
+                </PrimaryButton>
               </div>
             </div>
           </div>

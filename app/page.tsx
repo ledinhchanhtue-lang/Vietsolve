@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
-import BackgroundStripes from "@/components/background-stripes"
-import AnimatedBackground from "@/components/animated-background"
+import TechBackdrop from "@/components/tech/tech-backdrop"
+import { TechDivider } from "@/components/tech/tech-divider"
 import Navbar from "@/components/navbar"
 import Hero from "@/components/hero"
 import ThreePillars from "@/components/three-pillars"
@@ -9,7 +9,6 @@ import FeaturedProjects from "@/components/featured-projects"
 import HowWeWork from "@/components/how-we-work"
 import HomeCta from "@/components/home-cta"
 import AnimatedFooter from "@/components/animated-footer"
-import BackgroundPaths from "@/components/background-paths"
 
 export const metadata: Metadata = {
   title: "VietSolve — Creative, Technology & Growth Agency",
@@ -28,16 +27,19 @@ export const metadata: Metadata = {
 export default function Home() {
   return (
     <div className="relative min-h-screen bg-white">
-      <BackgroundPaths />
-      <AnimatedBackground />
-      <BackgroundStripes />
+      {/* One static backdrop replaces the three stacked background components */}
+      <TechBackdrop />
 
       <div className="relative z-40">
         <Navbar />
         <main id="main">
           <Hero />
           <ThreePillars />
+          {/* Dividers mark the joins the journey actually turns on: capability →
+              offer, and offer → proof. Not between every section. */}
+          <TechDivider className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8" />
           <InnovativeServices />
+          <TechDivider className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8" />
           <FeaturedProjects />
           <HowWeWork />
           <HomeCta />

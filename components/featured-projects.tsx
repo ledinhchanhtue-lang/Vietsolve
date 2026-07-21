@@ -7,6 +7,7 @@ import { useLanguage } from "@/lib/i18n"
 import { projects } from "@/lib/content/projects"
 import { ProjectVisual } from "@/components/project-visual"
 import { TextLink } from "@/components/ui-kit/button"
+import { TechLayer } from "@/components/tech/tech-layer"
 
 /**
  * Featured projects on the homepage — replaces the old ROI calculator (which
@@ -23,8 +24,14 @@ export default function FeaturedProjects() {
   if (shown.length === 0) return null
 
   return (
-    <section className="py-16 lg:py-24 bg-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="relative py-16 lg:py-24 bg-white">
+      {/* Level 1 only — the thumbnails already carry a lot of visual weight, so
+          the section behind them stays quiet. */}
+      <TechLayer>
+        <div className="absolute inset-0 vs-grid-1 vs-mask-center" />
+      </TechLayer>
+
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}

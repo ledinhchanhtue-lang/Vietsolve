@@ -13,6 +13,7 @@ import {
 import { useLanguage } from "@/lib/i18n"
 import { serviceGroups } from "@/lib/content/services"
 import { TextLink, SecondaryButton } from "@/components/ui-kit/button"
+import { TechLayer } from "@/components/tech/tech-layer"
 
 /**
  * Service ecosystem — the six service groups.
@@ -41,8 +42,14 @@ export default function InnovativeServices() {
   const { t, lang } = useLanguage()
 
   return (
-    <section className="py-16 lg:py-24 bg-gradient-to-b from-white to-gray-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="relative py-16 lg:py-24 bg-gradient-to-b from-white to-gray-50">
+      {/* Level 2 pattern, support only — masked away through the middle so it
+          never sits behind a card or a paragraph. */}
+      <TechLayer>
+        <div className="absolute inset-0 vs-grid-2 vs-mask-center opacity-50" />
+      </TechLayer>
+
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -69,10 +76,30 @@ export default function InnovativeServices() {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: (index % 3) * 0.1 }}
                 viewport={{ once: true }}
-                className="group flex flex-col bg-white border border-gray-200 rounded-2xl p-8 shadow-sm transition-all duration-300 ease-out hover:border-gray-300 hover:shadow-md hover:-translate-y-1"
+                /* vs-scan runs a short light bar across the top edge on hover
+                   only. Looping it on all six at once is exactly the kind of
+                   restlessness this design is trying to avoid. */
+                className="group relative isolate overflow-hidden vs-scan flex flex-col bg-white border border-gray-200 rounded-2xl p-8 shadow-sm transition-all duration-300 ease-out hover:border-red-200 hover:shadow-md hover:-translate-y-1"
               >
-                {/* Charcoal icon, no red circle — red is reserved as an accent */}
-                <Icon className="h-9 w-9 text-gray-900" strokeWidth={1.5} aria-hidden="true" />
+                {/* Card's own pattern: barely there at rest, lifted a few
+                    percent on hover so the card feels lit rather than recoloured. */}
+                <span
+                  aria-hidden="true"
+                  className="pointer-events-none absolute inset-0 -z-10 vs-grid-3 vs-mask-corner opacity-0 transition-opacity duration-300 group-hover:opacity-60"
+                />
+                {/* Corner bracket — draws itself in from the top-right on hover */}
+                <span
+                  aria-hidden="true"
+                  className="pointer-events-none absolute right-0 top-0 h-6 w-6 rounded-tr-2xl border-r-2 border-t-2 border-red-500/0 translate-x-1 -translate-y-1 transition-all duration-300 group-hover:border-red-500/50 group-hover:translate-x-0 group-hover:translate-y-0"
+                />
+
+                {/* Charcoal icon, no red circle — red is reserved as an accent.
+                    On hover it takes the brand colour and a soft bloom. */}
+                <Icon
+                  className="h-9 w-9 text-gray-900 transition-all duration-300 group-hover:text-red-600 group-hover:drop-shadow-[0_0_8px_rgba(220,38,38,0.35)]"
+                  strokeWidth={1.5}
+                  aria-hidden="true"
+                />
 
                 <h3 className="mt-6 text-xl font-bold text-gray-900">{group.name[lang]}</h3>
                 <p className="mt-3 text-gray-600 leading-relaxed">{group.tagline[lang]}</p>

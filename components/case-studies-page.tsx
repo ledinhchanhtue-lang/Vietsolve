@@ -7,6 +7,8 @@ import { ArrowRight, X } from "lucide-react"
 import { projects } from "@/lib/content/projects"
 import { ProjectVisual } from "@/components/project-visual"
 import { PrimaryButton } from "@/components/ui-kit/button"
+import { TechLayer } from "@/components/tech/tech-layer"
+import { TechDivider } from "@/components/tech/tech-divider"
 
 /**
  * Case studies — white theme, real projects only.
@@ -43,8 +45,13 @@ export default function CaseStudiesPage() {
   return (
     <main id="main" className="bg-white">
       {/* Hero */}
-      <section className="relative pt-32 pb-16 lg:pt-40 lg:pb-20 bg-gradient-to-br from-white via-red-50/30 to-gray-50/40">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="relative overflow-hidden pt-32 pb-16 lg:pt-40 lg:pb-20 bg-gradient-to-br from-white via-red-50/30 to-gray-50/40">
+        {/* Level 2 grid anchored top-right, away from the headline column */}
+        <TechLayer>
+          <div className="absolute inset-0 vs-grid-2 vs-mask-corner opacity-70" />
+        </TechLayer>
+
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -155,8 +162,13 @@ export default function CaseStudiesPage() {
       </section>
 
       {/* CTA */}
-      <section className="py-20 px-4 bg-gradient-to-br from-red-900 via-gray-900 to-black text-white">
-        <div className="max-w-3xl mx-auto text-center">
+      <section className="relative overflow-hidden py-20 px-4 bg-gradient-to-br from-red-900 via-gray-900 to-black text-white">
+        <TechDivider variant="plain" className="absolute inset-x-0 top-0" />
+        <TechLayer>
+          <div className="absolute inset-0 bg-[repeating-linear-gradient(-45deg,rgb(255_255_255/0.06)_0_1px,transparent_1px_11px)] vs-mask-down" />
+        </TechLayer>
+
+        <div className="relative max-w-3xl mx-auto text-center">
           <h2 className="text-3xl lg:text-4xl font-bold">Bạn có một bài toán cần giải?</h2>
           <p className="mt-5 text-lg text-gray-300 leading-relaxed">
             Chia sẻ với VietSolve về mục tiêu của doanh nghiệp, chúng tôi sẽ cùng bạn xác định hướng

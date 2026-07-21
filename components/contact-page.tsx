@@ -9,6 +9,8 @@ import { useLanguage } from "@/lib/i18n"
 import { siteConfig, readVerified } from "@/lib/site-config"
 import { projects } from "@/lib/content/projects"
 import { PrimaryButton, SecondaryButton } from "@/components/ui-kit/button"
+import { TechLayer } from "@/components/tech/tech-layer"
+import { TechDivider } from "@/components/tech/tech-divider"
 import { cn } from "@/lib/utils"
 
 /**
@@ -173,18 +175,43 @@ export default function ContactPage() {
       {/* ---------------- Hero ---------------- */}
       <section className="relative overflow-hidden pt-32 pb-12 lg:pt-40 lg:pb-16">
         <div className="absolute inset-0 bg-gradient-to-br from-red-50/60 via-white to-gray-50/60" />
-        {/* Light brand grid — kept very faint so text stays readable */}
-        <div
-          className="absolute inset-0 opacity-[0.5]"
-          style={{
-            backgroundImage:
-              "linear-gradient(rgba(0,0,0,0.035) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.035) 1px, transparent 1px)",
-            backgroundSize: "56px 56px",
-            maskImage: "radial-gradient(ellipse at top right, black, transparent 70%)",
-            WebkitMaskImage: "radial-gradient(ellipse at top right, black, transparent 70%)",
-          }}
-          aria-hidden="true"
-        />
+
+        {/* Was a one-off inline grid. Now the shared level-2 pattern plus a
+            contour motif, so the conversion page reads as part of the same
+            system as the hero instead of a page that decorates itself. */}
+        <TechLayer>
+          <div className="absolute inset-0 vs-grid-2 vs-mask-corner opacity-80" />
+          <div className="absolute inset-0 bg-[radial-gradient(30rem_22rem_at_88%_10%,rgb(220_38_38/0.09),transparent_72%)]" />
+
+          {/* Contour lines drawn from the arc of the Lạc bird's wing — the
+              motif from the logo, reduced to an energy path. Desktop only:
+              at 375px this would sit under the headline. */}
+          <svg
+            className="vs-desktop absolute inset-0 h-full w-full"
+            viewBox="0 0 1440 420"
+            fill="none"
+            preserveAspectRatio="xMidYMid slice"
+          >
+            <g stroke="rgb(15 23 42 / 0.07)" strokeWidth="1" fill="none">
+              <path d="M760 452 C 900 300, 1080 250, 1300 268" />
+              <path d="M790 452 C 930 288, 1110 232, 1340 246" />
+              <path d="M820 452 C 960 276, 1140 214, 1380 224" />
+            </g>
+            <path
+              d="M790 452 C 930 288, 1110 232, 1340 246"
+              stroke="rgb(220 38 38 / 0.7)"
+              strokeWidth="2"
+              strokeLinecap="round"
+              fill="none"
+              className="vs-dash vs-anim"
+            />
+            <g fill="rgb(220 38 38 / 0.5)">
+              <circle cx="1300" cy="268" r="4" className="vs-node vs-anim" />
+              <circle cx="1340" cy="246" r="4" className="vs-node vs-anim" style={{ animationDelay: "-1.4s" }} />
+              <circle cx="1380" cy="224" r="4" className="vs-node vs-anim" style={{ animationDelay: "-2.6s" }} />
+            </g>
+          </svg>
+        </TechLayer>
 
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
@@ -288,18 +315,28 @@ export default function ContactPage() {
                 </h2>
                 <ol className="relative mt-4">
                   {steps.map((step, i) => (
-                    <li key={step} className="relative flex gap-4 pb-5 last:pb-0">
+                    <motion.li
+                      key={step}
+                      initial={{ opacity: 0, y: 12 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true, amount: 0.6 }}
+                      transition={{ duration: 0.45, delay: i * 0.12 }}
+                      className="relative flex gap-4 pb-5 last:pb-0"
+                    >
                       {i < steps.length - 1 && (
+                        /* Connector reads as a signal path rather than a plain
+                           rule: it fades from brand red at the node it leaves
+                           to neutral at the node it reaches. */
                         <span
-                          className="absolute left-[11px] top-7 h-full w-px bg-gray-200"
+                          className="absolute left-[11px] top-7 h-full w-px bg-gradient-to-b from-red-300 to-gray-200"
                           aria-hidden="true"
                         />
                       )}
-                      <span className="relative z-10 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-red-50 text-xs font-bold text-red-600">
+                      <span className="relative z-10 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-red-50 text-xs font-bold text-red-600 ring-1 ring-red-100">
                         {i + 1}
                       </span>
                       <span className="pt-0.5 leading-relaxed text-gray-600">{step}</span>
-                    </li>
+                    </motion.li>
                   ))}
                 </ol>
               </div>
@@ -317,8 +354,23 @@ export default function ContactPage() {
                 <form
                   onSubmit={handleSubmit}
                   noValidate
-                  className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm sm:p-8 lg:p-10"
+                  /* The card is the focal object on this page, so it gets the
+                     depth: a warmer shadow, a hairline that turns red as soon
+                     as any field is focused, and a lit top edge. */
+                  className="group/card relative isolate overflow-hidden rounded-2xl border border-gray-200 bg-white p-6 shadow-[0_18px_46px_-24px_rgba(15,23,42,0.28)] transition-colors duration-300 focus-within:border-red-200 sm:p-8 lg:p-10"
                 >
+                  {/* Top edge glow */}
+                  <span
+                    aria-hidden="true"
+                    className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-red-500/70 to-transparent"
+                  />
+                  {/* Inner gradient — a few percent of warmth at the top of the
+                      card so it does not read as a flat white rectangle. */}
+                  <span
+                    aria-hidden="true"
+                    className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-40 bg-gradient-to-b from-red-50/70 to-transparent"
+                  />
+
                   <div className="mb-7">
                     <h2 className="text-xl font-bold text-gray-900">{t.contact.formTitle}</h2>
                     <p className="mt-1.5 text-sm text-gray-500">{t.contact.formHint}</p>
@@ -401,13 +453,18 @@ export default function ContactPage() {
                               "flex min-h-[48px] items-center justify-between gap-2 rounded-xl border px-4 py-3 text-left text-sm transition-all duration-200",
                               "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-600 focus-visible:ring-offset-2",
                               selected
-                                ? "border-red-600 bg-red-50 font-semibold text-red-700"
-                                : "border-gray-200 bg-white text-gray-700 hover:border-gray-300 hover:bg-gray-50",
+                                ? /* Selected chip earns an inner glow — this is
+                                     the one place on the page where the user's
+                                     own choice should visibly light up. */
+                                  "border-red-600 bg-red-50 font-semibold text-red-700 shadow-[inset_0_0_0_1px_rgba(220,38,38,0.25),0_0_14px_-4px_rgba(220,38,38,0.55)]"
+                                : "border-gray-200 bg-white text-gray-700 hover:border-red-200 hover:bg-red-50/40",
                             )}
                           >
                             {type}
                             {selected && (
-                              <Check className="h-4 w-4 shrink-0" strokeWidth={2.5} aria-hidden="true" />
+                              <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-red-600">
+                                <Check className="h-3 w-3 text-white" strokeWidth={3} aria-hidden="true" />
+                              </span>
                             )}
                           </button>
                         )
@@ -526,6 +583,8 @@ export default function ContactPage() {
                     className={cn(
                       "group mt-7 inline-flex w-full items-center justify-center gap-2 rounded-full bg-red-600 px-8 font-semibold text-white",
                       "min-h-[52px] transition-all duration-200 ease-out",
+                      /* Same sweep + bloom as every other primary on the site */
+                      "vs-sweep vs-glow-soft",
                       "hover:bg-red-700 hover:-translate-y-px active:translate-y-0",
                       "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-600 focus-visible:ring-offset-2",
                       "disabled:opacity-60 disabled:pointer-events-none",
@@ -555,7 +614,13 @@ export default function ContactPage() {
 
       {/* ---------------- Selected work strip ---------------- */}
       {projects.length > 0 && (
-        <section className="border-t border-gray-200 bg-gray-50 py-12 lg:py-16">
+        <section className="relative overflow-hidden border-t border-gray-200 bg-gray-50 py-12 lg:py-16">
+          {/* The connective line the brief asks for: it carries the eye from
+              the form down into the footer instead of leaving a hard seam. */}
+          <TechDivider variant="plain" className="absolute inset-x-0 top-0" />
+          <TechLayer>
+            <div className="absolute inset-0 vs-grid-1 vs-mask-up" />
+          </TechLayer>
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex flex-col gap-3 sm:flex-row sm:items-baseline sm:justify-between">
               <h2 className="text-sm font-bold uppercase tracking-wider text-gray-900">
@@ -594,10 +659,16 @@ function SuccessCard({ title, body, cta }: { title: string; body: string; cta: s
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      className="rounded-2xl border border-green-200 bg-green-50/50 p-8 text-center shadow-sm sm:p-12"
+      className="relative overflow-hidden rounded-2xl border border-green-200 bg-green-50/50 p-8 text-center shadow-sm sm:p-12"
       role="status"
     >
-      <span className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-green-600">
+      {/* A line runs across the top of the card once the message is away —
+          the visual full-stop on the submission. */}
+      <TechDivider variant="plain" className="absolute inset-x-0 top-0" />
+
+      {/* vs-ring emits a slow expanding ring from the check mark. Green, not
+          red: this is a system confirmation, not a brand moment. */}
+      <span className="vs-ring vs-anim relative mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-green-600">
         <Check className="h-7 w-7 text-white" strokeWidth={2.5} aria-hidden="true" />
       </span>
       <h2 className="mt-6 text-2xl font-bold text-gray-900">{title}</h2>
@@ -610,9 +681,13 @@ function SuccessCard({ title, body, cta }: { title: string; body: string; cta: s
   )
 }
 
+/* Focus is the only state that glows: red hairline plus a 4px soft bloom, so
+   the active field is unmistakable without every field looking active. */
 const inputCls =
-  "mt-2 w-full rounded-xl border bg-white px-4 py-3 text-gray-900 transition-colors " +
-  "min-h-[48px] focus:outline-none focus:ring-2 focus:ring-red-600/25"
+  "mt-2 w-full rounded-xl border bg-white px-4 py-3 text-gray-900 " +
+  "transition-[border-color,box-shadow] duration-200 " +
+  "min-h-[48px] focus:outline-none focus:border-red-500 " +
+  "focus:shadow-[0_0_0_4px_rgba(220,38,38,0.10),0_0_12px_-4px_rgba(220,38,38,0.5)]"
 
 function Field({
   name,
