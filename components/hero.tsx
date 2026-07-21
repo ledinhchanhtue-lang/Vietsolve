@@ -22,7 +22,7 @@ export default function Hero() {
       <div className="absolute inset-0 z-0 overflow-hidden">
         <video
           className="absolute inset-0 w-full h-full object-cover"
-          style={{ objectPosition: "center 80%", pointerEvents: "none" }}
+          style={{ objectPosition: "center center", pointerEvents: "none" }}
           src="/videos/hero-bg.mp4"
           poster="/videos/hero-poster.jpg"
           autoPlay
