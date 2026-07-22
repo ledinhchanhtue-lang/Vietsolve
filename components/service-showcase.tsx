@@ -12,7 +12,10 @@ import {
 } from "lucide-react"
 import { useLanguage } from "@/lib/i18n"
 import { serviceGroups } from "@/lib/content/services"
+import { projects } from "@/lib/content/projects"
+import { ProjectVisual } from "@/components/project-visual"
 import { IconTile } from "@/components/ui-kit/icon-tile"
+import Link from "next/link"
 import { TextLink } from "@/components/ui-kit/button"
 import { ServiceVisual } from "@/components/service-visual"
 import { cn } from "@/lib/utils"
@@ -32,6 +35,18 @@ import { cn } from "@/lib/utils"
  * (The mobile cards carry the same ids, so native anchor scrolling covers
  * small screens.)
  */
+
+/* Which real project exercised this group, keyed by the project's own
+   `capability` field — an honest association, not a marketing pairing.
+   Groups with no matching project simply show no related-work block. */
+const GROUP_CAPABILITY: Record<string, string> = {
+  "branding-strategy": "brand-growth",
+  "marketing-growth": "brand-growth",
+  "media-creative": "media-creative",
+  "website-digital": "digital-products",
+  "ai-automation": "ai-agents",
+  "data-seo-analytics": "digital-products",
+}
 
 const ICONS: Record<string, LucideIcon> = {
   Compass,
@@ -65,8 +80,10 @@ export function ServiceShowcase() {
     document.getElementById(`svc-tab-${serviceGroups[next].id}`)?.focus()
   }
 
+  const related = projects.find((pr) => pr.capability === GROUP_CAPABILITY[active.id])
+
   return (
-    <div className="hidden gap-8 lg:grid lg:grid-cols-[minmax(0,340px)_1fr]">
+    <div className="hidden gap-6 lg:grid lg:grid-cols-[minmax(0,280px)_1fr_minmax(0,250px)] xl:gap-8">
       {/* Rail */}
       <div role="tablist" aria-orientation="vertical" onKeyDown={onKeyDown} className="space-y-2">
         {serviceGroups.map((group) => {
@@ -133,28 +150,55 @@ export function ServiceShowcase() {
             </div>
           </div>
 
-          <ServiceVisual id={active.id} className="mt-6 aspect-[278/120]" />
+          <ServiceVisual id={active.id} className="mt-6 aspect-[278/140]" />
+          <p className="mt-3 text-right text-[10px] font-medium uppercase tracking-wider text-gray-300">
+            Interface demo
+          </p>
+        </div>
+      </div>
 
-          <ul className="mt-6 grid grid-cols-2 gap-x-8 gap-y-2.5">
+      {/* Right column — deliverables, related real work, CTA */}
+      <div key={`side-${active.id}`} className="animate-fade-in space-y-6">
+        <div>
+          <h4 className="text-xs font-bold uppercase tracking-wider text-gray-900">Deliverables</h4>
+          <ul className="mt-3 space-y-2">
             {active.services[lang].map((s) => (
               <li key={s} className="flex items-start gap-2.5">
                 <span
                   aria-hidden="true"
                   className="mt-[7px] h-1.5 w-1.5 shrink-0 rounded-full bg-red-600"
                 />
-                <span className="text-gray-700">{s}</span>
+                <span className="text-sm text-gray-700">{s}</span>
               </li>
             ))}
           </ul>
+        </div>
 
-          <div className="mt-7">
-            <TextLink
-              href={`/contact?service=${active.id}`}
-              ariaLabel={`Trao đổi về ${active.name[lang]}`}
+        {related && (
+          <div>
+            <h4 className="text-xs font-bold uppercase tracking-wider text-gray-900">
+              Dự án liên quan
+            </h4>
+            <Link
+              href="/case-studies"
+              className="group mt-3 block rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-600 focus-visible:ring-offset-2"
             >
-              Trao đổi về nhóm này
-            </TextLink>
+              <ProjectVisual project={related} sizes="250px" />
+              <span className="mt-2 block text-sm font-bold text-gray-900 transition-colors group-hover:text-red-600">
+                {related.name}
+              </span>
+              <span className="block text-xs text-gray-500">{related.industry[lang]}</span>
+            </Link>
           </div>
+        )}
+
+        <div className="border-t border-gray-200 pt-5">
+          <TextLink
+            href={`/contact?service=${active.id}`}
+            ariaLabel={`Trao đổi về ${active.name[lang]}`}
+          >
+            Trao đổi về nhóm này
+          </TextLink>
         </div>
       </div>
     </div>

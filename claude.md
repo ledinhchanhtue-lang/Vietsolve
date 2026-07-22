@@ -61,6 +61,9 @@ components/
 ## ⚠️ About = 7 section cố định
 Hero (copy + visual 45/55) → VietSolve là ai (manifesto + 3 statement typography) → Giá trị cốt lõi (1 lần duy nhất) → **Chim Lạc signature** → Hệ sinh thái năng lực (constellation) → Đội ngũ (diagram SVG) → Final CTA. **Đừng thêm lại**: 3 intro card trùng ý, sidebar "Định vị"/"Giá trị cốt lõi" mini, danh sách 01–07. Mỗi ý đúng 1 lần.
 
+## ⚠️ Services studio = 3 cột (lg+)
+Rail 6 tab · stage canvas · cột phải (Deliverables + Dự án liên quan + CTA). **Dự án liên quan map bằng field `capability` THẬT trong projects.ts** (GROUP_CAPABILITY trong service-showcase.tsx) — không có match thì ẩn block, tuyệt đối không gán bừa dự án cho nhóm dịch vụ.
+
 ## Homepage journey (7 section)
 Hero → 3 trụ cột (Intelligent/Creative/Innovation) → Hệ sinh thái dịch vụ (6 nhóm) → Dự án tiêu biểu (4 dự án) → Quy trình (3 bước) → Final CTA → Footer.
 **AI/Automation** là 1 trong 6 nhóm dịch vụ — không có section AI riêng, không workflow demo trên homepage.
@@ -89,7 +92,9 @@ Homepage: tên + 1 câu + 3 highlight + link. `/services`: danh sách đầy đ�
 | `service-visual.tsx` | 6 composition SVG riêng cho 6 nhóm dịch vụ (homepage + /services). Key theo `group.id` — **thêm nhóm mới phải thêm composition**, không sẽ render rỗng. |
 | `project-visual.tsx` | Thumbnail dự án: có ảnh thật → khung browser chrome; chưa có → visual sinh theo slug |
 | `lac-signature.tsx` + `about-hero-visual.tsx` | **NGUYÊN LOGO** trace từ PNG (`lib/lac-path.ts`, potrace): chim 2 subpath + wordmark 12 subpath, tách 2 layer. **CHỈ VIỀN — không bao giờ tô fill** (chủ website yêu cầu: tô vào mất chất công nghệ). Chim vẽ viền đỏ trước, chữ vẽ charcoal sau. Logo đổi → trace lại, không sửa path tay. |
-| `capability-constellation.tsx` | Hệ sinh thái 7 năng lực dạng hub + node (desktop) / pills (mobile). Mô tả lấy từ tagline services.ts — không viết copy mới. |
+| `value-workbench.tsx` | 3 giá trị = tablist 3 tab + stage canvas (creative/strategy/workflow). Đừng quay lại 3 card icon giống nhau. |
+| `project-builder.tsx` | Hệ sinh thái năng lực = chọn bài toán → module sáng theo LED rail. Mapping module theo quy trình, không phải claim kết quả. |
+| `project-room.tsx` | Đội ngũ = 5 workstation, hover/focus sáng connector về Project Lead. Chỉ role, không tên người. |
 | `pillar-visual.tsx` | 3 micro-drawing giá trị cốt lõi (dùng chung homepage + About) |
 
 ## ⚠️ Language switcher VI/EN

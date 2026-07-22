@@ -195,6 +195,25 @@ export default function LegalPage({ kind }: { kind: "privacy" | "terms" }) {
             </nav>
 
             <div className="max-w-3xl space-y-11">
+              {/* Mobile TOC — native disclosure, no JS to keep in sync */}
+              <details className="rounded-xl border border-gray-200 bg-gray-50/60 p-4 lg:hidden">
+                <summary className="min-h-11 cursor-pointer list-none text-sm font-bold uppercase tracking-wider text-gray-900 [&::-webkit-details-marker]:hidden">
+                  Mục lục
+                </summary>
+                <ul className="mt-2 space-y-1">
+                  {content.blocks.map((block) => (
+                    <li key={slug(block.heading)}>
+                      <a
+                        href={`#${slug(block.heading)}`}
+                        className="flex min-h-11 items-center text-sm text-gray-600 hover:text-red-600"
+                      >
+                        {block.heading}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </details>
+
               {content.blocks.map((block) => {
                 const id = slug(block.heading)
                 return (

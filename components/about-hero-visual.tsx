@@ -1,5 +1,6 @@
 "use client"
 
+import { useEffect, useRef } from "react"
 import { TechLayer } from "@/components/tech/tech-layer"
 import { LOGO_BIRD_PATH, LOGO_TEXT_PATH, LOGO_VIEWBOX } from "@/lib/lac-path"
 
@@ -18,9 +19,57 @@ import { LOGO_BIRD_PATH, LOGO_TEXT_PATH, LOGO_VIEWBOX } from "@/lib/lac-path"
 const KEYWORDS = ["Creative", "Intelligence", "Innovation", "Technology", "Growth"]
 
 export function AboutHeroVisual() {
+  /* Pointer tilt — the wireframe card leans a few degrees toward the cursor.
+     Fine-pointer + motion-allowed only; transform-only so it stays on the
+     compositor. ±5° max: depth, not a gimmick. */
+  const tiltRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const el = tiltRef.current
+    if (!el) return
+    if (!window.matchMedia("(pointer: fine)").matches) return
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return
+
+    let frame = 0
+    let rx = 0
+    let ry = 0
+    const apply = () => {
+      frame = 0
+      el.style.transform = `perspective(1000px) rotateX(${rx.toFixed(2)}deg) rotateY(${ry.toFixed(2)}deg)`
+    }
+    const onMove = (e: PointerEvent) => {
+      const r = el.getBoundingClientRect()
+      ry = ((e.clientX - r.left) / r.width - 0.5) * 10
+      rx = -((e.clientY - r.top) / r.height - 0.5) * 10
+      if (!frame) frame = requestAnimationFrame(apply)
+    }
+    const onLeave = () => {
+      rx = 0
+      ry = 0
+      if (!frame) frame = requestAnimationFrame(apply)
+    }
+    el.addEventListener("pointermove", onMove, { passive: true })
+    el.addEventListener("pointerleave", onLeave)
+    return () => {
+      el.removeEventListener("pointermove", onMove)
+      el.removeEventListener("pointerleave", onLeave)
+      if (frame) cancelAnimationFrame(frame)
+    }
+  }, [])
+
   return (
     <div aria-hidden="true" className="relative mx-auto w-full max-w-md lg:max-w-none">
-      <div className="relative aspect-[5/4]">
+      <div
+        ref={tiltRef}
+        className="relative aspect-[5/4] transition-transform duration-300 ease-out"
+      >
+        {/* One-shot LED edge — a light crosses the top edge once on load */}
+        <span className="pointer-events-none absolute inset-x-4 top-0 z-10 h-px overflow-hidden rounded-full">
+          <span
+            className="block h-full w-2/5 bg-gradient-to-r from-transparent via-red-500 to-transparent vs-anim"
+            style={{ animation: "vs-run 1.4s ease-out 0.5s 1 backwards" }}
+          />
+        </span>
         <TechLayer className="overflow-visible">
           {/* Blueprint surface */}
           <div className="absolute inset-0 rounded-2xl border border-gray-200 bg-gradient-to-br from-white to-gray-50 vs-grid-1" />

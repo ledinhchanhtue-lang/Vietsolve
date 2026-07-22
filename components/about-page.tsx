@@ -1,14 +1,14 @@
 "use client"
 
 import { motion } from "framer-motion"
-import { Radar, Shapes, Waypoints, ArrowRight } from "lucide-react"
+import { ArrowRight } from "lucide-react"
 import Link from "next/link"
-import { IconTile } from "@/components/ui-kit/icon-tile"
 import { PrimaryButton, SecondaryButton } from "@/components/ui-kit/button"
-import { PillarVisual } from "@/components/pillar-visual"
 import { AboutHeroVisual } from "@/components/about-hero-visual"
 import { LacSignatureVisual } from "@/components/lac-signature"
-import { CapabilityConstellation } from "@/components/capability-constellation"
+import { ValueWorkbench } from "@/components/value-workbench"
+import { ProjectBuilder } from "@/components/project-builder"
+import { ProjectRoom } from "@/components/project-room"
 import { TechLayer } from "@/components/tech/tech-layer"
 import { TechDivider } from "@/components/tech/tech-divider"
 import { projects } from "@/lib/content/projects"
@@ -30,30 +30,6 @@ import { ProjectVisual } from "@/components/project-visual"
  * is the only other CTA.
  */
 export default function AboutPage() {
-  const coreValues = [
-    {
-      icon: Shapes,
-      visual: "layers" as const,
-      title: "Sáng tạo",
-      titleEn: "Creative",
-      description: "Biến chiến lược thành thương hiệu, nội dung và trải nghiệm khác biệt.",
-    },
-    {
-      icon: Radar,
-      visual: "constellation" as const,
-      title: "Trí tuệ",
-      titleEn: "Intelligence",
-      description: "Dữ liệu, insight và tư duy chiến lược giúp xác định đúng bài toán.",
-    },
-    {
-      icon: Waypoints,
-      visual: "modules" as const,
-      title: "Đổi mới",
-      titleEn: "Innovation",
-      description: "Ứng dụng công nghệ và AI để giải pháp hiệu quả hơn theo thời gian.",
-    },
-  ]
-
   /* Three ways of working — typography and dividers, not another card row */
   const statements = [
     {
@@ -194,28 +170,9 @@ export default function AboutPage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-3 lg:gap-8">
-            {coreValues.map((value, index) => (
-              <motion.div
-                key={value.title}
-                initial={{ opacity: 0, y: 24 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="group relative overflow-hidden vs-scan rounded-2xl border border-gray-200 bg-white p-8 transition-all duration-300 hover:border-red-200 hover:shadow-md hover:-translate-y-1"
-              >
-                <IconTile icon={value.icon} size="md" />
-                <div className="mt-6 flex items-baseline gap-2">
-                  <h3 className="text-xl font-bold text-gray-900">{value.title}</h3>
-                  <span className="text-xs font-medium text-gray-400 uppercase tracking-wider">
-                    {value.titleEn}
-                  </span>
-                </div>
-                <p className="mt-3 text-gray-600 leading-relaxed">{value.description}</p>
-                <PillarVisual kind={value.visual} />
-              </motion.div>
-            ))}
-          </div>
+          {/* One interactive workbench — the three values as tabs over the
+              artifact each one produces, instead of three look-alike cards. */}
+          <ValueWorkbench />
         </div>
       </section>
 
@@ -259,10 +216,10 @@ export default function AboutPage() {
           <div className="text-center mb-12">
             <h2 className="text-3xl lg:text-4xl font-bold text-gray-900">Hệ sinh thái năng lực</h2>
             <p className="mt-4 text-lg text-gray-600 max-w-2xl mx-auto">
-              Bảy nhóm năng lực kết nối quanh một đội ngũ.
+              Chọn bài toán của bạn — xem những năng lực nào vào cuộc.
             </p>
           </div>
-          <CapabilityConstellation />
+          <ProjectBuilder />
         </div>
       </section>
 
@@ -287,33 +244,9 @@ export default function AboutPage() {
             transition={{ duration: 0.6 }}
             className="mx-auto max-w-3xl"
           >
-            {/* Core Team → Strategy / Creative / Technology → Specialist
-                Network. Roles only — no invented people. Decorative duplication
-                of the paragraph below, so aria-hidden. */}
-            <svg viewBox="0 0 520 190" className="mx-auto w-full max-w-lg" aria-hidden="true">
-              <g stroke="rgb(15 23 42 / 0.16)" strokeWidth="1.25" fill="none">
-                <path d="M260 44 V 62 M260 62 H 110 M260 62 H 410 M110 62 V 78 M260 62 V 78 M410 62 V 78" />
-                <path d="M110 116 V 132 M260 116 V 132 M410 116 V 132 M110 132 H 410" />
-                <path d="M260 132 V 148" />
-              </g>
-              <path d="M260 44 V 78" stroke="#dc2626" strokeWidth="1.75" fill="none" />
-              <g fill="#dc2626">
-                <circle cx="260" cy="62" r="2.5" />
-                <circle cx="260" cy="140" r="2.5" />
-              </g>
-              <rect x="196" y="14" width="128" height="30" rx="15" fill="#dc2626" />
-              <text x="260" y="34" textAnchor="middle" fill="#fff" fontSize="13" fontWeight="700">Core Team</text>
-              <g>
-                <rect x="50" y="78" width="120" height="38" rx="10" fill="#fff" stroke="rgb(15 23 42 / 0.18)" />
-                <rect x="200" y="78" width="120" height="38" rx="10" fill="#fff" stroke="rgb(15 23 42 / 0.18)" />
-                <rect x="350" y="78" width="120" height="38" rx="10" fill="#fff" stroke="rgb(15 23 42 / 0.18)" />
-                <text x="110" y="102" textAnchor="middle" fill="rgb(15 23 42 / 0.8)" fontSize="13" fontWeight="600">Strategy</text>
-                <text x="260" y="102" textAnchor="middle" fill="rgb(15 23 42 / 0.8)" fontSize="13" fontWeight="600">Creative</text>
-                <text x="410" y="102" textAnchor="middle" fill="rgb(15 23 42 / 0.8)" fontSize="13" fontWeight="600">Technology</text>
-              </g>
-              <rect x="130" y="148" width="260" height="32" rx="16" fill="rgb(220 38 38 / 0.06)" stroke="rgb(220 38 38 / 0.35)" strokeDasharray="4 5" />
-              <text x="260" y="169" textAnchor="middle" fill="rgb(185 28 28 / 0.9)" fontSize="12" fontWeight="600" letterSpacing="0.04em">Specialist Network</text>
-            </svg>
+            {/* Project room — workstations with real hand-overs; hover/focus
+                lights the coordination flow. Roles only, no invented people. */}
+            <ProjectRoom />
 
             <p className="mx-auto mt-8 max-w-2xl text-center text-gray-600 leading-relaxed">
               Mỗi dự án được dẫn dắt bởi đội ngũ core của VietSolve và kết hợp cùng các chuyên gia
