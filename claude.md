@@ -145,6 +145,12 @@ Lớp hiệu ứng công nghệ dùng chung cho cả site. **Đừng tự chế 
 ## ⚠️ Mobile: đừng animate `x` trên element full-width
 `initial={{ x: 20 }}` của framer-motion đẩy document rộng thêm 20px trước khi `whileInView` chạy → cả trang kéo ngang được ở 375px. Dùng `y` thay cho `x`. `globals.css` có `overflow-x: clip` làm lưới an toàn.
 
+## ⚠️ QUY TRÌNH BẮT BUỘC: commit + push sau MỖI vòng thay đổi
+Chủ website yêu cầu (22/07/2026): **tự lưu CLAUDE.md và cập nhật GitHub liên tục, không chờ nhắc.**
+- Xong một vòng việc → `git add -A && git commit && git push fork HEAD:local-update` ngay.
+- Có **Stop hook** ở `../.claude/settings.json` (thư mục cha) làm lưới an toàn: tự commit "chore: autosave" + push mọi thay đổi còn sót khi kết thúc lượt.
+- Không force push. Không xóa lịch sử.
+
 ## Kiểm tra trước khi deploy
 ```bash
 npx tsc --noEmit     # phải 0 lỗi — next.config có ignoreBuildErrors: true nên build KHÔNG bắt lỗi type
