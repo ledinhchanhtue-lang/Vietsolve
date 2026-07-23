@@ -432,6 +432,36 @@
   animation: vs-drawline 1.7s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
+/* ---------- Stage scene transition ----------------------------------------
+   Product-stage scenes enter with a short rise-and-fade; keyed remounts replay
+   it on every service switch. Reduced-motion collapses it to a plain show. */
+@keyframes vs-scenein {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.vs-scene {
+  animation: vs-scenein 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Media timeline playhead — one sweep across the clips, then it parks. */
+@keyframes vs-playhead {
+  from {
+    left: 2%;
+  }
+  to {
+    left: 96%;
+  }
+}
+.vs-playhead {
+  animation: vs-playhead 3.2s cubic-bezier(0.4, 0, 0.6, 1) 0.4s 1 both;
+}
+
 /* ---------- Signal primitives --------------------------------------------- */
 .vs-node {
   animation: vs-pulse 3.6s ease-in-out infinite;
@@ -492,6 +522,14 @@
     animation: none !important;
     stroke-dasharray: none;
     stroke-dashoffset: 0;
+  }
+  /* Scene entrances collapse to an instant show */
+  .vs-scene {
+    animation: none !important;
+  }
+  .vs-playhead {
+    animation: none !important;
+    left: 2%;
   }
   .vs-anim,
   .vs-anim::before,
