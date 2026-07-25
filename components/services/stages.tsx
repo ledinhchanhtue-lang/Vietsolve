@@ -4,6 +4,8 @@ import { useEffect, useRef, useState } from "react"
 import Image from "next/image"
 import { Play, RotateCcw, Monitor, Smartphone } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { ProductionGallery } from "@/components/company/production-gallery"
+import { productionPhotos } from "@/lib/content/company-media"
 
 /**
  * Six product stages — one distinct interactive scene per service group.
@@ -349,6 +351,14 @@ export function MediaStage() {
       <p className="mt-2 text-xs text-gray-500">
         Storyboard → dựng → âm thanh — click một cảnh để nhảy playhead tới clip tương ứng.
       </p>
+
+      {/* Real production shoots — VietSolve's own crew, not a demo */}
+      <div className="mt-5 border-t border-gray-100 pt-4">
+        <p className="mb-3 text-[10px] font-bold uppercase tracking-wider text-red-700/70">
+          Ê-kíp VietSolve tại hiện trường
+        </p>
+        <ProductionGallery photos={productionPhotos.slice(0, 8)} />
+      </div>
     </div>
   )
 }
@@ -719,7 +729,7 @@ export const STAGE_BY_ID: Record<string, () => React.ReactElement> = {
 export const STAGE_LABEL: Record<string, string> = {
   "branding-strategy": "Brand system demo — VietSolve",
   "marketing-growth": "Interface demo",
-  "media-creative": "Interface demo",
+  "media-creative": "Sản xuất VietSolve",
   "website-digital": "Interface demo",
   "ai-automation": "Interface demo",
   "data-seo-analytics": "Interface demo",

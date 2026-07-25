@@ -25,6 +25,12 @@ Website đã từng bị redesign thành dark AI-agency rồi **hoàn nguyên v�
 - Header nổi bo tròn `navbar.tsx`, menu: **Trang chủ · Về chúng tôi · Dịch vụ · Case Study · Blog · Liên hệ** + VI/EN + CTA "Liên hệ ngay".
 - **KHÔNG** dùng lại: obsidian bg, system-node graph, workflow canvas, chim Lạc data-constellation, menu "Năng lực/Hệ thống AI/Dự án".
 
+## ⚠️ Ảnh doanh nghiệp THẬT — `public/images/company/` (22/07/2026)
+14 ảnh WebP thật do chủ website cấp (đội ngũ + ê-kíp sản xuất: podcast, TVC, nấu ăn, chụp sản phẩm, dựng phim, hậu trường). Metadata ở `lib/content/company-media.ts`, hiển thị qua `components/company/production-gallery.tsx`.
+- **Được dùng:** ảnh team + ê-kíp sản xuất thật của VietSolve (bằng chứng năng lực media/creative). Đặt tại: Homepage `ProductionBand`, About section đội ngũ (banner team-hero + 3 ảnh), Services → Media & Creative stage.
+- **KHÔNG:** caption ảnh là "kết quả dự án khách hàng" cụ thể. Đây là năng lực/quy trình của VietSolve, không phải outcome. Alt text mô tả đúng cảnh.
+- Tối ưu bằng ffmpeg libwebp (max ~1600w, q80). Muốn thêm ảnh: convert WebP, thêm vào company-media.ts.
+
 ## ⚠️ KHÔNG BAO GIỜ RENDER DỮ LIỆU GIẢ
 Đã xóa sạch: badge Google Partner/BBB A+ · SĐT `+1 (555) 123-4567`, `0909.xxx.xxx` · 2 địa chỉ mâu thuẫn (Tôn Đức Thắng / Saigon Centre-Lê Lợi) · map giả · ROI calculator USD · dashboard số liệu giả (+23%, 15.2K, 9/10, #1) · 9 blog giả · 6 case giả + metric bịa · bảng giá Start/Grow/Scale · tên khách hàng gán sai (Rabity/Nordic/Ladipage) · `motionmedia.com` · form giả setTimeout.
 

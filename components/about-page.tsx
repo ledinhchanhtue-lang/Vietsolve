@@ -1,6 +1,7 @@
 "use client"
 
 import { motion } from "framer-motion"
+import Image from "next/image"
 import { ArrowRight } from "lucide-react"
 import Link from "next/link"
 import { PrimaryButton, SecondaryButton } from "@/components/ui-kit/button"
@@ -13,6 +14,8 @@ import { TechLayer } from "@/components/tech/tech-layer"
 import { TechDivider } from "@/components/tech/tech-divider"
 import { projects } from "@/lib/content/projects"
 import { ProjectVisual } from "@/components/project-visual"
+import { ProductionGallery } from "@/components/company/production-gallery"
+import { teamHero, teamPhotos } from "@/lib/content/company-media"
 
 /**
  * About — restructured to seven sections, down from ten-plus.
@@ -237,6 +240,31 @@ export default function AboutPage() {
             </p>
           </div>
 
+          {/* Real team photo — the org model sits under the actual team */}
+          <motion.figure
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="group relative mx-auto mb-12 max-w-4xl overflow-hidden rounded-2xl border border-gray-200 shadow-sm"
+          >
+            <Image
+              src={teamHero.src}
+              alt={teamHero.alt}
+              width={teamHero.w}
+              height={teamHero.h}
+              sizes="(max-width: 1024px) 100vw, 56rem"
+              className="aspect-[16/9] w-full object-cover object-top transition-transform duration-500 ease-out group-hover:scale-[1.02]"
+            />
+            <span
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-red-500/70 to-transparent"
+            />
+            <figcaption className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/65 to-transparent p-5 pt-12">
+              <span className="text-sm font-semibold text-white/95">{teamHero.caption}</span>
+            </figcaption>
+          </motion.figure>
+
           <motion.div
             initial={{ opacity: 0, y: 24 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -254,6 +282,11 @@ export default function AboutPage() {
               với bài toán của doanh nghiệp.
             </p>
           </motion.div>
+
+          {/* Team at work — real workspace photography */}
+          <div className="mx-auto mt-12 max-w-4xl">
+            <ProductionGallery photos={teamPhotos} aspect="aspect-[4/3]" className="sm:grid-cols-3 lg:grid-cols-3" />
+          </div>
         </div>
       </section>
 
