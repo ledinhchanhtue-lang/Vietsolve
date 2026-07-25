@@ -20,14 +20,16 @@ import { TechDivider } from "@/components/tech/tech-divider"
  * the shape is gone. Structure now:
  *
  *   Hero (copy 42% + Creative Control Desk 58%)
- *   → Interactive Service Studio (pinned; six distinct product stages)
+ *   → Interactive Service Studio (click-tab; six distinct product stages)
  *   → Cross-capability Project Builder
  *   → three-step process
  *   → final CTA
  *
  * The three-pillar section was dropped — it duplicated the homepage; the
  * values survive as one line in the hero. Deep links /services#<group.id>
- * keep working (handled inside ServiceStudio).
+ * keep working (handled inside ServiceStudio). The studio mounts EITHER the
+ * desktop tabs OR the mobile accordion — never both — so no heading, id or CTA
+ * is ever duplicated in the DOM.
  */
 export default function SolutionsPage() {
   const { t } = useLanguage()
@@ -90,7 +92,7 @@ export default function SolutionsPage() {
         {/* Keep the old anchor alive — homepage and footer still link to it */}
         <span id="service-ecosystem" className="block scroll-mt-24" aria-hidden="true" />
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="mb-10 text-center lg:mb-4">
+          <div className="mb-12 text-center">
             <h2 className="text-3xl font-bold text-gray-900 md:text-4xl">
               Hệ sinh thái <span className="text-red-700">giải pháp toàn diện</span>
             </h2>

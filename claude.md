@@ -67,17 +67,20 @@ components/
 ## ⚠️ About = 7 section cố định
 Hero (copy + visual 45/55) → VietSolve là ai (manifesto + 3 statement typography) → Giá trị cốt lõi (1 lần duy nhất) → **Chim Lạc signature** → Hệ sinh thái năng lực (constellation) → Đội ngũ (diagram SVG) → Final CTA. **Đừng thêm lại**: 3 intro card trùng ý, sidebar "Định vị"/"Giá trị cốt lõi" mini, danh sách 01–07. Mỗi ý đúng 1 lần.
 
-## ⚠️ /services = Interactive Creative Studio (rebuild 22/07/2026)
+## ⚠️ /services = Interactive Creative Studio (hoàn thiện 22/07/2026)
 Cấu trúc CỐ ĐỊNH: Hero (copy 42% + **Creative Control Desk** 58%, 6 panel artifact lắp ráp tuần tự) → **Service Studio** → **Cross-capability Project Builder** (`services/capability-stack.tsx`) → Quy trình 3 bước → Final CTA. Section 3 trụ cột đã bỏ (trùng homepage) — 3 giá trị là 1 dòng trong hero.
 
 **Service Studio** (`components/services/service-studio.tsx` + `stages.tsx`):
-- Desktop: pin ~5.3 viewport (wrapper `N*88vh`), scroll lần lượt active 6 nhóm, click nav = nhảy scroll. KHÔNG khóa scroll.
+- **CHỈ MOUNT MỘT CÂY** (P0): `useIsDesktop()` hydration-safe → desktop = tab click (nav|stage|output, 3 cột), mobile/SSR = accordion. **KHÔNG bao giờ render cả hai rồi ẩn bằng CSS** (bản cũ làm vậy → mọi heading bị lặp trong DOM). Không còn scroll-jack 528vh.
 - 6 Product Stage TƯƠNG TÁC riêng trong `stages.tsx`: Brand System Table (logo THẬT + variations, chip Strategy/Identity/Application) · Campaign Command Board (journey→channel) · Production Suite (storyboard→playhead nhảy theo clip) · Product Experience Lab (sitemap→browser, toggle desktop/mobile) · Live Workflow Console (nút Chạy demo/Chạy lại, 6 bước, human-in-the-loop) · Search & Insight Lab (cluster→SERP→đề xuất). **Đừng quay lại 6 card giống nhau.**
 - Mobile: accordion, item mang `id` group. Deep-link + **hashchange** đều preselect (hash-only nav không remount!).
 - Không số liệu giả — mọi stage ghi "Interface demo" (Brand ghi "Brand system demo — VietSolve").
 
 ## ⚠️ Services studio cột phải
 Rail 6 tab · stage canvas · cột phải (Deliverables + Dự án liên quan + CTA). **Dự án liên quan map bằng field `capability` THẬT trong projects.ts** (GROUP_CAPABILITY trong service-showcase.tsx) — không có match thì ẩn block, tuyệt đối không gán bừa dự án cho nhóm dịch vụ.
+
+## ⚠️ Project Builder /services = `services/capability-stack.tsx`
+5 bài toán → mỗi bài toán ráp 5 module, **mỗi module có Glyph SVG mini riêng** (không phải pill chữ) + LED rail + **output preview trực quan** riêng (brand-kit/growth-system/product/campaign-wall/automation) + CTA `?service=` đúng (5 CTA khác nhau). Đừng rút gọn về danh sách chữ.
 
 ## Homepage journey (7 section)
 Hero → 3 trụ cột (Intelligent/Creative/Innovation) → Hệ sinh thái dịch vụ (6 nhóm) → Dự án tiêu biểu (4 dự án) → Quy trình (3 bước) → Final CTA → Footer.
