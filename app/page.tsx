@@ -6,7 +6,6 @@ import Hero from "@/components/hero"
 import ThreePillars from "@/components/three-pillars"
 import InnovativeServices from "@/components/innovative-services"
 import FeaturedProjects from "@/components/featured-projects"
-import { ProductionBand } from "@/components/company/production-band"
 import HowWeWork from "@/components/how-we-work"
 import HomeCta from "@/components/home-cta"
 import AnimatedFooter from "@/components/animated-footer"
@@ -42,8 +41,6 @@ export default function Home() {
           <InnovativeServices />
           <TechDivider className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8" />
           <FeaturedProjects />
-          {/* Real production photography — VietSolve's own crew on set */}
-          <ProductionBand />
           <HowWeWork />
           <HomeCta />
         </main>
